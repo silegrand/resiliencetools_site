@@ -3,222 +3,291 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RESILIENCE — Dual Report Referral · RSLNCE-2026-0042</title>
+<title>RESILIENCE — Clinical Referral · RSLNCE-2026-0042</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <style>
 :root {
-  --sage:#2D5A4E; --sage-dark:#1E3D35; --sage-light:#3D7A68;
-  --sage-pale:#E8F2EF; --sage-very-pale:#F4FAF8;
-  --amber:#C4843A; --amber-dark:#9E6420; --amber-pale:#FDF3E7;
-  --warm:#8B5E3C; --warm-pale:#FDF6F0;
-  --cream:#FAFAF7; --white:#FFFFFF;
-  --charcoal:#1A2520; --text:#2A3028;
-  --text-secondary:#5A6B5A; --text-light:#8A9E8A;
-  --border:#D5E5DF; --border-light:#EDF5F2;
-  --g:#27AE60; --g-bg:#EBF8F0; --g-border:#A3D9B7; --g-text:#1D6B3A;
-  --a:#E67E22; --a-bg:#FEF5E7; --a-border:#F0C070; --a-text:#9E6420;
-  --r:#E74C3C; --r-bg:#FDEDEC; --r-border:#F5A89F; --r-text:#C0392B;
-  --shadow:0 2px 16px rgba(30,61,53,0.08);
+  --sage: #2D5A4E; --sage-dark: #1E3D35; --sage-light: #3D7A68;
+  --sage-pale: #E8F2EF; --sage-very-pale: #F4FAF8;
+  --amber: #C4843A; --amber-dark: #9E6420;
+  --amber-pale: #FDF3E7;
+  --cream: #FAFAF7; --white: #FFFFFF;
+  --charcoal: #1A2520; --text: #2A3028;
+  --text-secondary: #5A6B5A; --text-light: #8A9E8A;
+  --border: #D5E5DF; --border-light: #EDF5F2;
+  --g-text: #1D6B3A; --g-bg: #EBF8F0; --g-border: #A3D9B7;
+  --a-text: #9E6420; --a-bg: #FEF5E7; --a-border: #F0C070;
+  --r-text: #C0392B; --r-bg: #FDEDEC; --r-border: #F5A89F;
+  --shadow: 0 2px 16px rgba(30,61,53,0.08);
 }
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);font-size:13px;}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Nunito', sans-serif; background: var(--cream); color: var(--text); font-size: 14px; line-height: 1.5; }
+a { color: var(--sage); text-decoration: none; }
+a:hover { text-decoration: underline; }
 
-/* HEADER */
-.page-header{background:var(--sage-dark);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
-.dh-brand{display:flex;align-items:center;gap:16px;}
-.dh-logo{font-family:'Cormorant Garamond',serif;font-size:12px;font-weight:500;letter-spacing:.35em;text-transform:uppercase;color:rgba(255,255,255,.9);}
-.dh-title{font-size:13px;font-weight:600;color:rgba(255,255,255,.75);}
-.dh-sub{font-size:11px;color:rgba(255,255,255,.45);margin-top:1px;}
-.dh-actions{display:flex;align-items:center;gap:10px;}
-.risk-badge{font-size:12px;font-weight:700;letter-spacing:.08em;padding:6px 16px;border-radius:20px;text-transform:uppercase;}
-.risk-badge.amber{background:var(--a-bg);color:var(--a-text);border:1px solid var(--a-border);}
-.dh-btn{font-family:'Nunito',sans-serif;font-size:12px;font-weight:600;padding:7px 16px;border-radius:16px;cursor:pointer;border:none;transition:all .2s;}
-.dh-btn.primary{background:var(--amber);color:white;}
-.dh-btn.primary:hover{background:var(--amber-dark);}
-.dh-btn.ghost{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);}
-.dh-btn.ghost:hover{background:rgba(255,255,255,.18);}
+/* ── HEADER ── */
+.page-header {
+  background: var(--white); border-bottom: 2px solid var(--sage-pale);
+  padding: 16px 32px; display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow);
+}
+.header-brand { display: flex; align-items: center; gap: 20px; }
+.logo { font-family: 'Cormorant Garamond', serif; font-size: 13px; font-weight: 500; letter-spacing: 0.35em; text-transform: uppercase; color: var(--sage); }
+.header-divider { width: 1px; height: 30px; background: var(--border); }
+.header-meta { display: flex; flex-direction: column; gap: 2px; }
+.header-ref { font-size: 13px; font-weight: 700; color: var(--charcoal); }
+.header-sub { font-size: 11px; color: var(--text-secondary); }
+.header-actions { display: flex; align-items: center; gap: 10px; }
+.risk-badge { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; padding: 6px 16px; border-radius: 20px; text-transform: uppercase; }
+.risk-badge.green { background: var(--g-bg); color: var(--g-text); border: 1px solid var(--g-border); }
+.risk-badge.amber { background: var(--a-bg); color: var(--a-text); border: 1px solid var(--a-border); }
+.risk-badge.red { background: var(--r-bg); color: var(--r-text); border: 1px solid var(--r-border); }
+.btn { font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 600; padding: 8px 18px; border-radius: 20px; cursor: pointer; transition: all 0.2s; border: none; }
+.btn-primary { background: var(--sage); color: white; }
+.btn-primary:hover { background: var(--sage-dark); }
+.btn-outline { background: none; border: 1px solid var(--border); color: var(--text-secondary); }
+.btn-outline:hover { border-color: var(--sage); color: var(--sage); }
 
-/* LAYOUT */
-.page-body{max-width:1100px;margin:0 auto;padding:22px 20px 60px;}
-.row{display:grid;gap:16px;margin-bottom:20px;}
-.row.cols-2{grid-template-columns:1fr 1fr;}
-.row.cols-3{grid-template-columns:1fr 1fr 1fr;}
-.card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--shadow);}
-.card-label{font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--text-secondary);margin-bottom:10px;}
-.section-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:500;color:var(--charcoal);margin-bottom:14px;}
+/* ── LAYOUT ── */
+.page-body { max-width: 1100px; margin: 0 auto; padding: 28px 24px 80px; }
 
-/* LEGEND */
-.radar-legend{display:flex;gap:20px;margin-top:14px;flex-wrap:wrap;}
-.legend-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-secondary);}
-.legend-swatch{width:24px;height:4px;border-radius:2px;}
+/* ── TOP GRID ── */
+.top-grid { display: grid; grid-template-columns: 1fr 340px; gap: 24px; margin-bottom: 24px; }
 
-/* DIVERGENCE SUMMARY */
-.div-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
-.div-tile{border-radius:12px;padding:14px 16px;text-align:center;}
-.div-tile.agree{background:var(--g-bg);border:1px solid var(--g-border);}
-.div-tile.mild{background:var(--a-bg);border:1px solid var(--a-border);}
-.div-tile.sig{background:var(--r-bg);border:1px solid var(--r-border);}
-.div-tile-num{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400;line-height:1;}
-.div-tile.agree .div-tile-num{color:var(--g-text);}
-.div-tile.mild .div-tile-num{color:var(--a-text);}
-.div-tile.sig .div-tile-num{color:var(--r-text);}
-.div-tile-label{font-size:11px;margin-top:4px;}
-.div-tile.agree .div-tile-label{color:var(--g-text);}
-.div-tile.mild .div-tile-label{color:var(--a-text);}
-.div-tile.sig .div-tile-label{color:var(--r-text);}
+/* ── RADAR PANEL ── */
+.radar-panel {
+  background: var(--white); border: 1px solid var(--border); border-radius: 16px;
+  padding: 24px; box-shadow: var(--shadow);
+}
+.panel-title { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 500; color: var(--charcoal); margin-bottom: 16px; }
+.panel-sub { font-size: 12px; color: var(--text-secondary); margin-bottom: 20px; }
+.radar-container { display: flex; justify-content: center; }
+#radarSvg { width: 100%; max-width: 420px; height: auto; }
 
-/* DOMAIN ROWS */
-.domain-row{background:var(--white);border:1px solid var(--border);border-radius:12px;margin-bottom:8px;overflow:hidden;box-shadow:0 1px 4px rgba(30,61,53,.04);}
-.domain-row-header{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;transition:background .15s;}
-.domain-row-header:hover{background:var(--sage-very-pale);}
-.div-badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:4px 10px;border-radius:10px;flex-shrink:0;}
-.div-badge.agree{background:var(--g-bg);color:var(--g-text);border:1px solid var(--g-border);}
-.div-badge.mild{background:var(--a-bg);color:var(--a-text);border:1px solid var(--a-border);}
-.div-badge.sig{background:var(--r-bg);color:var(--r-text);border:1px solid var(--r-border);}
-.div-badge.double{background:var(--r-bg);color:var(--r-text);border:2px solid var(--r);font-size:11px;}
-.domain-name-text{font-weight:700;font-size:14px;color:var(--charcoal);flex:1;}
-.dual-scores{display:flex;align-items:center;gap:14px;flex-shrink:0;}
-.score-chip{display:flex;flex-direction:column;align-items:center;}
-.score-chip-val{font-size:18px;font-weight:700;}
-.score-chip-val.sage{color:var(--sage);}
-.score-chip-val.amber{color:var(--amber);}
-.score-chip-lbl{font-size:9px;color:var(--text-light);text-transform:uppercase;letter-spacing:.05em;}
-.score-delta{font-size:12px;font-weight:700;color:var(--r-text);background:var(--r-bg);padding:2px 8px;border-radius:8px;}
-.score-delta.ok{color:var(--g-text);background:var(--g-bg);}
-.chevron-icon{font-size:14px;color:var(--text-light);transition:transform .25s;flex-shrink:0;}
-.domain-row.open .chevron-icon{transform:rotate(180deg);}
-.domain-row-body{display:none;border-top:1px solid var(--border-light);padding:16px 18px 18px;background:#FDFDFB;}
-.domain-row.open .domain-row-body{display:block;}
-.dr-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px;}
-.dr-block label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-secondary);display:block;margin-bottom:6px;}
-.phrase{font-style:italic;font-size:14px;color:var(--charcoal);line-height:1.55;border-left:3px solid var(--sage-pale);padding-left:10px;}
-.phrase.carer{border-color:var(--amber-pale);}
-.clinical-note{background:var(--sage-very-pale);border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-size:13px;color:var(--sage-dark);}
-.clinical-note.amber{background:var(--a-bg);border-color:var(--a-border);color:var(--a-text);}
-.clinical-note.red{background:var(--r-bg);border-color:var(--r-border);color:var(--r-text);}
-.clinical-note.double-tap{background:var(--r-bg);border:2px solid var(--r);color:var(--r-text);}
+/* ── SUMMARY PANEL ── */
+.summary-panel { display: flex; flex-direction: column; gap: 16px; }
+.card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 20px; box-shadow: var(--shadow); }
+.card-title { font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 14px; }
 
-/* CARER WELLBEING PANEL */
-.carer-wb-panel{background:var(--warm-pale);border:1px solid rgba(139,94,60,.25);border-left:4px solid var(--warm);border-radius:0 14px 14px 0;padding:18px 22px;margin-bottom:20px;}
-.cw-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:var(--warm);margin-bottom:10px;}
-.cw-body{font-size:13px;color:var(--text-secondary);line-height:1.65;margin-bottom:12px;}
-.cw-action{display:inline-block;background:var(--warm);color:white;font-family:'Nunito',sans-serif;font-size:12px;font-weight:600;padding:7px 16px;border-radius:14px;cursor:pointer;border:none;transition:all .2s;}
-.cw-action:hover{background:#7A4E2F;}
+/* RESPONDENT INFO */
+.resp-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; }
+.resp-label { color: var(--text-secondary); }
+.resp-value { font-weight: 600; color: var(--charcoal); }
 
-/* MINIMISATION NOTE */
-.minim-note{background:#FFF8F0;border:1px solid #E8956D;border-left:4px solid #E8956D;border-radius:0 12px 12px 0;padding:16px 20px;margin-bottom:20px;display:flex;gap:12px;}
-.minim-title{font-weight:700;font-size:13px;color:#7B4A20;margin-bottom:5px;}
-.minim-body{font-size:13px;color:#5A3020;line-height:1.6;}
+/* SCORE PILLS */
+.score-pills { display: flex; flex-direction: column; gap: 10px; }
+.score-pill { display: flex; align-items: center; justify-content: space-between; }
+.score-pill-label { font-size: 13px; color: var(--text-secondary); }
+.score-pill-value { display: flex; align-items: center; gap: 8px; }
+.score-num { font-size: 16px; font-weight: 700; }
+.score-num.green { color: var(--g-text); }
+.score-num.amber { color: var(--a-text); }
+.score-num.red { color: var(--r-text); }
+.score-denom { font-size: 11px; color: var(--text-light); }
+.prisma-bar { width: 80px; height: 6px; border-radius: 3px; background: var(--border-light); overflow: hidden; }
+.prisma-fill { height: 100%; border-radius: 3px; background: var(--amber); }
+.frail-bar { width: 80px; height: 6px; border-radius: 3px; background: var(--border-light); overflow: hidden; }
+.frail-fill { height: 100%; border-radius: 3px; background: var(--amber); }
 
-/* ACTIONS */
-.actions-bar{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:16px 22px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;box-shadow:var(--shadow);}
-.actions-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-secondary);margin-right:4px;}
-.btn-action{font-family:'Nunito',sans-serif;font-size:13px;font-weight:600;padding:8px 18px;border-radius:18px;cursor:pointer;border:none;transition:all .2s;}
-.btn-action.primary{background:var(--sage);color:white;}
-.btn-action.primary:hover{background:var(--sage-dark);}
-.btn-action.outline{background:none;border:1px solid var(--border);color:var(--text-secondary);}
-.btn-action.outline:hover{border-color:var(--sage);color:var(--sage);}
+/* ALERTS */
+.alert-list { display: flex; flex-direction: column; gap: 8px; }
+.alert-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border-radius: 10px; font-size: 12px; line-height: 1.45; }
+.alert-item.amber { background: var(--a-bg); border: 1px solid var(--a-border); }
+.alert-item.red { background: var(--r-bg); border: 1px solid var(--r-border); }
+.alert-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+.alert-body strong { display: block; font-weight: 700; color: var(--charcoal); margin-bottom: 2px; }
+.alert-body span { color: var(--text-secondary); }
 
-/* SCORE COMPARISON BAR */
-.comparison-bars{display:flex;flex-direction:column;gap:8px;margin-top:8px;}
-.cbar-row{display:flex;align-items:center;gap:8px;}
-.cbar-label{font-size:11px;color:var(--text-secondary);width:50px;flex-shrink:0;text-align:right;}
-.cbar-track{flex:1;height:8px;background:var(--border-light);border-radius:4px;overflow:hidden;}
-.cbar-fill-sage{height:100%;border-radius:4px;background:var(--sage);}
-.cbar-fill-amber{height:100%;border-radius:4px;background:var(--amber);}
-.cbar-score{font-size:11px;font-weight:700;width:24px;flex-shrink:0;}
-.cbar-score.sage{color:var(--sage);}
-.cbar-score.amber{color:var(--amber-dark);}
+/* ── MINIMISATION NOTE ── */
+.minim-note {
+  background: #FFF8F0; border: 1px solid #E8956D;
+  border-left: 4px solid #E8956D; border-radius: 12px;
+  padding: 18px 22px; margin-bottom: 24px; display: flex; gap: 14px;
+}
+.minim-icon { font-size: 22px; flex-shrink: 0; }
+.minim-title { font-weight: 700; font-size: 13px; color: #7B4A20; margin-bottom: 6px; }
+.minim-body { font-size: 13px; color: #5A3020; line-height: 1.65; }
 
-@media(max-width:900px){.row.cols-2,.row.cols-3{grid-template-columns:1fr;}.dr-grid{grid-template-columns:1fr;}}
-@media print{.page-header{position:static;}.dh-actions,.actions-bar{display:none;}.domain-row-body{display:block!important;}}
+/* ── SECTION HEADER ── */
+.section-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; }
+.section-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 500; color: var(--charcoal); }
+.section-count { font-size: 12px; color: var(--text-secondary); }
+
+/* ── DOMAIN ACCORDION ── */
+.domains-section { margin-bottom: 28px; }
+.domain-item { background: var(--white); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(30,61,53,0.05); }
+.domain-header { display: flex; align-items: center; gap: 14px; padding: 14px 18px; cursor: pointer; transition: background 0.15s; }
+.domain-header:hover { background: var(--sage-very-pale); }
+.domain-score-ring { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 15px; font-weight: 700; }
+.domain-score-ring.green { background: var(--g-bg); color: var(--g-text); border: 2px solid var(--g-border); }
+.domain-score-ring.amber { background: var(--a-bg); color: var(--a-text); border: 2px solid var(--a-border); }
+.domain-score-ring.red { background: var(--r-bg); color: var(--r-text); border: 2px solid var(--r-border); }
+.domain-header-text { flex: 1; }
+.domain-name { font-weight: 600; font-size: 14px; color: var(--charcoal); }
+.domain-band-text { font-size: 11px; margin-top: 2px; }
+.domain-band-text.green { color: var(--g-text); }
+.domain-band-text.amber { color: var(--a-text); }
+.domain-band-text.red { color: var(--r-text); }
+.domain-score-bar-wrap { width: 120px; }
+.domain-score-bar { height: 5px; border-radius: 3px; background: var(--border-light); overflow: hidden; margin-bottom: 3px; }
+.domain-score-fill { height: 100%; border-radius: 3px; }
+.domain-score-fill.green { background: var(--g-text); }
+.domain-score-fill.amber { background: var(--a-text); }
+.domain-score-fill.red { background: var(--r-text); }
+.domain-score-label { font-size: 10px; color: var(--text-light); text-align: right; }
+.domain-chevron { font-size: 16px; color: var(--text-light); transition: transform 0.25s; flex-shrink: 0; }
+.domain-item.open .domain-chevron { transform: rotate(180deg); }
+.domain-body { display: none; border-top: 1px solid var(--border-light); padding: 16px 18px 18px; background: #FDFDFB; }
+.domain-item.open .domain-body { display: block; }
+.domain-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 14px; }
+.detail-block label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-secondary); display: block; margin-bottom: 6px; }
+.key-phrase { font-style: italic; font-size: 14px; color: var(--charcoal); line-height: 1.55; border-left: 3px solid var(--sage-pale); padding-left: 10px; }
+.signal-list { display: flex; flex-direction: column; gap: 4px; }
+.signal-tag { display: inline-flex; align-items: center; gap: 5px; background: var(--sage-pale); color: var(--sage-dark); font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 10px; }
+.domain-action { background: var(--sage-very-pale); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 13px; color: var(--sage-dark); }
+.domain-action strong { font-weight: 700; }
+
+/* ── REFERRAL PATHWAYS ── */
+.pathways-section { margin-bottom: 28px; }
+.pathways-table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--border); }
+.pathways-table th { background: var(--sage-pale); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sage-dark); padding: 11px 16px; text-align: left; }
+.pathways-table td { padding: 12px 16px; border-top: 1px solid var(--border-light); font-size: 13px; vertical-align: middle; }
+.pathways-table tr:hover td { background: var(--sage-very-pale); }
+.priority-badge { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 10px; border-radius: 10px; }
+.priority-badge.high { background: var(--r-bg); color: var(--r-text); border: 1px solid var(--r-border); }
+.priority-badge.moderate { background: var(--a-bg); color: var(--a-text); border: 1px solid var(--a-border); }
+.priority-badge.low { background: var(--g-bg); color: var(--g-text); border: 1px solid var(--g-border); }
+.pathway-name { font-weight: 600; color: var(--charcoal); }
+.pathway-rationale { color: var(--text-secondary); margin-top: 2px; font-size: 12px; }
+.pathway-action { display: inline-flex; align-items: center; gap: 5px; background: var(--sage); color: white; font-size: 11px; font-weight: 600; padding: 5px 12px; border-radius: 12px; cursor: pointer; border: none; font-family: 'Nunito', sans-serif; transition: all 0.2s; }
+.pathway-action:hover { background: var(--sage-dark); }
+
+/* ── CONSENT SUMMARY ── */
+.consent-bar { background: var(--sage-pale); border: 1px solid var(--border); border-radius: 10px; padding: 12px 18px; display: flex; gap: 24px; align-items: center; margin-bottom: 28px; font-size: 12px; }
+.consent-bar strong { color: var(--sage-dark); }
+.consent-item { display: flex; align-items: center; gap: 6px; color: var(--text-secondary); }
+.consent-item .tick { color: var(--g-text); font-weight: 700; }
+.consent-item .cross { color: var(--text-light); }
+
+/* ── CLINICIAN ACTIONS ── */
+.actions-bar { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 18px 22px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; box-shadow: var(--shadow); }
+.actions-label { font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-secondary); margin-right: 4px; }
+.action-confirm { font-size: 12px; color: var(--g-text); font-weight: 600; display: none; }
+
+/* ── FOOTER ── */
+.page-footer { margin-top: 36px; font-size: 11px; color: var(--text-light); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+
+/* ── PRINT ── */
+@media print {
+  .page-header { position: static; }
+  .header-actions, .actions-bar { display: none; }
+  .domain-body { display: block !important; }
+  .domain-chevron { display: none; }
+  body { background: white; }
+  .page-body { padding: 16px; }
+  .top-grid { grid-template-columns: 1fr 280px; }
+}
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
+<!-- ── PAGE HEADER ── -->
 <header class="page-header">
-  <div class="dh-brand">
-    <div class="dh-logo">RESILIENCE</div>
-    <div>
-      <div class="dh-title">Dual Report Referral — Person + Carer</div>
-      <div class="dh-sub">Folkestone and Hythe Neighbourhood Health Service · RSLNCE-2026-0042 · 16 May 2026</div>
+  <div class="header-brand">
+    <div class="logo">RESILIENCE</div>
+    <div class="header-divider"></div>
+    <div class="header-meta">
+      <div class="header-ref">Clinical Referral · RSLNCE-2026-0042</div>
+      <div class="header-sub">Folkestone and Hythe Neighbourhood Health Service · Frailty Team · 16 May 2026</div>
     </div>
   </div>
-  <div class="dh-actions">
-    <span class="risk-badge amber">⚠ Amber Risk · Divergence Detected</span>
-    <button class="dh-btn ghost" onclick="window.print()">Print / PDF</button>
-    <button class="dh-btn primary" onclick="acknowledgeReferral()">Acknowledge</button>
+  <div class="header-actions">
+    <span class="risk-badge amber">⚠ Amber Risk</span>
+    <button class="btn btn-outline" onclick="window.print()">Print / PDF</button>
+    <button class="btn btn-primary" onclick="acknowledgeReferral()">Acknowledge Receipt</button>
   </div>
 </header>
 
+<!-- ── PAGE BODY ── -->
 <div class="page-body">
 
-  <!-- CARER WELLBEING ALERT -->
-  <div class="carer-wb-panel">
-    <div class="cw-title">⚠ Carer Wellbeing Flagged</div>
-    <div class="cw-body">The carer reports finding the caring role very demanding, with no proper break in recent months and limited support network. <strong>A carer's assessment and carer support referral are recommended</strong> alongside the main clinical response. A carer under significant strain is itself a critical frailty risk indicator for the person they care for.</div>
-    <button class="cw-action">Refer carer to Kent and Medway Carers Support →</button>
-  </div>
-
-  <!-- TOP ROW: RADAR + SUMMARY -->
-  <div class="row cols-2">
+  <!-- TOP GRID -->
+  <div class="top-grid">
 
     <!-- RADAR PANEL -->
-    <div class="card">
-      <div class="card-label">Dual Frailty Profile Radar — Person vs Carer</div>
-      <p style="font-size:11px;color:var(--text-secondary);margin-bottom:14px;">Two independent observations of the same person. Where the polygons overlap, reports agree. Where they diverge, a gap is visible — and that gap is a clinical signal.</p>
-      <div style="display:flex;justify-content:center;">
-        <svg id="radarSvg" viewBox="0 0 500 460" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:420px;height:auto;"></svg>
-      </div>
-      <div class="radar-legend">
-        <div class="legend-item"><div class="legend-swatch" style="background:var(--sage);"></div>Person's self-report</div>
-        <div class="legend-item"><div class="legend-swatch" style="background:var(--amber);"></div>Carer's observation</div>
-        <div class="legend-item"><div class="legend-swatch" style="background:var(--r);height:8px;border-radius:4px;"></div>Double tap — both confirm significant need</div>
+    <div class="radar-panel">
+      <div class="panel-title">Frailty Profile Radar</div>
+      <div class="panel-sub">Each spoke represents a consolidated frailty domain scored 1–10. A full, rounded web indicates low concern. Compressed spokes show where clinical attention is most needed.</div>
+      <div class="radar-container">
+        <svg id="radarSvg" viewBox="0 0 500 460" xmlns="http://www.w3.org/2000/svg"></svg>
       </div>
     </div>
 
-    <!-- RIGHT PANEL -->
-    <div style="display:flex;flex-direction:column;gap:16px;">
+    <!-- SUMMARY PANEL -->
+    <div class="summary-panel">
 
-      <!-- DIVERGENCE SUMMARY -->
+      <!-- Respondent Info -->
       <div class="card">
-        <div class="card-label">Agreement and Divergence Summary</div>
-        <div class="div-summary">
-          <div class="div-tile agree">
-            <div class="div-tile-num" id="agreeCount">—</div>
-            <div class="div-tile-label">✓ Agreement</div>
-          </div>
-          <div class="div-tile mild">
-            <div class="div-tile-num" id="mildCount">—</div>
-            <div class="div-tile-label">▲ Mild divergence</div>
-          </div>
-          <div class="div-tile sig">
-            <div class="div-tile-num" id="sigCount">—</div>
-            <div class="div-tile-label">⚠ Significant divergence</div>
-          </div>
+        <div class="card-title">Respondent Context</div>
+        <div class="resp-row"><span class="resp-label">Reference</span><span class="resp-value">RSLNCE-2026-0042</span></div>
+        <div class="resp-row"><span class="resp-label">Age band</span><span class="resp-value">75–84</span></div>
+        <div class="resp-row"><span class="resp-label">Lives</span><span class="resp-value">Alone · Folkestone</span></div>
+        <div class="resp-row"><span class="resp-label">Completed by</span><span class="resp-value">Community health worker</span></div>
+        <div class="resp-row"><span class="resp-label">Date</span><span class="resp-value">16 May 2026</span></div>
+        <div class="resp-row" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border-light);">
+          <span class="resp-label">PRISMA-7</span>
+          <span class="resp-value" style="display:flex;align-items:center;gap:8px;">
+            <span class="score-num amber">4/7</span>
+            <div class="prisma-bar"><div class="prisma-fill" style="width:57%"></div></div>
+          </span>
         </div>
-        <p style="font-size:12px;color:var(--text-secondary);line-height:1.6;">Where there is significant divergence, the person is likely understating the extent of their difficulties. This is the most important signal in this referral — approach the CGA with particular care and patience in these domains.</p>
+        <div class="resp-row">
+          <span class="resp-label">FRAIL Scale</span>
+          <span class="resp-value" style="display:flex;align-items:center;gap:8px;">
+            <span class="score-num amber">2/5</span>
+            <div class="frail-bar"><div class="frail-fill" style="width:40%"></div></div>
+          </span>
+        </div>
+        <div class="resp-row">
+          <span class="resp-label">CFS (estimated)</span>
+          <span class="resp-value"><span class="score-num amber">CFS 4</span><span style="font-size:11px;color:var(--text-secondary);margin-left:4px;">Vulnerable</span></span>
+        </div>
       </div>
 
-      <!-- SCORE COMPARISON -->
+      <!-- Supplementary Alerts -->
       <div class="card">
-        <div class="card-label">Domain Score Comparison</div>
-        <div class="comparison-bars" id="compBars"></div>
-      </div>
-
-      <!-- RESPONDENT CONTEXT -->
-      <div class="card">
-        <div class="card-label">Context</div>
-        <div style="display:flex;flex-direction:column;gap:7px;font-size:13px;">
-          <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-secondary);">Reference</span><span style="font-weight:600;">RSLNCE-2026-0042</span></div>
-          <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-secondary);">Person screen</span><span style="font-weight:600;">16 May 2026</span></div>
-          <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-secondary);">Carer report</span><span style="font-weight:600;">16 May 2026</span></div>
-          <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-secondary);">PRISMA-7</span><span style="font-weight:600;color:var(--a-text);">4/7</span></div>
-          <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-secondary);">FRAIL Scale</span><span style="font-weight:600;color:var(--a-text);">2/5 Pre-frail</span></div>
-          <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-secondary);">Carer wellbeing</span><span style="font-weight:600;color:var(--r-text);">⚠ Strain flagged</span></div>
+        <div class="card-title">Supplementary Alerts</div>
+        <div class="alert-list">
+          <div class="alert-item amber">
+            <div class="alert-icon">⚠️</div>
+            <div class="alert-body">
+              <strong>Oral Frailty</strong>
+              <span>Reports difficulty chewing and frequent dry mouth. Consider dental referral and oral health review.</span>
+            </div>
+          </div>
+          <div class="alert-item amber">
+            <div class="alert-icon">⚠️</div>
+            <div class="alert-body">
+              <strong>Sleep Disruption</strong>
+              <span>Reports waking most nights and daytime fatigue. Consider sleep hygiene advice or GP review for underlying causes.</span>
+            </div>
+          </div>
+          <div class="alert-item amber">
+            <div class="alert-icon">⚠️</div>
+            <div class="alert-body">
+              <strong>Grip Strength — Proxy Signal</strong>
+              <span>Respondent dismissed difficulty with jar opening and gripping tasks. Response pattern consistent with minimisation. Dynamometer assessment recommended at CGA as a Fried Frailty Phenotype criterion.</span>
+            </div>
+          </div>
+          <div class="alert-item amber">
+            <div class="alert-icon">💊</div>
+            <div class="alert-body">
+              <strong>Medication-Temperature Risk</strong>
+              <span>Takes 5 regular medicines. Has not received temperature guidance from GP or pharmacist. Cold weather risk window active. Pharmacist review recommended.</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -226,350 +295,544 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);f
 
   <!-- MINIMISATION NOTE -->
   <div class="minim-note">
-    <div style="font-size:20px;flex-shrink:0;">⚠</div>
+    <div class="minim-icon">⚠</div>
     <div>
-      <div class="minim-title">Minimisation Pattern — Both Tools Detected</div>
-      <div class="minim-body">The RESILIENCE screening tool detected minimisation signals during the person's conversation. The divergence pattern in this dual report — person consistently rating higher than the carer's observation — is the classic corroborating indicator. The person is almost certainly understating the extent of their difficulties, most likely due to fear of being a burden or concern about care home placement. The CGA should explicitly reassure the person that the goal of every service involved is for them to stay at home, on their own terms, with their dignity intact.</div>
+      <div class="minim-title">Clinical Note — Minimisation Detected</div>
+      <div class="minim-body">The RESILIENCE tool detected signals consistent with health minimisation during this conversation. The respondent may be understating the extent of their difficulties, potentially due to concern about worrying family members or fear of residential care placement. Clinical scores may therefore underrepresent actual frailty risk. A <strong>sensitive, unhurried approach to initial contact</strong> is recommended, with particular care taken to create a safe space before asking about specific difficulties. The respondent's autonomy and right to remain at home should be explicitly affirmed early in any clinical conversation.</div>
     </div>
   </div>
 
-  <!-- DOMAIN BREAKDOWN -->
-  <div class="section-title">Domain Breakdown — Agreement and Divergence</div>
-  <div id="domainRows"></div>
+  <!-- CONSENT SUMMARY -->
+  <div class="consent-bar">
+    <strong>Consent:</strong>
+    <span class="consent-item"><span class="tick">✓</span> Personal Wellness Guide (Layer A)</span>
+    <span class="consent-item"><span class="tick">✓</span> Anonymous population data (Layer B)</span>
+    <span class="consent-item"><span class="tick">✓</span> Clinical referral (Layer C)</span>
+    <span style="margin-left:auto;color:var(--text-light);font-size:11px;">Consent given 16 May 2026 · Respondent may withdraw at any time</span>
+  </div>
 
-  <!-- ACTIONS -->
+  <!-- DOMAIN BREAKDOWN -->
+  <div class="domains-section">
+    <div class="section-header">
+      <div class="section-title">Domain Breakdown</div>
+      <div class="section-count">Sorted by risk · Click to expand</div>
+    </div>
+
+    <!-- Social Connection · 3/10 · Red -->
+    <div class="domain-item open">
+      <div class="domain-header" onclick="toggleDomain(this)">
+        <div class="domain-score-ring red">3</div>
+        <div class="domain-header-text">
+          <div class="domain-name">Social Connection and Support</div>
+          <div class="domain-band-text red">High concern — referral indicated</div>
+        </div>
+        <div class="domain-score-bar-wrap">
+          <div class="domain-score-bar"><div class="domain-score-fill red" style="width:30%"></div></div>
+          <div class="domain-score-label">3 / 10</div>
+        </div>
+        <div class="domain-chevron">▼</div>
+      </div>
+      <div class="domain-body">
+        <div class="domain-detail-grid">
+          <div class="detail-block">
+            <label>Key phrase — what they said</label>
+            <div class="key-phrase">"I don't see many people these days. My husband passed last year and I don't want to be a burden on my daughter."</div>
+          </div>
+          <div class="detail-block">
+            <label>Clinical signals extracted</label>
+            <div class="signal-list">
+              <span class="signal-tag">🔴 Recent bereavement (spousal)</span>
+              <span class="signal-tag">🔴 Social isolation — no regular contact</span>
+              <span class="signal-tag">🟡 Burden concern — family</span>
+              <span class="signal-tag">🟡 No formal support network</span>
+            </div>
+          </div>
+        </div>
+        <div class="domain-action"><strong>Recommended action:</strong> High priority referral to Social Prescribing / Link Worker. Bereavement support may also be appropriate. Sensitivity around burden concern noted — respondent should not feel coerced into accepting support.</div>
+      </div>
+    </div>
+
+    <!-- Cognition & MH · 4/10 · Amber/Red -->
+    <div class="domain-item">
+      <div class="domain-header" onclick="toggleDomain(this)">
+        <div class="domain-score-ring red">4</div>
+        <div class="domain-header-text">
+          <div class="domain-name">Cognition and Mental Health</div>
+          <div class="domain-band-text red">High concern — referral indicated</div>
+        </div>
+        <div class="domain-score-bar-wrap">
+          <div class="domain-score-bar"><div class="domain-score-fill red" style="width:40%"></div></div>
+          <div class="domain-score-label">4 / 10</div>
+        </div>
+        <div class="domain-chevron">▼</div>
+      </div>
+      <div class="domain-body">
+        <div class="domain-detail-grid">
+          <div class="detail-block">
+            <label>Key phrase — what they said</label>
+            <div class="key-phrase">"I've been feeling a bit flat lately if I'm honest, not really looking forward to things the way I used to."</div>
+          </div>
+          <div class="detail-block">
+            <label>Clinical signals extracted</label>
+            <div class="signal-list">
+              <span class="signal-tag">🔴 Low mood — persistent</span>
+              <span class="signal-tag">🔴 Anhedonia — reduced pleasure</span>
+              <span class="signal-tag">🟡 Hopelessness — future uncertainty</span>
+              <span class="signal-tag">🟡 Minimisation ("a bit flat")</span>
+            </div>
+          </div>
+        </div>
+        <div class="domain-action"><strong>Recommended action:</strong> Mental health and wellbeing assessment. Combined with bereavement (Domain 7) this represents a complex grief and mood picture. PHQ-9 at initial contact recommended. Memory assessment not indicated at this stage but review at CGA.</div>
+      </div>
+    </div>
+
+    <!-- Daily Living · 5/10 · Amber -->
+    <div class="domain-item">
+      <div class="domain-header" onclick="toggleDomain(this)">
+        <div class="domain-score-ring amber">5</div>
+        <div class="domain-header-text">
+          <div class="domain-name">Daily Living (ADLs and IADLs)</div>
+          <div class="domain-band-text amber">Moderate concern — support may be beneficial</div>
+        </div>
+        <div class="domain-score-bar-wrap">
+          <div class="domain-score-bar"><div class="domain-score-fill amber" style="width:50%"></div></div>
+          <div class="domain-score-label">5 / 10</div>
+        </div>
+        <div class="domain-chevron">▼</div>
+      </div>
+      <div class="domain-body">
+        <div class="domain-detail-grid">
+          <div class="detail-block">
+            <label>Key phrase — what they said</label>
+            <div class="key-phrase">"I cope with the basics but getting to the shops has become difficult since my daughter moved away."</div>
+          </div>
+          <div class="detail-block">
+            <label>Clinical signals extracted</label>
+            <div class="signal-list">
+              <span class="signal-tag">🟡 IADL difficulty — shopping</span>
+              <span class="signal-tag">🟡 Loss of informal support (daughter)</span>
+              <span class="signal-tag">🟢 Basic ADLs maintained</span>
+              <span class="signal-tag">🟡 Increasing social isolation</span>
+            </div>
+          </div>
+        </div>
+        <div class="domain-action"><strong>Recommended action:</strong> Reablement assessment and OT review. Consider community transport options and local shopping support schemes. Loss of informal support network since daughter relocated is a significant change factor.</div>
+      </div>
+    </div>
+
+    <!-- Physical Function · 6/10 · Amber -->
+    <div class="domain-item">
+      <div class="domain-header" onclick="toggleDomain(this)">
+        <div class="domain-score-ring amber">6</div>
+        <div class="domain-header-text">
+          <div class="domain-name">Physical Function, Mobility and Grip Strength</div>
+          <div class="domain-band-text amber">Moderate concern — monitoring warranted</div>
+        </div>
+        <div class="domain-score-bar-wrap">
+          <div class="domain-score-bar"><div class="domain-score-fill amber" style="width:60%"></div></div>
+          <div class="domain-score-label">6 / 10</div>
+        </div>
+        <div class="domain-chevron">▼</div>
+      </div>
+      <div class="domain-body">
+        <div class="domain-detail-grid">
+          <div class="detail-block">
+            <label>Key phrase — what they said</label>
+            <div class="key-phrase">"I manage most things but the stairs are getting harder and I did have a fall in the garden last month, but I didn't want to bother anyone about it. Opening jars is fine, I manage."</div>
+          </div>
+          <div class="detail-block">
+            <label>Clinical signals extracted</label>
+            <div class="signal-list">
+              <span class="signal-tag">🔴 Unreported fall — minimised</span>
+              <span class="signal-tag">🟡 Stair difficulty — functional decline</span>
+              <span class="signal-tag">🟡 Minimisation ("didn't want to bother")</span>
+              <span class="signal-tag">🟡 Grip strength proxy — dismissive response to jar opening question; consider objective assessment</span>
+              <span class="signal-tag">🟢 Generally mobile independently</span>
+            </div>
+          </div>
+        </div>
+        <div class="domain-action"><strong>Recommended action:</strong> Falls Prevention Service referral. Home safety assessment recommended given garden fall (outdoor surface risk). Note: fall was not reported to anyone — consistent with minimisation pattern identified in this referral. <strong>Grip strength:</strong> Respondent dismissed difficulty opening jars. Recommend dynamometer assessment at CGA as a Fried Frailty Phenotype criterion — reduced grip correlates with overall muscle mass, cardiovascular health, and fall risk independently of reported mobility.</div>
+      </div>
+    </div>
+
+    <!-- Medical Burden · 6/10 · Amber -->
+    <div class="domain-item">
+      <div class="domain-header" onclick="toggleDomain(this)">
+        <div class="domain-score-ring amber">6</div>
+        <div class="domain-header-text">
+          <div class="domain-name">Medical and Medication Burden</div>
+          <div class="domain-band-text amber">Moderate concern — review recommended</div>
+        </div>
+        <div class="domain-score-bar-wrap">
+          <div class="domain-score-bar"><div class="domain-score-fill amber" style="width:60%"></div></div>
+          <div class="domain-score-label">6 / 10</div>
+        </div>
+        <div class="domain-chevron">▼</div>
+      </div>
+      <div class="domain-body">
+        <div class="domain-detail-grid">
+          <div class="detail-block">
+            <label>Key phrase — what they said</label>
+            <div class="key-phrase">"I take five tablets every day but I've never been told anything about the weather or when they might be a problem."</div>
+          </div>
+          <div class="detail-block">
+            <label>Clinical signals extracted</label>
+            <div class="signal-list">
+              <span class="signal-tag">🟡 Polypharmacy — 5 medications</span>
+              <span class="signal-tag">🔴 No temperature guidance received</span>
+              <span class="signal-tag">🟡 3 long-term conditions</span>
+              <span class="signal-tag">🟢 No recent medication changes reported</span>
+            </div>
+          </div>
+        </div>
+        <div class="domain-action"><strong>Recommended action:</strong> Pharmacist-led medicines use review. Temperature guidance should be provided given polypharmacy and current cold weather conditions. See supplementary medication-temperature alert above.</div>
+      </div>
+    </div>
+
+    <!-- Nutrition · 8/10 · Green -->
+    <div class="domain-item">
+      <div class="domain-header" onclick="toggleDomain(this)">
+        <div class="domain-score-ring green">8</div>
+        <div class="domain-header-text">
+          <div class="domain-name">Nutrition and Weight</div>
+          <div class="domain-band-text green">Low concern — strength to build on</div>
+        </div>
+        <div class="domain-score-bar-wrap">
+          <div class="domain-score-bar"><div class="domain-score-fill green" style="width:80%"></div></div>
+          <div class="domain-score-label">8 / 10</div>
+        </div>
+        <div class="domain-chevron">▼</div>
+      </div>
+      <div class="domain-body">
+        <div class="domain-detail-grid">
+          <div class="detail-block">
+            <label>Key phrase — what they said</label>
+            <div class="key-phrase">"I eat well enough, I still cook for myself most days and I haven't really lost any weight."</div>
+          </div>
+          <div class="detail-block">
+            <label>Clinical signals extracted</label>
+            <div class="signal-list">
+              <span class="signal-tag">🟢 Self-cooking maintained</span>
+              <span class="signal-tag">🟢 No unintentional weight loss</span>
+              <span class="signal-tag">🟢 Appetite generally good</span>
+            </div>
+          </div>
+        </div>
+        <div class="domain-action"><strong>Recommended action:</strong> No immediate referral indicated. Monitor at review — shopping difficulty (Domain 5) may over time affect ability to maintain dietary intake. Note in CGA.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- REFERRAL PATHWAYS -->
+  <div class="pathways-section">
+    <div class="section-header">
+      <div class="section-title">Recommended Referral Pathways</div>
+      <div class="section-count">Sorted by priority</div>
+    </div>
+    <table class="pathways-table">
+      <thead>
+        <tr>
+          <th>Priority</th>
+          <th>Pathway</th>
+          <th>Trigger domain</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="priority-badge high">High</span></td>
+          <td>
+            <div class="pathway-name">Social Prescribing / Link Worker</div>
+            <div class="pathway-rationale">Social isolation · Recent bereavement · Daughter relocated</div>
+          </td>
+          <td>Social Connection 3/10</td>
+          <td><button class="pathway-action" onclick="alert('Social prescribing referral form — integration coming in Phase 2')">Refer →</button></td>
+        </tr>
+        <tr>
+          <td><span class="priority-badge high">High</span></td>
+          <td>
+            <div class="pathway-name">Mental Health and Wellbeing Support</div>
+            <div class="pathway-rationale">Persistent low mood · Anhedonia · Grief</div>
+          </td>
+          <td>Cognition and MH 4/10</td>
+          <td><button class="pathway-action" onclick="alert('Mental health referral — integration coming in Phase 2')">Refer →</button></td>
+        </tr>
+        <tr>
+          <td><span class="priority-badge moderate">Moderate</span></td>
+          <td>
+            <div class="pathway-name">Falls Prevention Service</div>
+            <div class="pathway-rationale">Unreported fall (garden) · Stair difficulty · Minimisation noted</div>
+          </td>
+          <td>Physical Function 6/10</td>
+          <td><button class="pathway-action" onclick="alert('Falls prevention referral — integration coming in Phase 2')">Refer →</button></td>
+        </tr>
+        <tr>
+          <td><span class="priority-badge moderate">Moderate</span></td>
+          <td>
+            <div class="pathway-name">Grip Strength — Dynamometer Assessment at CGA</div>
+            <div class="pathway-rationale">Grip proxy signal detected · Minimisation of jar and lifting difficulty · Fried Frailty Phenotype criterion</div>
+          </td>
+          <td>Physical Function 6/10 + alert</td>
+          <td><button class="pathway-action" onclick="alert('Flag for dynamometer assessment at CGA — no separate referral required')">Flag →</button></td>
+        </tr>
+        <tr>
+          <td><span class="priority-badge moderate">Moderate</span></td>
+          <td>
+            <div class="pathway-name">Pharmacist Medicines Use Review</div>
+            <div class="pathway-rationale">5 medications · No temperature guidance given · Cold weather alert</div>
+          </td>
+          <td>Medical Burden 6/10 + alert</td>
+          <td><button class="pathway-action" onclick="alert('Pharmacy referral — integration coming in Phase 2')">Refer →</button></td>
+        </tr>
+        <tr>
+          <td><span class="priority-badge moderate">Moderate</span></td>
+          <td>
+            <div class="pathway-name">Reablement / OT Assessment</div>
+            <div class="pathway-rationale">Shopping difficulty · Loss of informal support</div>
+          </td>
+          <td>Daily Living 5/10</td>
+          <td><button class="pathway-action" onclick="alert('Reablement referral — integration coming in Phase 2')">Refer →</button></td>
+        </tr>
+        <tr>
+          <td><span class="priority-badge low">Lower</span></td>
+          <td>
+            <div class="pathway-name">Dental / Oral Health Review</div>
+            <div class="pathway-rationale">Difficulty chewing · Dry mouth — oral frailty indicators</div>
+          </td>
+          <td>Domain 10 — Oral</td>
+          <td><button class="pathway-action" onclick="alert('Oral health referral — integration coming in Phase 2')">Refer →</button></td>
+        </tr>
+        <tr>
+          <td><span class="priority-badge low">Lower</span></td>
+          <td>
+            <div class="pathway-name">Sleep Review</div>
+            <div class="pathway-rationale">Frequent waking · Daytime fatigue contributing to deconditioning</div>
+          </td>
+          <td>Domain 10 — Sleep</td>
+          <td><button class="pathway-action" onclick="alert('Sleep review — discuss at CGA')">Flag →</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- CLINICIAN ACTIONS -->
   <div class="actions-bar">
     <span class="actions-label">Clinician actions</span>
-    <button class="btn-action primary" onclick="this.textContent='✓ Acknowledged';this.style.background='var(--g)';this.disabled=true;">Acknowledge Receipt</button>
-    <button class="btn-action outline" onclick="alert('Flagged for next MDT meeting.')">Flag for MDT</button>
-    <button class="btn-action outline" onclick="alert('A repeat screen link will be sent in 3 months.')">Request Repeat</button>
-    <button class="btn-action outline" onclick="window.print()">Print / PDF</button>
-    <button class="btn-action primary" style="background:var(--sage);display:flex;align-items:center;gap:7px;" onclick="generateCgaPDF()">
+    <button class="btn btn-primary" onclick="acknowledgeReferral()">Acknowledge Receipt</button>
+    <button class="btn btn-outline" onclick="alert('Flagged for next MDT meeting.')">Flag for MDT</button>
+    <button class="btn btn-outline" onclick="alert('A new RESILIENCE screen link will be sent in 3 months.')">Request Repeat Screen</button>
+    <button class="btn btn-outline" onclick="window.print()">Print / Export PDF</button>
+    <button class="btn btn-primary" style="display:flex;align-items:center;gap:7px;background:var(--sage);" onclick="generateCgaPDF()">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
       Generate CGA Pre-Screen Brief
     </button>
+    <span class="action-confirm" id="ackConfirm">✓ Receipt acknowledged and logged</span>
   </div>
 
-  <p style="font-size:11px;color:var(--text-light);margin-top:20px;line-height:1.7;">RESILIENCE Dual Report · RSLNCE-2026-0042 · Folkestone and Hythe NHS · <a href="#" style="color:var(--sage);">Data governance</a> · <a href="#" style="color:var(--sage);">Delete data</a></p>
+  <!-- FOOTER -->
+  <div class="page-footer">
+    <span>RESILIENCE · Clinical Referral · RSLNCE-2026-0042 · Generated 16 May 2026</span>
+    <span>Folkestone and Hythe Neighbourhood Health Service · <a href="#">Data governance</a> · <a href="#">Delete respondent data</a></span>
+  </div>
+
 </div>
 
-<!-- ── JAVASCRIPT ── -->
+<!-- ── RADAR CHART ── -->
 <script>
-// ── DUAL DATA ──
-const DOMAINS = [
-  {
-    key:'physical', name:'Physical Function and Mobility',
-    personScore:6, carerScore:4,
-    personPhrase:'"I manage most things but the stairs are getting harder and I did have a fall last month — but I didn\'t want to bother anyone about it."',
-    carerPhrase:'"They really struggle with the stairs and I\'ve noticed them moving much more slowly. I\'m quite worried after the fall — they tried to hide it from me."',
-    clinicalSignals:['Unreported fall (person minimised)','Stair difficulty confirmed by both reports','Carer significantly more concerned than person discloses'],
-  },
-  {
-    key:'nutrition', name:'Nutrition and Weight',
-    personScore:8, carerScore:7,
-    personPhrase:'"I eat well enough, I still cook for myself most days."',
-    carerPhrase:'"They seem to eat reasonably well when I visit, though I worry they might skip meals when I\'m not there."',
-    clinicalSignals:['Both reports indicate reasonable nutrition','Mild carer concern about unsupervised meals','No urgent nutritional risk at this time'],
-  },
-  {
-    key:'daily_living', name:'Daily Living (ADLs and IADLs)',
-    personScore:5, carerScore:3,
-    personPhrase:'"I cope with the basics but getting to the shops has become difficult since my daughter moved away."',
-    carerPhrase:'"They are really struggling with shopping, housework, and managing appointments. Much more than they let on. I\'ve been doing a lot more for them quietly."',
-    clinicalSignals:['Person significantly underreports IADLs','Carer providing substantial covert support','Loss of informal support network (daughter relocated)','Significant divergence — explore in CGA'],
-  },
-  {
-    key:'cognition', name:'Cognition and Mental Health',
-    personScore:4, carerScore:5,
-    personPhrase:'"I\'ve been feeling a bit flat lately if I\'m honest, not really looking forward to things the way I used to."',
-    carerPhrase:'"They seem a bit low but actually I think they have more insight into how they\'re feeling than I expected. The grief is real but they do talk about it."',
-    clinicalSignals:['Both reports flag low mood','Carer slightly more positive than person self-reports','Grief process appears active but not suppressed','PHQ-9 recommended at initial contact'],
-  },
-  {
-    key:'social', name:'Social Connection and Support',
-    personScore:3, carerScore:2,
-    personPhrase:'"I don\'t see many people these days. My husband passed last year and I don\'t want to be a burden on my daughter."',
-    carerPhrase:'"They are very isolated. Since bereavement they barely go out. I visit as much as I can but I\'m worried — they have almost no other contact."',
-    clinicalSignals:['DOUBLE TAP — Both reports confirm significant isolation','Recent bereavement (spousal) confirmed','Burden concern actively voiced by person','Carer close to sole support — unsustainable'],
-  },
-  {
-    key:'medical', name:'Medical and Medication Burden',
-    personScore:6, carerScore:5,
-    personPhrase:'"I take five tablets every day but I\'ve never been told about hot or cold weather."',
-    carerPhrase:'"They manage their tablets but I\'m not sure they always remember the right order. And no one has ever explained the temperature thing to me either."',
-    clinicalSignals:['Polypharmacy — 5 medications confirmed','No temperature guidance received — both report','Some carer concern about medication adherence'],
-  }
-];
+(function buildRadar() {
+  const CX = 250, CY = 235, MAX_R = 148;
 
-// ── COMPUTE DIVERGENCE ──
-function divergenceClass(p,c){
-  const d=Math.abs(p-c);
-  if(d<=1.5) return 'agree';
-  if(d<=3.0) return 'mild';
-  return 'sig';
-}
-
-function isDoubleTap(p,c){ return p<=3.5 && c<=3.5; }
-
-// ── RENDER RADAR ──
-(function buildRadar(){
-  const CX=250, CY=235, MAX_R=148;
-  const NS='http://www.w3.org/2000/svg';
-  const svg=document.getElementById('radarSvg');
-
-  const domains=[
-    {name:'Physical',pScore:6,cScore:4,angle:0},
-    {name:'Nutrition',pScore:8,cScore:7,angle:60},
-    {name:'Daily\nLiving',pScore:5,cScore:3,angle:120},
-    {name:'Medical',pScore:6,cScore:5,angle:180},
-    {name:'Social\nConnec.',pScore:3,cScore:2,angle:240},
-    {name:'Cognition\n& MH',pScore:4,cScore:5,angle:300},
+  // Domain data (higher score = better, lower = more concern)
+  const domains = [
+    { name: 'Physical\n& Grip',      shortName: 'Physical',   score: 6, angle: 0   },
+    { name: 'Nutrition',            shortName: 'Nutrition',  score: 8, angle: 60  },
+    { name: 'Daily\nLiving',        shortName: 'Living',     score: 5, angle: 120 },
+    { name: 'Medical\nBurden',      shortName: 'Medical',    score: 6, angle: 180 },
+    { name: 'Social\nConnection',   shortName: 'Social',     score: 3, angle: 240 },
+    { name: 'Cognition &\nMH',      shortName: 'Cognition',  score: 4, angle: 300 },
   ];
 
-  function el(tag,attrs,text){
-    const e=document.createElementNS(NS,tag);
-    Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,v));
-    if(text!==undefined) e.textContent=text;
+  function toXY(angleDeg, r) {
+    const rad = (angleDeg - 90) * Math.PI / 180;
+    return { x: CX + r * Math.cos(rad), y: CY + r * Math.sin(rad) };
+  }
+
+  function scoreColor(s) {
+    if (s >= 7) return { text: '#1D6B3A', fill: '#27AE60', bg: '#EBF8F0' };
+    if (s >= 4) return { text: '#9E6420', fill: '#D4881F', bg: '#FEF5E7' };
+    return { text: '#C0392B', fill: '#E74C3C', bg: '#FDEDEC' };
+  }
+
+  const svg = document.getElementById('radarSvg');
+  const NS = 'http://www.w3.org/2000/svg';
+
+  function el(tag, attrs, text) {
+    const e = document.createElementNS(NS, tag);
+    Object.entries(attrs).forEach(([k, v]) => e.setAttribute(k, v));
+    if (text !== undefined) e.textContent = text;
     return e;
   }
 
-  function toXY(angleDeg,r){
-    const rad=(angleDeg-90)*Math.PI/180;
-    return{x:CX+r*Math.cos(rad),y:CY+r*Math.sin(rad)};
-  }
-
   // Defs
-  const defs=el('defs',{});
-  const gGrad=el('linearGradient',{id:'sageGrad',x1:'0%',y1:'0%',x2:'100%',y2:'100%'});
-  gGrad.appendChild(el('stop',{offset:'0%','stop-color':'#2D5A4E','stop-opacity':'0.22'}));
-  gGrad.appendChild(el('stop',{offset:'100%','stop-color':'#2D5A4E','stop-opacity':'0.10'}));
-  defs.appendChild(gGrad);
-  const aGrad=el('linearGradient',{id:'amberGrad',x1:'0%',y1:'0%',x2:'100%',y2:'100%'});
-  aGrad.appendChild(el('stop',{offset:'0%','stop-color':'#C4843A','stop-opacity':'0.22'}));
-  aGrad.appendChild(el('stop',{offset:'100%','stop-color':'#C4843A','stop-opacity':'0.10'}));
-  defs.appendChild(aGrad);
+  const defs = el('defs', {});
+
+  // Gradient for data polygon
+  const grad = el('radialGradient', { id: 'radarGrad', cx: '50%', cy: '50%', r: '50%' });
+  grad.appendChild(el('stop', { offset: '0%', 'stop-color': '#D4881F', 'stop-opacity': '0.18' }));
+  grad.appendChild(el('stop', { offset: '100%', 'stop-color': '#C0392B', 'stop-opacity': '0.12' }));
+  defs.appendChild(grad);
   svg.appendChild(defs);
 
-  // Grid
-  [2,4,6,8,10].forEach(level=>{
-    const r=(level/10)*MAX_R;
-    const pts=domains.map(d=>{const p=toXY(d.angle,r);return`${p.x},${p.y}`;}).join(' ');
-    svg.appendChild(el('polygon',{points:pts,fill:'none',stroke:level===10?'#2D5A4E':'#D5E5DF','stroke-width':level===10?'1.5':'0.75',opacity:level===10?'0.4':'1'}));
-    if(level===6||level===2){
-      const lp=toXY(60,r);
-      svg.appendChild(el('text',{x:lp.x+5,y:lp.y+4,'font-size':'9',fill:'#8A9E8A','font-family':'Nunito,sans-serif'},level));
+  // Web grid lines (concentric hexagons)
+  [2, 4, 6, 8, 10].forEach(level => {
+    const r = (level / 10) * MAX_R;
+    const pts = domains.map(d => {
+      const p = toXY(d.angle, r);
+      return `${p.x},${p.y}`;
+    }).join(' ');
+    svg.appendChild(el('polygon', {
+      points: pts,
+      fill: 'none',
+      stroke: level === 10 ? '#2D5A4E' : '#D5E5DF',
+      'stroke-width': level === 10 ? '1.5' : '0.75',
+      opacity: level === 10 ? '0.5' : '1',
+    }));
+
+    // Score labels on the right grid line (at 60° spoke)
+    if (level % 4 === 0 || level === 2) {
+      const lp = toXY(60, r);
+      svg.appendChild(el('text', {
+        x: lp.x + 5, y: lp.y + 4,
+        'font-size': '9', fill: '#8A9E8A',
+        'font-family': 'Nunito, sans-serif', opacity: '0.8'
+      }, level));
     }
   });
 
-  // Spokes
-  domains.forEach(d=>{
-    const tip=toXY(d.angle,MAX_R+10);
-    svg.appendChild(el('line',{x1:CX,y1:CY,x2:tip.x,y2:tip.y,stroke:'#D5E5DF','stroke-width':'1'}));
+  // Spoke lines
+  domains.forEach(d => {
+    const tip = toXY(d.angle, MAX_R + 10);
+    svg.appendChild(el('line', {
+      x1: CX, y1: CY, x2: tip.x, y2: tip.y,
+      stroke: '#D5E5DF', 'stroke-width': '1',
+    }));
   });
 
-  // Double tap highlight zones
-  domains.forEach(d=>{
-    if(isDoubleTap(d.pScore,d.cScore)){
-      const rMax=(Math.max(d.pScore,d.cScore)/10)*MAX_R;
-      const pts=domains.map(dd=>{
-        const r=dd.key===d.key?(3.5/10)*MAX_R:0;
-        const p=toXY(dd.angle,dd===d?rMax:0);
-        return`${p.x},${p.y}`;
-      });
-    }
-  });
+  // Data polygon
+  const dataPts = domains.map(d => {
+    const r = (d.score / 10) * MAX_R;
+    const p = toXY(d.angle, r);
+    return `${p.x},${p.y}`;
+  }).join(' ');
 
-  // Carer polygon (amber, behind)
-  const carerPts=domains.map(d=>{const r=(d.cScore/10)*MAX_R;const p=toXY(d.angle,r);return`${p.x},${p.y}`;}).join(' ');
-  svg.appendChild(el('polygon',{points:carerPts,fill:'url(#amberGrad)',stroke:'#C4843A','stroke-width':'2.5',opacity:'0.9','stroke-dasharray':'none'}));
-
-  // Person polygon (sage, on top)
-  const personPts=domains.map(d=>{const r=(d.pScore/10)*MAX_R;const p=toXY(d.angle,r);return`${p.x},${p.y}`;}).join(' ');
-  svg.appendChild(el('polygon',{points:personPts,fill:'url(#sageGrad)',stroke:'#2D5A4E','stroke-width':'2.5',opacity:'0.9'}));
-
-  // Double tap pulse ring on Social Connection (both very low)
-  const dtDomain=domains.find(d=>d.name==='Social\nConnec.');
-  if(dtDomain){
-    const r=(Math.max(dtDomain.pScore,dtDomain.cScore)/10)*MAX_R;
-    const p=toXY(dtDomain.angle,r*0.5);
-    svg.appendChild(el('circle',{cx:p.x,cy:p.y,r:'18',fill:'rgba(231,76,60,0.15)',stroke:'#E74C3C','stroke-width':'1.5','stroke-dasharray':'3,2'}));
-    svg.appendChild(el('text',{x:p.x,y:p.y+5,'text-anchor':'middle','font-size':'9',fill:'#C0392B','font-weight':'700','font-family':'Nunito,sans-serif'},'●●'));
-  }
+  svg.appendChild(el('polygon', {
+    points: dataPts,
+    fill: 'url(#radarGrad)',
+    stroke: '#C4843A',
+    'stroke-width': '2',
+    opacity: '0.85',
+  }));
 
   // Score dots + labels
-  domains.forEach(d=>{
-    // Person dot (sage)
-    const pr=(d.pScore/10)*MAX_R;
-    const pp=toXY(d.angle,pr);
-    svg.appendChild(el('circle',{cx:pp.x,cy:pp.y,r:'6',fill:'#E8F2EF',stroke:'#2D5A4E','stroke-width':'2'}));
-    svg.appendChild(el('text',{x:pp.x,y:pp.y+4,'text-anchor':'middle','font-size':'8.5',fill:'#2D5A4E','font-weight':'700','font-family':'Nunito,sans-serif'},d.pScore));
+  domains.forEach(d => {
+    const r = (d.score / 10) * MAX_R;
+    const p = toXY(d.angle, r);
+    const c = scoreColor(d.score);
 
-    // Carer dot (amber)
-    const cr=(d.cScore/10)*MAX_R;
-    const cp=toXY(d.angle,cr);
-    svg.appendChild(el('circle',{cx:cp.x,cy:cp.y,r:'6',fill:'#FDF3E7',stroke:'#C4843A','stroke-width':'2'}));
-    svg.appendChild(el('text',{x:cp.x,y:cp.y+4,'text-anchor':'middle','font-size':'8.5',fill:'#C4843A','font-weight':'700','font-family':'Nunito,sans-serif'},d.cScore));
+    // Dot
+    svg.appendChild(el('circle', {
+      cx: p.x, cy: p.y, r: '7',
+      fill: c.bg, stroke: c.fill, 'stroke-width': '2'
+    }));
+
+    // Score number
+    svg.appendChild(el('text', {
+      x: p.x, y: p.y + 4,
+      'text-anchor': 'middle', 'font-size': '9',
+      fill: c.text, 'font-weight': '700',
+      'font-family': 'Nunito, sans-serif'
+    }, d.score));
   });
 
   // Spoke labels
-  const LABEL_R=MAX_R+36;
-  const labelCfg=[
-    {anchor:'middle',dy:-14,dx:0},
-    {anchor:'start',dy:0,dx:8},
-    {anchor:'start',dy:0,dx:8},
-    {anchor:'middle',dy:18,dx:0},
-    {anchor:'end',dy:0,dx:-8},
-    {anchor:'end',dy:0,dx:-8},
+  const LABEL_R = MAX_R + 36;
+  const labelConfig = [
+    { anchor: 'middle',  dy: -14, dx: 0    }, // 0° top
+    { anchor: 'start',   dy: 0,   dx: 8    }, // 60° top-right
+    { anchor: 'start',   dy: 0,   dx: 8    }, // 120° bottom-right
+    { anchor: 'middle',  dy: 18,  dx: 0    }, // 180° bottom
+    { anchor: 'end',     dy: 0,   dx: -8   }, // 240° bottom-left
+    { anchor: 'end',     dy: 0,   dx: -8   }, // 300° top-left
   ];
-  domains.forEach((d,i)=>{
-    const lp=toXY(d.angle,LABEL_R);
-    const cfg=labelCfg[i];
-    const lines=d.name.split('\n');
-    const t=el('text',{x:lp.x+cfg.dx,y:lp.y+cfg.dy,'text-anchor':cfg.anchor,'font-size':'11','fill':'#2A3028','font-family':'Nunito,sans-serif','font-weight':'600'});
-    const lh=14;
-    const offset=lines.length===2?-lh/2:0;
-    lines.forEach((line,li)=>{
-      t.appendChild(Object.assign(document.createElementNS(NS,'tspan'),{textContent:line}));
-      t.lastChild.setAttribute('x',lp.x+cfg.dx);
-      t.lastChild.setAttribute('dy',li===0?offset:lh);
+
+  domains.forEach((d, i) => {
+    const lp = toXY(d.angle, LABEL_R);
+    const cfg = labelConfig[i];
+    const lines = d.name.split('\n');
+    const t = el('text', {
+      x: lp.x + cfg.dx,
+      y: lp.y + cfg.dy,
+      'text-anchor': cfg.anchor,
+      'font-size': '11.5',
+      fill: '#2A3028',
+      'font-family': 'Nunito, sans-serif',
+      'font-weight': '600',
+    });
+    const lineH = 14;
+    const offset = lines.length === 2 ? -lineH / 2 : 0;
+    lines.forEach((line, li) => {
+      t.appendChild(el('tspan', {
+        x: lp.x + cfg.dx,
+        dy: li === 0 ? offset : lineH,
+      }, line));
     });
     svg.appendChild(t);
   });
 
   // Centre label
-  svg.appendChild(el('text',{x:CX,y:CY-8,'text-anchor':'middle','font-size':'11',fill:'#8A9E8A','font-family':'Cormorant Garamond,serif','font-style':'italic'},'Dual Report'));
+  svg.appendChild(el('text', {
+    x: CX, y: CY - 8,
+    'text-anchor': 'middle',
+    'font-size': '11', fill: '#8A9E8A',
+    'font-family': 'Cormorant Garamond, serif',
+    'font-style': 'italic',
+  }, 'Frailty Profile'));
+  svg.appendChild(el('text', {
+    x: CX, y: CY + 6,
+    'text-anchor': 'middle',
+    'font-size': '10', fill: '#C4843A',
+    'font-family': 'Nunito, sans-serif',
+    'font-weight': '700',
+  }, '▲ AMBER RISK'));
+
 })();
 
-// ── RENDER COMPONENTS ──
-document.addEventListener('DOMContentLoaded',()=>{
-  buildCounts();
-  buildCompBars();
-  buildDomainRows();
-});
-
-function buildCounts(){
-  let agree=0,mild=0,sig=0;
-  DOMAINS.forEach(d=>{
-    const dc=divergenceClass(d.personScore,d.carerScore);
-    if(dc==='agree') agree++;
-    else if(dc==='mild') mild++;
-    else sig++;
-  });
-  document.getElementById('agreeCount').textContent=agree;
-  document.getElementById('mildCount').textContent=mild;
-  document.getElementById('sigCount').textContent=sig;
+// ── ACCORDION ──
+function toggleDomain(header) {
+  const item = header.parentElement;
+  item.classList.toggle('open');
 }
 
-function buildCompBars(){
-  const labels={physical:'Physical',nutrition:'Nutrition',daily_living:'Daily Living',cognition:'Cognition & MH',social:'Social',medical:'Medical'};
-  document.getElementById('compBars').innerHTML=DOMAINS.map(d=>`
-    <div>
-      <div style="font-size:11px;font-weight:600;color:var(--charcoal);margin-bottom:5px;">${labels[d.key]||d.name}</div>
-      <div class="cbar-row">
-        <div class="cbar-label" style="color:var(--sage);font-weight:600;">Person</div>
-        <div class="cbar-track"><div class="cbar-fill-sage" style="width:${d.personScore*10}%"></div></div>
-        <div class="cbar-score sage">${d.personScore}</div>
-      </div>
-      <div class="cbar-row">
-        <div class="cbar-label" style="color:var(--amber-dark);font-weight:600;">Carer</div>
-        <div class="cbar-track"><div class="cbar-fill-amber" style="width:${d.carerScore*10}%"></div></div>
-        <div class="cbar-score amber">${d.carerScore}</div>
-      </div>
-    </div>
-  `).join('');
-}
-
-function buildDomainRows(){
-  const interpretations={
-    agree:{green:{text:'Both reports agree this is a strength. High clinical confidence in the positive signal.',cls:''},
-           red:{text:'DOUBLE TAP — Both reports confirm significant concern. Two independent observations agree. This is the highest clinical confidence signal in this referral. Act with urgency.',cls:'double-tap'}},
-    mild:{text:'Mild divergence. Worth noting in the CGA and monitoring. Ask open questions in both directions.',cls:'amber'},
-    sig:{personHigh:{text:'Person rates this domain higher than the carer observes. This is the classic minimisation pattern — the person is likely understating their difficulties. Approach this domain with particular care in the CGA. Reassure explicitly that the goal is to support them at home, not to make decisions without them.',cls:'red'},
-         carerHigh:{text:'The carer is more concerned than the person reports. Explore openly in the CGA — the person may have insight the carer does not, or there may be difficulties the carer is not fully aware of.',cls:'amber'}},
-  };
-
-  document.getElementById('domainRows').innerHTML=DOMAINS.map(d=>{
-    const dc=divergenceClass(d.personScore,d.carerScore);
-    const dt=isDoubleTap(d.personScore,d.carerScore);
-    const delta=Math.abs(d.personScore-d.carerScore);
-
-    let badgeCls,badgeText,interpText,interpCls;
-    if(dt){badgeCls='double';badgeText='●● Double Tap';}
-    else if(dc==='agree'){badgeCls='agree';badgeText='✓ Agreement';}
-    else if(dc==='mild'){badgeCls='mild';badgeText='▲ Mild divergence';}
-    else{badgeCls='sig';badgeText='⚠ Significant divergence';}
-
-    if(dt){interpText=interpretations.agree.red.text;interpCls='double-tap';}
-    else if(dc==='agree'){interpText=interpretations.agree.green.text;interpCls='';}
-    else if(dc==='mild'){interpText=interpretations.mild.text;interpCls='amber';}
-    else{
-      if(d.personScore>d.carerScore){interpText=interpretations.sig.personHigh.text;interpCls='red';}
-      else{interpText=interpretations.sig.carerHigh.text;interpCls='amber';}
+// ── ACKNOWLEDGE ──
+function acknowledgeReferral() {
+  document.getElementById('ackConfirm').style.display = 'inline';
+  document.querySelectorAll('.btn-primary').forEach(b => {
+    if (b.textContent.includes('Acknowledge')) {
+      b.textContent = '✓ Acknowledged';
+      b.style.background = '#27AE60';
+      b.disabled = true;
     }
-
-    return `
-      <div class="domain-row${dt?' open':''}">
-        <div class="domain-row-header" onclick="toggleRow(this)">
-          <div class="div-badge ${badgeCls}">${badgeText}</div>
-          <div class="domain-name-text">${d.name}</div>
-          <div class="dual-scores">
-            <div class="score-chip">
-              <div class="score-chip-val sage">${d.personScore}</div>
-              <div class="score-chip-lbl">Person</div>
-            </div>
-            <div class="score-chip">
-              <div class="score-chip-val amber">${d.carerScore}</div>
-              <div class="score-chip-lbl">Carer</div>
-            </div>
-            <div class="score-delta${dc==='agree'?' ok':''}">${dc==='agree'?'✓':'Δ '+delta}</div>
-          </div>
-          <div class="chevron-icon">▼</div>
-        </div>
-        <div class="domain-row-body">
-          <div class="dr-grid">
-            <div class="dr-block">
-              <label>Person said</label>
-              <div class="phrase">${d.personPhrase}</div>
-            </div>
-            <div class="dr-block">
-              <label>Carer observed</label>
-              <div class="phrase carer">${d.carerPhrase}</div>
-            </div>
-            <div class="dr-block">
-              <label>Clinical signals</label>
-              <div style="display:flex;flex-direction:column;gap:4px;">
-                ${d.clinicalSignals.map(s=>`<div style="background:var(--sage-pale);color:var(--sage-dark);font-size:11px;font-weight:500;padding:3px 10px;border-radius:10px;">${s}</div>`).join('')}
-              </div>
-            </div>
-          </div>
-          <div class="clinical-note${interpCls?' '+interpCls:''}">
-            <strong>Clinical interpretation and recommended approach:</strong> ${interpText}
-          </div>
-        </div>
-      </div>
-    `;
-  }).join('');
-}
-
-function toggleRow(header){
-  header.parentElement.classList.toggle('open');
-}
-
-function acknowledgeReferral(){
-  document.querySelectorAll('.dh-btn.primary').forEach(b=>{
-    b.textContent='✓ Acknowledged';
-    b.style.background='var(--g)';
-    b.disabled=true;
   });
 }
 
-// ── CGA PRE-SCREEN BRIEF PDF ──
+// ── CGA PRE-SCREEN BRIEF PDF (Single Person) ──
 function generateCgaPDF() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ orientation:'landscape', unit:'mm', format:'a4' });
   const pW=297, pH=210, mg=12;
 
-  // Colour palette
+  // Colours
   const SAGE_DARK=[30,61,53], SAGE=[45,90,78], SAGE_PALE=[232,242,239];
   const AMBER=[196,132,58], AMBER_PALE=[253,243,231];
   const RED=[192,57,43], RED_PALE=[253,237,236];
@@ -578,101 +841,129 @@ function generateCgaPDF() {
   const WHITE=[255,255,255], OFF_WHITE=[248,252,250];
   const WARM_ORANGE=[232,149,109];
 
-  // CGA metadata per domain
-  const META = {
-    physical:    { cga:'Physical / Functional',    priority:'HIGH',     pCol:RED,   tool:'Barthel ADL Index  ·  TUG  ·  FRAT' },
-    nutrition:   { cga:'Nutrition & Weight',        priority:'LOWER',    pCol:GREEN, tool:'MUST — Malnutrition Screening' },
-    daily_living:{ cga:'ADL / IADL Function',       priority:'HIGH',     pCol:RED,   tool:'Barthel Index  ·  Lawton IADL' },
-    cognition:   { cga:'Psychological / Cognitive', priority:'HIGH',     pCol:RED,   tool:'GDS-15  ·  Mini-COG or MoCA  ·  PHQ-9' },
-    social:      { cga:'Social & Environmental',    priority:'HIGH ●●',  pCol:RED,   tool:'Carer Strain Index  ·  Social Needs Assess.' },
-    medical:     { cga:'Medical / Medication',      priority:'MODERATE', pCol:AMBER, tool:'Medication Review  ·  Beers Criteria' },
-  };
+  // Domain data extracted from this referral
+  const DOMAINS = [
+    {
+      cga:'Social & Environmental',    score:3,  priority:'HIGH',     pCol:RED,
+      tool:'Carer Strain Index  ·  Social Needs Assessment  ·  Social Prescribing referral',
+      phrase:'I don\'t see many people these days. My husband passed last year and I don\'t want to be a burden on my daughter.',
+      signals:['Social isolation — lives alone','Recent bereavement (spousal)','Burden concern explicitly voiced','No regular social contact beyond daughter'],
+      action:'High priority referral to Social Prescribing / Link Worker. Bereavement support may also be appropriate.',
+    },
+    {
+      cga:'Psychological / Cognitive', score:4,  priority:'HIGH',     pCol:RED,
+      tool:'GDS-15  ·  Mini-COG or MoCA  ·  PHQ-9 at initial contact',
+      phrase:'I\'ve been feeling a bit flat lately if I\'m honest, not really looking forward to things the way I used to.',
+      signals:['Low mood — persistent','Anhedonia — reduced pleasure in usual activities','Hopelessness about future','Minimisation detected ("a bit flat")'],
+      action:'Mental health and wellbeing assessment. Complex grief and mood picture. PHQ-9 at initial contact. Memory assessment not indicated at this stage — review at CGA.',
+    },
+    {
+      cga:'Physical / Functional',     score:6,  priority:'HIGH',     pCol:RED,
+      tool:'Barthel ADL Index  ·  TUG  ·  FRAT  ·  Dynamometer (grip strength)',
+      phrase:'I manage most things but the stairs are getting harder and I did have a fall in the garden last month, but I didn\'t want to bother anyone about it. Opening jars is fine, I manage.',
+      signals:['Unreported fall (garden) — minimised','Stair difficulty — functional decline','Minimisation pattern confirmed','Grip strength proxy — dismissive of jar opening; dynamometer at CGA recommended'],
+      action:'Falls Prevention Service referral. Home safety assessment. Fall was not reported to anyone — consistent with minimisation pattern. Grip strength dynamometer assessment recommended at CGA as Fried Frailty Phenotype criterion.',
+    },
+    {
+      cga:'ADL / IADL Function',       score:5,  priority:'MODERATE', pCol:AMBER,
+      tool:'Barthel Index  ·  Lawton IADL Scale  ·  OT assessment',
+      phrase:'I cope with the basics but getting to the shops has become difficult since my daughter moved away.',
+      signals:['IADL difficulty — shopping','Loss of informal support (daughter relocated)','Basic ADLs maintained','Increasing isolation risk'],
+      action:'Reablement assessment and OT review. Community transport and local shopping support. Loss of informal network since daughter relocated is a significant change factor.',
+    },
+    {
+      cga:'Medical / Medication',      score:6,  priority:'MODERATE', pCol:AMBER,
+      tool:'Medication reconciliation  ·  Beers Criteria review  ·  Pharmacy MUR',
+      phrase:'I take five tablets every day but I\'ve never been told anything about the weather or when they might be a problem.',
+      signals:['Polypharmacy — 5 medications','No temperature guidance received — cold weather risk active','3 long-term conditions','No recent medication changes reported'],
+      action:'Pharmacist-led medicines use review. Temperature guidance required given polypharmacy and current cold weather conditions.',
+    },
+    {
+      cga:'Nutrition & Weight',        score:8,  priority:'LOWER',    pCol:GREEN,
+      tool:'MUST — Malnutrition Universal Screening Tool',
+      phrase:'I eat well enough, I still cook for myself most days and I haven\'t really lost any weight.',
+      signals:['Self-cooking maintained','No unintentional weight loss','Appetite generally good'],
+      action:'No immediate referral indicated. Monitor at review — shopping difficulty may over time affect dietary intake. Note in CGA.',
+    },
+  ];
 
-  function addPageHeader(pageNum) {
+  function addHeader(pageNum) {
     doc.setFillColor(...SAGE_DARK);
     doc.rect(0,0,pW,16,'F');
     doc.setFont('helvetica','bold');
     doc.setFontSize(9);
     doc.setTextColor(...WHITE);
-    doc.text('RESILIENCE', mg, 10);
+    doc.text('RESILIENCE',mg,10);
     doc.setFont('helvetica','normal');
     doc.setFontSize(7.5);
     doc.setTextColor(180,210,200);
-    doc.text('CGA Pre-Screen Brief  ·  RSLNCE-2026-0042  ·  Dual Report (Person + Carer)  ·  16 May 2026', mg+28, 10);
+    doc.text('CGA Pre-Screen Brief  ·  RSLNCE-2026-0042  ·  Single Person Report  ·  16 May 2026',mg+28,10);
     doc.setFontSize(7);
     doc.setTextColor(130,170,160);
-    doc.text(`Page ${pageNum}  ·  Powered by Claude Sonnet, Anthropic`, pW-mg-55, 10);
+    doc.text(`Page ${pageNum}  ·  Powered by Claude Sonnet, Anthropic`,pW-mg-55,10);
   }
 
-  function addPageFooter() {
+  function addFooter() {
     doc.setFillColor(...SAGE_DARK);
     doc.rect(0,pH-9,pW,9,'F');
     doc.setFont('helvetica','normal');
     doc.setFontSize(6.5);
     doc.setTextColor(130,170,160);
-    doc.text('Assistiv Systems Limited, Faversham, Kent  ·  resiliencetools.xyz', mg, pH-3.5);
-    doc.setTextColor(160,190,185);
-    doc.text('This document pre-populates the CGA. It does not constitute a clinical assessment. All clinical decisions remain with the qualified practitioner.', pW-mg-118, pH-3.5);
+    doc.text('Assistiv Systems Limited, Faversham, Kent  ·  resiliencetools.xyz',mg,pH-3.5);
+    doc.text('This document pre-populates the CGA. It does not constitute a clinical assessment. All clinical decisions remain with the qualified practitioner.',pW-mg-118,pH-3.5);
   }
 
-  // ══ PAGE 1 ══
-  addPageHeader(1);
+  // ══ PAGE 1 — HEADER, SCORES, ALERTS ══
+  addHeader(1);
 
-  // Scores summary bar
+  // Scores bar
   doc.setFillColor(...SAGE_PALE);
   doc.rect(0,16,pW,13,'F');
   const scoreItems=[
-    {l:'Overall Risk', v:'AMBER RISK', c:AMBER},
-    {l:'PRISMA-7', v:'4 / 7  (threshold ≥3)', c:AMBER},
-    {l:'FRAIL Scale', v:'2 / 5  Pre-frail', c:AMBER},
-    {l:'Minimisation', v:'DETECTED — Both tools', c:RED},
-    {l:'Carer Wellbeing', v:'Strain flagged', c:RED},
-    {l:'Completing', v:'Self + Carer (dual)', c:SAGE},
+    {l:'Overall Risk',  v:'AMBER RISK',           c:AMBER},
+    {l:'PRISMA-7',      v:'4 / 7  (threshold ≥3)',c:AMBER},
+    {l:'FRAIL Scale',   v:'2 / 5  Pre-frail',     c:AMBER},
+    {l:'Minimisation',  v:'DETECTED',             c:RED},
+    {l:'Report Type',   v:'Person self-report',   c:SAGE},
+    {l:'Completing',    v:'Community health worker',c:SAGE},
   ];
   const sW=(pW-mg*2)/scoreItems.length;
   scoreItems.forEach((s,i)=>{
     const x=mg+i*sW;
-    doc.setFont('helvetica','normal');
-    doc.setFontSize(6.5);
-    doc.setTextColor(...TEXT_SEC);
+    doc.setFont('helvetica','normal'); doc.setFontSize(6.5); doc.setTextColor(...TEXT_SEC);
     doc.text(s.l.toUpperCase(),x,21);
-    doc.setFont('helvetica','bold');
-    doc.setFontSize(7.5);
-    doc.setTextColor(...s.c);
+    doc.setFont('helvetica','bold'); doc.setFontSize(7.5); doc.setTextColor(...s.c);
     doc.text(s.v,x,27);
   });
 
   let y=33;
 
   // Alert flags
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(8);
-  doc.setTextColor(...CHARCOAL);
+  doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(...CHARCOAL);
   doc.text('CLINICAL ALERT FLAGS',mg,y);
   y+=3;
 
   const alerts=[
-    {badge:'DOUBLE TAP  ●●', col:RED,   text:'Social Connection (Person 3 · Carer 2) — Both reports confirm critical isolation. Recent bereavement. Highest-priority need. Act urgently.'},
-    {badge:'HIGH  ⚠',        col:RED,   text:'Daily Living divergence (Person 5 · Carer 3) — Carer providing substantial covert support. Person significantly underreporting IADL dependency.'},
-    {badge:'HIGH  ⚠',        col:RED,   text:'Unreported fall — Physical Function (Person 6 · Carer 4). Person minimised fall. Stair difficulty confirmed by both. Falls assessment essential.'},
-    {badge:'AMBER  ⚠',       col:AMBER, text:'Polypharmacy — 5 medications. No temperature guidance received. Cold weather risk window active. Pharmacy review recommended this week.'},
-    {badge:'AMBER  ⚠',       col:AMBER, text:'Minimisation confirmed across both screening and carer divergence. Reassure person explicitly: goal is staying at home, on their terms.'},
-    {badge:'AMBER  ⚠',       col:AMBER, text:'Carer wellbeing strain flagged. No regular breaks. Limited support network. Carer assessment recommended alongside main CGA response.'},
+    {badge:'HIGH  ⚠',   col:RED,   text:'Social Connection (3/10) — Critical isolation. Recent spousal bereavement. Lives alone. No regular contact beyond daughter. Burden concern explicitly voiced. Highest-priority need.'},
+    {badge:'HIGH  ⚠',   col:RED,   text:'Cognition and Mental Health (4/10) — Persistent low mood, anhedonia, and future uncertainty detected. Minimisation of emotional state confirmed. PHQ-9 at initial contact.'},
+    {badge:'HIGH  ⚠',   col:RED,   text:'Physical Function (6/10) — Unreported fall in garden last month. Person explicitly minimised this. Stair difficulty confirmed. Grip strength proxy signal detected — dynamometer at CGA.'},
+    {badge:'AMBER  ⚠',  col:AMBER, text:'Polypharmacy — 5 medications. No temperature guidance received. Cold weather risk window active. Pharmacy medicines use review required.'},
+    {badge:'AMBER  ⚠',  col:AMBER, text:'Minimisation pattern — Detected across Physical Function and Mood domains. Person consistently downplays difficulties. Approach CGA with sensitivity and explicit reassurance of autonomy.'},
+    {badge:'AMBER  ⚠',  col:AMBER, text:'Domain 10 — Oral frailty indicators present (difficulty chewing, dry mouth). Sleep disruption flagged (frequent waking, daytime fatigue). Supplementary referrals recommended.'},
   ];
 
   doc.autoTable({
     startY:y, margin:{left:mg,right:mg},
-    body:alerts.map(a=>[a.badge, a.text]),
+    body:alerts.map(a=>[a.badge,a.text]),
     columnStyles:{
-      0:{cellWidth:30,fontStyle:'bold',fontSize:7},
-      1:{cellWidth:pW-mg*2-30,fontSize:7},
+      0:{cellWidth:28,fontStyle:'bold',fontSize:7},
+      1:{cellWidth:pW-mg*2-28,fontSize:7},
     },
     styles:{cellPadding:2.5,overflow:'linebreak',lineColor:[213,229,223],lineWidth:0.3},
     alternateRowStyles:{fillColor:OFF_WHITE},
     didParseCell:(d)=>{
       if(d.column.index===0&&d.section==='body'){
         d.cell.styles.textColor=alerts[d.row.index]?.col||CHARCOAL;
-        d.cell.styles.fillColor=d.row.index%2===0?WHITE:OFF_WHITE;
       }
     },
   });
@@ -683,67 +974,51 @@ function generateCgaPDF() {
   doc.setFillColor(255,248,240);
   doc.setDrawColor(...WARM_ORANGE);
   doc.setLineWidth(0.4);
-  doc.roundedRect(mg,y,pW-mg*2,18,2,2,'FD');
+  doc.roundedRect(mg,y,pW-mg*2,20,2,2,'FD');
   doc.setFillColor(...WARM_ORANGE);
-  doc.rect(mg,y,3,18,'F');
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(7.5);
-  doc.setTextColor(123,74,32);
-  doc.text('MINIMISATION CLINICAL NOTE — For the assessing clinician',mg+5,y+5.5);
-  doc.setFont('helvetica','normal');
-  doc.setFontSize(7);
-  doc.setTextColor(90,48,32);
-  const mLines=doc.splitTextToSize('The RESILIENCE screening tool and carer report both detected signals consistent with health minimisation. The person is almost certainly understating the extent of their difficulties, most likely due to fear of being a burden or concern about care home placement. The CGA should explicitly reassure the person that the goal of every service involved is for them to stay at home, on their own terms, with their dignity intact. A sensitive, unhurried approach is strongly recommended.',pW-mg*2-10);
-  doc.text(mLines,mg+5,y+11);
-  y+=24;
+  doc.rect(mg,y,3,20,'F');
+  doc.setFont('helvetica','bold'); doc.setFontSize(7.5); doc.setTextColor(123,74,32);
+  doc.text('MINIMISATION CLINICAL NOTE — For the assessing clinician',mg+5,y+6);
+  doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(90,48,32);
+  const mText='The RESILIENCE screening tool detected minimisation signals during this conversation. The person is likely understating the extent of their difficulties — most probably due to fear of being a burden on their daughter or concern about what honest disclosure might lead to. The CGA should explicitly reassure the person that the goal of every service involved is for them to stay at home, on their own terms, with their dignity intact. A sensitive, unhurried approach is strongly recommended at every stage of initial contact.';
+  doc.text(doc.splitTextToSize(mText,pW-mg*2-10),mg+5,y+12);
+  y+=26;
 
-  addPageFooter();
+  addFooter();
 
-  // ══ PAGE 2 ══
+  // ══ PAGE 2 — DOMAIN MAPPING TABLE ══
   doc.addPage();
-  addPageHeader(2);
+  addHeader(2);
   y=22;
 
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(8.5);
-  doc.setTextColor(...CHARCOAL);
-  doc.text('DOMAIN MAPPING — PERSON & CARER VERBATIM WITH AI CLINICAL SIGNALS AND CGA TOOL RECOMMENDATIONS',mg,y);
+  doc.setFont('helvetica','bold'); doc.setFontSize(8.5); doc.setTextColor(...CHARCOAL);
+  doc.text('CGA DOMAIN MAPPING — VERBATIM SCREENING INPUT WITH AI CLINICAL SIGNALS AND TOOL RECOMMENDATIONS',mg,y);
   y+=4;
 
-  const tableRows=DOMAINS.map(d=>{
-    const meta=META[d.key]||{};
-    const dc=divergenceClass(d.personScore,d.carerScore);
-    const dt=isDoubleTap(d.personScore,d.carerScore);
-    const delta=Math.abs(d.personScore-d.carerScore);
-    const divLabel=dt?'●● DOUBLE TAP':dc==='agree'?'✓ Agree':dc==='mild'?`▲ Mild  Δ${delta}`:`⚠ Sig  Δ${delta}`;
-    const scoreStr=`P: ${d.personScore}/10\nC: ${d.carerScore}/10\n${divLabel}`;
-    const personClean=d.personPhrase.replace(/^"|"$/g,'').replace(/\\'/g,"'");
-    const carerClean=d.carerPhrase.replace(/^"|"$/g,'').replace(/\\'/g,"'");
-    return [
-      meta.cga||d.name,
-      meta.priority||'',
-      scoreStr,
-      personClean,
-      carerClean,
-      d.clinicalSignals.join('\n'),
-      meta.tool||'',
-      '[ ] Verified\n[ ] Modified\nNotes:\n___________',
-    ];
-  });
+  const tableRows=DOMAINS.map(d=>[
+    d.cga,
+    d.priority,
+    `${d.score}/10`,
+    d.phrase,
+    d.signals.join('\n'),
+    d.tool,
+    d.action,
+    '[ ] Verified\n[ ] Modified\nNotes:\n___________',
+  ]);
 
   doc.autoTable({
     startY:y, margin:{left:mg,right:mg},
-    head:[['CGA Domain','Priority','Scores','Person — Verbatim','Carer — Verbatim','AI Clinical Signals','CGA Tool','MDT Sign-Off']],
+    head:[['CGA Domain','Priority','Score','Person — Verbatim','AI Clinical Signals','CGA Tool','Recommended Action','MDT Sign-Off']],
     body:tableRows,
     headStyles:{fillColor:SAGE,textColor:WHITE,fontSize:7,fontStyle:'bold',cellPadding:3},
     columnStyles:{
       0:{cellWidth:30,fontStyle:'bold',fontSize:6.5},
       1:{cellWidth:18,fontStyle:'bold',fontSize:6.5},
-      2:{cellWidth:18,fontSize:6.5},
-      3:{cellWidth:46,fontSize:6.5,fontStyle:'italic'},
-      4:{cellWidth:46,fontSize:6.5,fontStyle:'italic'},
-      5:{cellWidth:44,fontSize:6.5},
-      6:{cellWidth:34,fontSize:6},
+      2:{cellWidth:12,fontSize:7,fontStyle:'bold',halign:'center'},
+      3:{cellWidth:52,fontSize:6.5,fontStyle:'italic'},
+      4:{cellWidth:44,fontSize:6.5},
+      5:{cellWidth:38,fontSize:6},
+      6:{cellWidth:50,fontSize:6.5},
       7:{cellWidth:28,fontSize:6.5},
     },
     styles:{overflow:'linebreak',cellPadding:2.8,lineColor:[213,229,223],lineWidth:0.3,valign:'top'},
@@ -752,25 +1027,12 @@ function generateCgaPDF() {
       if(d.section==='body'){
         const dom=DOMAINS[d.row.index];
         if(!dom) return;
-        const meta=META[dom.key];
-        // Priority column colour
-        if(d.column.index===1&&meta){
-          d.cell.styles.textColor=meta.pCol||CHARCOAL;
-        }
-        // Score column colour by divergence
+        if(d.column.index===1) d.cell.styles.textColor=dom.pCol||CHARCOAL;
         if(d.column.index===2){
-          const dt=isDoubleTap(dom.personScore,dom.carerScore);
-          const dc=divergenceClass(dom.personScore,dom.carerScore);
-          d.cell.styles.textColor=dt||dc==='sig'?RED:dc==='mild'?AMBER:GREEN;
+          d.cell.styles.textColor=dom.score<=3?RED:dom.score<=6?AMBER:GREEN;
+          d.cell.styles.fontStyle='bold';
         }
-        // Person column sage tint
-        if(d.column.index===3){
-          d.cell.styles.textColor=[30,65,55];
-        }
-        // Carer column amber tint
-        if(d.column.index===4){
-          d.cell.styles.textColor=[100,65,20];
-        }
+        if(d.column.index===3) d.cell.styles.textColor=[30,65,55];
       }
     },
   });
@@ -778,7 +1040,7 @@ function generateCgaPDF() {
   y=doc.lastAutoTable.finalY+6;
 
   // GP Starter
-  if(y>pH-38) { doc.addPage(); addPageHeader(3); y=22; }
+  if(y>pH-36){ doc.addPage(); addHeader(3); y=22; }
 
   doc.setFillColor(...AMBER_PALE);
   doc.setDrawColor(...AMBER);
@@ -786,31 +1048,24 @@ function generateCgaPDF() {
   doc.roundedRect(mg,y,pW-mg*2,20,2,2,'FD');
   doc.setFillColor(...AMBER);
   doc.rect(mg,y,3,20,'F');
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(7.5);
-  doc.setTextColor(...AMBER);
+  doc.setFont('helvetica','bold'); doc.setFontSize(7.5); doc.setTextColor(...AMBER);
   doc.text('GP / CLINICIAN CONVERSATION STARTER',mg+5,y+6);
-  doc.setFont('helvetica','italic');
-  doc.setFontSize(7.5);
-  doc.setTextColor(...CHARCOAL);
-  const gpText='"I can see from your RESILIENCE conversation that there are a few things you\'ve been finding harder lately — getting around, staying connected, and managing at home. I want to make sure we talk through those today, so we can think together about what support would help you stay well and at home, on your own terms."';
-  const gpLines=doc.splitTextToSize(gpText,pW-mg*2-10);
-  doc.text(gpLines,mg+5,y+12);
+  doc.setFont('helvetica','italic'); doc.setFontSize(7.5); doc.setTextColor(...CHARCOAL);
+  const gpText='"I can see from your RESILIENCE conversation that there are a few things you\'ve been finding harder lately — feeling connected to people, your mood, and getting around. I want to make sure we talk through those today, so we can think together about what support would help you stay well and at home, on your own terms."';
+  doc.text(doc.splitTextToSize(gpText,pW-mg*2-10),mg+5,y+12);
   y+=26;
 
-  // BGS CGA domain reference
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(7.5);
-  doc.setTextColor(...TEXT_SEC);
+  // BGS reference note
+  doc.setFont('helvetica','bold'); doc.setFontSize(7.5); doc.setTextColor(...TEXT_SEC);
   doc.text('BGS CGA DOMAIN REFERENCE',mg,y);
-  doc.setFont('helvetica','normal');
-  doc.setFontSize(7);
-  doc.text('This brief maps to the five-pillar BGS Comprehensive Geriatric Assessment framework. The CGA remains the gold standard multidisciplinary assessment. This document prepares for it — it does not replace it.',mg,y+4);
+  doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(...TEXT_SEC);
+  doc.text('This brief maps to the BGS Comprehensive Geriatric Assessment five-pillar framework. The CGA remains the gold standard multidisciplinary assessment. This document prepares for it — it does not replace it.',mg,y+5);
 
-  addPageFooter();
+  addFooter();
 
-  doc.save('RESILIENCE_CGA_PreScreen_RSLNCE-2026-0042.pdf');
+  doc.save('RESILIENCE_CGA_PreScreen_SingleReport_RSLNCE-2026-0042.pdf');
 }
 </script>
+
 </body>
 </html>
