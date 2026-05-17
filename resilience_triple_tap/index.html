@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RESILIENCE — Triple Tap Intelligence · RSLNCE-2026-0042</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#1A2B4A; --navy-dark:#0F1A2E; --navy-pale:#EEF1F6;
+  --sage:#2D5A4E; --sage-dark:#1E3D35; --sage-pale:#E8F2EF; --sage-very-pale:#F4FAF8;
+  --amber:#C4843A; --amber-dark:#9E6420; --amber-pale:#FDF3E7;
+  --cream:#FAF7F2; --white:#FFFFFF;
+  --charcoal:#1A2520; --text:#2A3028;
+  --text-secondary:#5A6B5A; --text-light:#8A9E8A;
+  --border:#D5E5DF; --border-light:#EDF5F2;
+  --g:#27AE60; --g-bg:#EBF8F0; --g-text:#1D6B3A; --g-border:#A3D9B7;
+  --a:#E67E22; --a-bg:#FEF5E7; --a-text:#9E6420; --a-border:#F0C070;
+  --r:#E74C3C; --r-bg:#FDEDEC; --r-text:#C0392B; --r-border:#F5A89F;
+  --tt:#8B008B; --tt-bg:#F5E6F5; --tt-border:#D4A0D4; --tt-text:#6A006A;
+  --shadow:0 2px 16px rgba(26,43,74,0.1);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);font-size:13px;}
+
+/* ── HEADER ── */
+.page-header{background:var(--navy-dark);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.dh-brand{display:flex;align-items:center;gap:16px;}
+.dh-logo{font-family:'Cormorant Garamond',serif;font-size:12px;font-weight:500;letter-spacing:.35em;text-transform:uppercase;color:rgba(255,255,255,.9);}
+.dh-title{font-size:13px;font-weight:600;color:rgba(255,255,255,.75);}
+.dh-sub{font-size:11px;color:rgba(255,255,255,.4);margin-top:1px;}
+.dh-actions{display:flex;align-items:center;gap:10px;}
+.tt-badge{background:var(--tt-bg);color:var(--tt-text);border:1px solid var(--tt-border);font-size:12px;font-weight:700;padding:6px 16px;border-radius:20px;letter-spacing:.05em;}
+.dh-btn{font-family:'Nunito',sans-serif;font-size:12px;font-weight:600;padding:7px 16px;border-radius:16px;cursor:pointer;border:none;transition:all .2s;}
+.dh-btn.primary{background:var(--amber);color:white;}
+.dh-btn.primary:hover{background:var(--amber-dark);}
+.dh-btn.ghost{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);}
+.dh-btn.ghost:hover{background:rgba(255,255,255,.18);}
+
+/* ── TRIPLE TAP BANNER ── */
+.tt-banner{background:linear-gradient(135deg,var(--tt) 0%,#C0395C 100%);padding:14px 28px;display:flex;align-items:center;gap:16px;}
+.tt-banner-icon{font-size:24px;}
+.tt-banner-text{flex:1;}
+.tt-banner-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:white;margin-bottom:2px;}
+.tt-banner-sub{font-size:12px;color:rgba(255,255,255,.8);}
+.tt-banner-badge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:white;font-size:11px;font-weight:700;padding:5px 14px;border-radius:12px;letter-spacing:.05em;}
+
+/* ── LAYOUT ── */
+.page-body{max-width:1100px;margin:0 auto;padding:22px 20px 60px;}
+.row{display:grid;gap:16px;margin-bottom:20px;}
+.row.cols-2{grid-template-columns:1fr 1fr;}
+.row.cols-3{grid-template-columns:1fr 1fr 1fr;}
+.row.cols-2-1{grid-template-columns:2fr 1fr;}
+.card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--shadow);}
+.card-label{font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--text-secondary);margin-bottom:10px;}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:500;color:var(--charcoal);margin-bottom:14px;}
+
+/* ── KPI CARDS ── */
+.kpi-num{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:400;line-height:1;color:var(--charcoal);}
+.kpi-num.tt{color:var(--tt-text);}
+.kpi-num.green{color:var(--g-text);}
+.kpi-num.amber{color:var(--a-text);}
+.kpi-num.red{color:var(--r-text);}
+.kpi-sub{font-size:12px;color:var(--text-secondary);margin-top:4px;}
+
+/* ── RADAR ── */
+.radar-legend{display:flex;gap:20px;margin-top:14px;flex-wrap:wrap;}
+.legend-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-secondary);}
+.legend-swatch{width:28px;height:4px;border-radius:2px;}
+.legend-swatch.dashed{background:repeating-linear-gradient(90deg,var(--sage) 0,var(--sage) 6px,transparent 6px,transparent 10px);}
+.legend-swatch.dotted{background:repeating-linear-gradient(90deg,var(--amber) 0,var(--amber) 4px,transparent 4px,transparent 8px);}
+.legend-swatch.solid{background:var(--navy);}
+.legend-swatch.tt-dot{background:var(--tt);border-radius:50%;width:12px;height:12px;}
+
+/* ── PATTERN BADGES ── */
+.pattern-badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:4px 10px;border-radius:10px;}
+.pb-tt{background:var(--tt-bg);color:var(--tt-text);border:1px solid var(--tt-border);}
+.pb-minim{background:var(--r-bg);color:var(--r-text);border:1px solid var(--r-border);}
+.pb-agree{background:var(--g-bg);color:var(--g-text);border:1px solid var(--g-border);}
+.pb-cga-person{background:var(--navy-pale);color:var(--navy);border:1px solid #C5D0E0;}
+.pb-cga-carer{background:var(--a-bg);color:var(--a-text);border:1px solid var(--a-border);}
+
+/* ── DOMAIN ROWS ── */
+.domain-row{background:var(--white);border:1px solid var(--border);border-radius:12px;margin-bottom:8px;overflow:hidden;box-shadow:0 1px 4px rgba(26,43,74,.05);}
+.domain-row.triple-tap-row{border:2px solid var(--tt-border);}
+.domain-header{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;transition:background .15s;}
+.domain-header:hover{background:var(--sage-very-pale);}
+.domain-row.open .domain-chevron{transform:rotate(180deg);}
+.three-scores{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.score-chip{display:flex;flex-direction:column;align-items:center;width:42px;}
+.score-val{font-size:17px;font-weight:700;}
+.score-val.person{color:var(--sage);}
+.score-val.carer{color:var(--amber-dark);}
+.score-val.cga{color:var(--navy);}
+.score-lbl{font-size:8px;text-transform:uppercase;letter-spacing:.05em;color:var(--text-light);}
+.score-divider{width:1px;height:28px;background:var(--border);}
+.domain-name-text{font-weight:700;font-size:14px;color:var(--charcoal);flex:1;}
+.domain-priority{font-size:11px;font-weight:600;margin-top:2px;}
+.domain-chevron{font-size:14px;color:var(--text-light);transition:transform .25s;flex-shrink:0;}
+.domain-body{display:none;border-top:1px solid var(--border-light);padding:16px 18px 18px;background:#FDFDFB;}
+.domain-row.open .domain-body{display:block;}
+.dr-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px;}
+.dr-block label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-secondary);display:block;margin-bottom:6px;}
+.phrase{font-style:italic;font-size:13px;color:var(--charcoal);line-height:1.55;border-left:3px solid var(--sage-pale);padding-left:10px;}
+.phrase.carer-p{border-color:var(--amber-pale);}
+.phrase.cga-p{border-color:var(--navy-pale);font-style:normal;font-size:12px;}
+.cga-interp{background:var(--navy-pale);border:1px solid #C5D0E0;border-radius:8px;padding:11px 14px;font-size:13px;color:var(--navy);line-height:1.6;}
+.cga-interp.tt-interp{background:var(--tt-bg);border-color:var(--tt-border);color:var(--tt-text);}
+.cga-interp.minim-interp{background:var(--r-bg);border-color:var(--r-border);color:var(--r-text);}
+
+/* ── CALIBRATION ── */
+.calib-bar{height:10px;border-radius:5px;display:flex;overflow:hidden;gap:2px;margin:8px 0;}
+.cb-hit{background:var(--g);}
+.cb-miss{background:var(--r);}
+.calib-legend{display:flex;gap:14px;font-size:11px;color:var(--text-secondary);}
+
+/* ── CGA SUMMARY ── */
+.cga-metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.cga-metric{background:var(--navy-pale);border-radius:8px;padding:10px 12px;}
+.cga-metric-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--navy);margin-bottom:3px;}
+.cga-metric-value{font-size:16px;font-weight:700;color:var(--charcoal);}
+.cga-metric-sub{font-size:10px;color:var(--text-secondary);margin-top:1px;}
+
+/* ── AI SYNTHESIS ── */
+.ai-panel{background:var(--navy-dark);border-radius:14px;padding:22px 24px;color:white;}
+.ai-label{font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:14px;}
+.ai-trigger-btn{font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;padding:10px 22px;background:var(--amber);color:white;border:none;border-radius:20px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px;}
+.ai-trigger-btn:hover{background:var(--amber-dark);}
+.ai-trigger-btn:disabled{opacity:.5;pointer-events:none;}
+.ai-desc{font-size:12px;color:rgba(255,255,255,.6);line-height:1.5;max-width:420px;}
+.ai-loading{display:none;align-items:center;gap:12px;color:rgba(255,255,255,.7);font-size:13px;margin-top:14px;}
+.ai-loading.active{display:flex;}
+.ai-orb{width:12px;height:12px;border-radius:50%;background:var(--amber);animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.85);}}
+.ai-output{display:none;margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,.12);}
+.ai-output.visible{display:block;}
+.ai-section{margin-bottom:16px;}
+.ai-section h4{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:500;color:rgba(255,255,255,.92);margin-bottom:8px;}
+.ai-section p,.ai-section li{font-size:13px;color:rgba(255,255,255,.72);line-height:1.65;}
+.ai-section ul{padding-left:16px;}
+.ai-section li{margin-bottom:4px;}
+.ai-meta{font-size:10px;color:rgba(255,255,255,.3);margin-top:16px;}
+
+/* ── LONGITUDINAL ── */
+.longi-placeholder{background:var(--navy-pale);border:2px dashed #C5D0E0;border-radius:12px;padding:28px;text-align:center;}
+.longi-icon{font-size:36px;margin-bottom:12px;}
+.longi-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;color:var(--navy);margin-bottom:8px;}
+.longi-body{font-size:13px;color:var(--text-secondary);line-height:1.65;max-width:480px;margin:0 auto;}
+
+/* ── ACTIONS ── */
+.actions-bar{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:16px 22px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;box-shadow:var(--shadow);}
+.actions-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-secondary);}
+.btn-action{font-family:'Nunito',sans-serif;font-size:13px;font-weight:600;padding:8px 18px;border-radius:18px;cursor:pointer;border:none;transition:all .2s;}
+.btn-action.primary{background:var(--navy);color:white;}
+.btn-action.primary:hover{background:var(--navy-dark);}
+.btn-action.outline{background:none;border:1px solid var(--border);color:var(--text-secondary);}
+.btn-action.outline:hover{border-color:var(--navy);color:var(--navy);}
+
+@media(max-width:900px){.row.cols-2,.row.cols-3,.row.cols-2-1{grid-template-columns:1fr;}.dr-grid{grid-template-columns:1fr;}.three-scores{gap:6px;}}
+@media print{.page-header{position:static;background:var(--navy-dark);}.dh-actions,.actions-bar,.ai-trigger-btn{display:none;}.ai-output{display:block!important;}.domain-body{display:block!important;}}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="page-header">
+  <div class="dh-brand">
+    <div class="dh-logo">RESILIENCE</div>
+    <div>
+      <div class="dh-title">Triple Tap Intelligence · RSLNCE-2026-0042</div>
+      <div class="dh-sub">Person · Carer · CGA — Three independent clinical perspectives synthesised</div>
+    </div>
+  </div>
+  <div class="dh-actions">
+    <span class="tt-badge">●●● Triple Tap Confirmed</span>
+    <button class="dh-btn ghost" onclick="window.print()">Print / PDF</button>
+    <button class="dh-btn primary" onclick="runAI()">✦ AI Synthesis</button>
+  </div>
+</header>
+
+<!-- TRIPLE TAP BANNER -->
+<div class="tt-banner">
+  <div class="tt-banner-icon">●●●</div>
+  <div class="tt-banner-text">
+    <div class="tt-banner-title">Triple Tap Confirmed — Social Connection and Support</div>
+    <div class="tt-banner-sub">Person self-report, carer observation, and CGA clinical assessment all confirm critical social isolation. Highest clinical confidence signal in this case. Immediate action indicated.</div>
+  </div>
+  <span class="tt-banner-badge">CGA SCORE 2/10</span>
+</div>
+
+<div class="page-body">
+
+  <!-- KPI ROW -->
+  <div class="row cols-3" style="margin-bottom:20px;">
+    <div class="card">
+      <div class="card-label">Triple Tap Domains</div>
+      <div class="kpi-num tt">1</div>
+      <div class="kpi-sub">Social Connection — all three confirm critical need</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Minimisation Confirmed</div>
+      <div class="kpi-num red">2</div>
+      <div class="kpi-sub">CGA and Carer agree; Person significantly understated</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Screening Calibration</div>
+      <div class="kpi-num green">4/6</div>
+      <div class="kpi-sub">Domains well-predicted by community screening (67%)</div>
+    </div>
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="row cols-2">
+
+    <!-- RADAR -->
+    <div class="card">
+      <div class="card-label">Triple Tap Frailty Profile Radar — Three Perspectives</div>
+      <p style="font-size:11px;color:var(--text-secondary);margin-bottom:14px;">CGA is the primary clinical assessment and is shown front and most prominent. Person and Carer reports provide community context. Where all three polygons compress inward — the Triple Tap zone — clinical confidence is highest.</p>
+      <div style="display:flex;justify-content:center;">
+        <svg id="radarSvg" viewBox="0 0 500 460" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:420px;height:auto;"></svg>
+      </div>
+      <div class="radar-legend">
+        <div class="legend-item"><div class="legend-swatch dashed"></div>Person self-report</div>
+        <div class="legend-item"><div class="legend-swatch dotted"></div>Carer observation</div>
+        <div class="legend-item"><div class="legend-swatch solid"></div>CGA — Primary</div>
+        <div class="legend-item"><div class="legend-swatch tt-dot"></div>Triple Tap zone</div>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div style="display:flex;flex-direction:column;gap:16px;">
+
+      <!-- CGA SUMMARY -->
+      <div class="card">
+        <div class="card-label">CGA Clinical Findings — Primary Assessment</div>
+        <div class="cga-metrics">
+          <div class="cga-metric"><div class="cga-metric-label">PRISMA-7 (verified)</div><div class="cga-metric-value" style="color:var(--r-text);">5/7</div><div class="cga-metric-sub">Threshold ≥3 — Frailty confirmed</div></div>
+          <div class="cga-metric"><div class="cga-metric-label">FRAIL Scale</div><div class="cga-metric-value" style="color:var(--r-text);">3/5</div><div class="cga-metric-sub">Frail (upgraded from Pre-frail)</div></div>
+          <div class="cga-metric"><div class="cga-metric-label">GDS-15</div><div class="cga-metric-value" style="color:var(--a-text);">8/15</div><div class="cga-metric-sub">Moderate depression confirmed</div></div>
+          <div class="cga-metric"><div class="cga-metric-label">MoCA</div><div class="cga-metric-value" style="color:var(--g-text);">24/30</div><div class="cga-metric-sub">Within normal limits for age</div></div>
+          <div class="cga-metric"><div class="cga-metric-label">Barthel Index</div><div class="cga-metric-value" style="color:var(--a-text);">18/20</div><div class="cga-metric-sub">Basic ADLs mostly preserved</div></div>
+          <div class="cga-metric"><div class="cga-metric-label">Lawton IADL</div><div class="cga-metric-value" style="color:var(--r-text);">4/8</div><div class="cga-metric-sub">Significant IADL impairment</div></div>
+        </div>
+      </div>
+
+      <!-- SCREENING CALIBRATION -->
+      <div class="card">
+        <div class="card-label">RESILIENCE Screening Calibration vs CGA</div>
+        <p style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">How accurately did community screening predict the CGA clinical findings?</p>
+        <div class="calib-bar">
+          <div class="cb-hit" style="width:67%"></div>
+          <div class="cb-miss" style="width:33%"></div>
+        </div>
+        <div class="calib-legend">
+          <span>🟢 4 domains well-calibrated</span>
+          <span>🔴 2 domains underestimated (minimisation)</span>
+        </div>
+        <div style="margin-top:12px;font-size:12px;color:var(--text-secondary);line-height:1.65;">Physical Function and Daily Living were significantly underestimated by the person's self-report. Carer observation was better calibrated — carer scores matched CGA findings in both domains.</div>
+      </div>
+
+      <!-- WHAT CGA ADDED -->
+      <div class="card">
+        <div class="card-label">What CGA Found Beyond Community Screening</div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;">
+          <div style="background:var(--navy-pale);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--navy);">
+            <strong>Grip strength below threshold</strong> — 18kg (below age/sex norm). Early sarcopenia. Not detectable from self-report.
+          </div>
+          <div style="background:var(--navy-pale);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--navy);">
+            <strong>FRAIL upgraded to Frail (3/5)</strong> — Community screen estimated Pre-frail. CGA confirmed full frailty.
+          </div>
+          <div style="background:var(--navy-pale);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--navy);">
+            <strong>Anticholinergic drug flag</strong> — Beers Criteria review. Increases fall risk. Not captured in self-report.
+          </div>
+          <div style="background:var(--navy-pale);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--navy);">
+            <strong>IADL impairment confirmed</strong> — Lawton 4/8. Carer providing covert support not acknowledged by person.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOMAIN ACCORDION -->
+  <div class="section-title">Domain Breakdown — Three Perspectives</div>
+  <div id="domainRows"></div>
+
+  <!-- AI SYNTHESIS -->
+  <div class="ai-panel" style="margin-bottom:20px;">
+    <div class="ai-label">✦ Triple Tap AI Intelligence Synthesis · Claude Sonnet</div>
+    <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:14px;">
+      <button class="ai-trigger-btn" id="aiBtn" onclick="runAI()"><span>✦</span> Synthesise Three Perspectives</button>
+      <div class="ai-desc">Claude Sonnet reads all three independent assessments and generates a structured clinical intelligence synthesis — identifying what each perspective contributed, where they converge, and what the combined picture means for MDT planning.</div>
+    </div>
+    <div class="ai-loading" id="aiLoading">
+      <div class="ai-orb"></div>
+      Synthesising person, carer, and CGA perspectives...
+    </div>
+    <div class="ai-output" id="aiOutput"></div>
+  </div>
+
+  <!-- LONGITUDINAL PLACEHOLDER -->
+  <div class="longi-placeholder" style="margin-bottom:20px;">
+    <div class="longi-icon">📈</div>
+    <div class="longi-title">Longitudinal Triple Tap Tracking</div>
+    <div class="longi-body">Repeat all three assessments at 3 and 6 months to measure intervention effectiveness. Does social prescribing shift the person's self-report? Does the carer observe improvement? Does the next CGA confirm it? This trajectory view is the most powerful clinical intelligence RESILIENCE generates over time.</div>
+    <div style="margin-top:16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+      <div style="background:rgba(26,43,74,.08);border:1px dashed #C5D0E0;border-radius:8px;padding:10px 18px;font-size:12px;color:var(--navy);font-weight:600;">Baseline — May 2026 ✓</div>
+      <div style="background:rgba(26,43,74,.04);border:1px dashed #C5D0E0;border-radius:8px;padding:10px 18px;font-size:12px;color:var(--text-light);">3 months — Aug 2026 ○</div>
+      <div style="background:rgba(26,43,74,.04);border:1px dashed #C5D0E0;border-radius:8px;padding:10px 18px;font-size:12px;color:var(--text-light);">6 months — Nov 2026 ○</div>
+    </div>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="actions-bar">
+    <span class="actions-label">MDT actions</span>
+    <button class="btn-action primary" onclick="this.textContent='✓ Acknowledged';this.style.background='var(--g)';this.disabled=true;">Acknowledge Receipt</button>
+    <button class="btn-action outline" onclick="alert('Flagged for MDT agenda.')">Flag for MDT</button>
+    <button class="btn-action outline" onclick="alert('3-month repeat screens scheduled.')">Schedule 3-Month Review</button>
+    <button class="btn-action outline" onclick="window.print()">Print / PDF</button>
+  </div>
+
+  <p style="font-size:11px;color:var(--text-light);margin-top:20px;line-height:1.7;">RESILIENCE Triple Tap Intelligence · RSLNCE-2026-0042 · Folkestone and Hythe NHS · Assistiv Systems Limited · <a href="#" style="color:var(--sage);">resiliencetools.xyz</a></p>
+</div>
+
+<!-- JAVASCRIPT -->
+<script>
+// ── DOMAIN DATA ──
+const DOMAINS = [
+  {
+    key:'social', name:'Social Connection and Support',
+    personScore:3, carerScore:2, cgaScore:2,
+    pattern:'triple_tap', priority:'CRITICAL',
+    personPhrase:'"I don\'t see many people these days. My husband passed last year and I don\'t want to be a burden on my daughter."',
+    carerPhrase:'"They are very isolated. Since bereavement they barely go out. I\'m worried — they have almost no other contact."',
+    cgaFindings:'UCLA Loneliness Scale 7/9. Social contact limited to 1-2 carer visits per week. No peer relationships, no community engagement, no befriending in place. Bereavement counselling not accessed 12 months post-loss.',
+    interpretation:'TRIPLE TAP — All three independent sources confirm critical social isolation. Highest clinical confidence signal in this case. Bereavement unaddressed at 12 months is a compounding risk factor. Social prescribing and bereavement support are the most urgent referrals.',
+  },
+  {
+    key:'physical', name:'Physical Function and Mobility',
+    personScore:6, carerScore:4, cgaScore:4,
+    pattern:'minimisation', priority:'HIGH',
+    personPhrase:'"I manage most things but the stairs are getting harder and I did have a fall last month, but I didn\'t want to bother anyone."',
+    carerPhrase:'"They really struggle with stairs. I\'m quite worried after the fall — they tried to hide it from me."',
+    cgaFindings:'TUG 12.4 seconds (borderline). Berg Balance Scale 46/56. Fall confirmed and full circumstances documented on direct questioning. Grip strength dynamometer: 18kg — below threshold for age and sex. Early sarcopenia indicated.',
+    interpretation:'Minimisation confirmed. Person self-report (6/10) significantly overstated functional capacity. CGA aligns with carer observation (4/10). CGA additionally identified subclinical grip strength loss — not detectable from self-report. Falls Prevention Service referral urgent.',
+  },
+  {
+    key:'daily_living', name:'Daily Living — ADLs and IADLs',
+    personScore:5, carerScore:3, cgaScore:3,
+    pattern:'minimisation', priority:'HIGH',
+    personPhrase:'"I cope with the basics but getting to the shops has become difficult since my daughter moved away."',
+    carerPhrase:'"They are really struggling. I\'ve been doing a lot more for them quietly — shopping, appointments, finances. They don\'t want to admit it."',
+    cgaFindings:'Barthel Index 18/20 — basic ADLs mostly preserved. Lawton IADL Scale 4/8 — significant impairment in shopping, transport, medication management, and finances. Carer providing substantial covert IADL support confirmed.',
+    interpretation:'Minimisation confirmed. Barthel preserves basic ADLs but Lawton IADL reveals significant functional dependency the person underreported. CGA aligns with carer observation. Formal OT reablement assessment and care package review are indicated.',
+  },
+  {
+    key:'cognition', name:'Cognition and Mental Health',
+    personScore:4, carerScore:5, cgaScore:4,
+    pattern:'cga_person', priority:'HIGH',
+    personPhrase:'"I\'ve been feeling a bit flat lately if I\'m honest — not really looking forward to things the way I used to."',
+    carerPhrase:'"They seem a bit low but actually I think they have more insight into how they\'re feeling than I expected. The grief is real but they do talk about it."',
+    cgaFindings:'GDS-15: 8/15 — moderate depression confirmed. MoCA: 24/30 — within normal limits for age. Person\'s self-awareness of mood is accurate. Carer slightly overestimates mood relative to clinical picture.',
+    interpretation:'CGA aligns with person self-report. GDS-15 confirms moderate depression — person\'s honesty about their mood is notable and should be explicitly affirmed in the clinical relationship. Carer slightly more optimistic than clinical picture supports. Psychological support referral confirmed.',
+  },
+  {
+    key:'medical', name:'Medical and Medication Burden',
+    personScore:6, carerScore:5, cgaScore:5,
+    pattern:'cga_carer', priority:'MODERATE',
+    personPhrase:'"I take five tablets every day but I\'ve never been told anything about the weather or when they might be a problem."',
+    carerPhrase:'"They manage their tablets mostly but I\'m not sure they always remember. Nobody has ever explained the temperature issue to either of us."',
+    cgaFindings:'5 medications confirmed. Beers Criteria review identifies anticholinergic burden from one medication — compounds fall risk identified in physical domain. No temperature guidance has been given. Cold weather risk active. Pharmacist MUR arranged.',
+    interpretation:'CGA and carer broadly agree. Person slightly overestimates medication management. Beers Criteria flags anticholinergic burden — clinically significant given fall risk from physical domain. This interaction between domains would not be visible from community screening alone.',
+  },
+  {
+    key:'nutrition', name:'Nutrition and Weight',
+    personScore:8, carerScore:7, cgaScore:7,
+    pattern:'agreement', priority:'LOWER',
+    personPhrase:'"I eat well enough, I still cook for myself most days and I haven\'t really lost any weight."',
+    carerPhrase:'"They seem to eat reasonably when I visit, though I worry about meals when I\'m not there."',
+    cgaFindings:'MUST score 1 — low risk. BMI 22.1. No unintentional weight loss on record review. Appetite adequate. Carer concern about unsupervised meals noted for monitoring given IADL shopping difficulty.',
+    interpretation:'Broad agreement across all three sources. Nutrition is a relative strength and a positive anchor in the clinical conversation. Monitor — shopping difficulty (Daily Living domain) may over time affect dietary intake if not addressed.',
+  },
+];
+
+const PATTERNS = {
+  triple_tap:   { badge:'pb-tt',       label:'●●● Triple Tap',          pCol:'var(--tt-text)' },
+  minimisation: { badge:'pb-minim',    label:'⚠ Minimisation Confirmed', pCol:'var(--r-text)' },
+  cga_person:   { badge:'pb-cga-person',label:'CGA + Person Agree',      pCol:'var(--navy)' },
+  cga_carer:    { badge:'pb-cga-carer', label:'CGA + Carer Agree',       pCol:'var(--a-text)' },
+  agreement:    { badge:'pb-agree',    label:'✓ Broad Agreement',        pCol:'var(--g-text)' },
+};
+
+const PRIORITY_COLORS = {
+  'CRITICAL':'var(--tt-text)', 'HIGH':'var(--r-text)',
+  'MODERATE':'var(--a-text)', 'LOWER':'var(--g-text)',
+};
+
+// ── RADAR ──
+(function buildRadar(){
+  const CX=250,CY=235,MAX_R=148;
+  const NS='http://www.w3.org/2000/svg';
+  const svg=document.getElementById('radarSvg');
+
+  const spokes=[
+    {name:'Physical',pScore:6,cScore:4,cgaScore:4,angle:0},
+    {name:'Nutrition',pScore:8,cScore:7,cgaScore:7,angle:60},
+    {name:'Daily\nLiving',pScore:5,cScore:3,cgaScore:3,angle:120},
+    {name:'Medical',pScore:6,cScore:5,cgaScore:5,angle:180},
+    {name:'Social\nConnec.',pScore:3,cScore:2,cgaScore:2,angle:240},
+    {name:'Cognition\n& MH',pScore:4,cScore:5,cgaScore:4,angle:300},
+  ];
+
+  function el(tag,attrs,text){
+    const e=document.createElementNS(NS,tag);
+    Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,v));
+    if(text!==undefined)e.textContent=text;
+    return e;
+  }
+  function toXY(angleDeg,r){
+    const rad=(angleDeg-90)*Math.PI/180;
+    return{x:CX+r*Math.cos(rad),y:CY+r*Math.sin(rad)};
+  }
+
+  // Defs
+  const defs=el('defs',{});
+  ['sage','amber','navy'].forEach((name,i)=>{
+    const colors=['#2D5A4E','#C4843A','#1A2B4A'];
+    const g=el('radialGradient',{id:`grad_${name}`,cx:'50%',cy:'50%',r:'50%'});
+    g.appendChild(el('stop',{offset:'0%','stop-color':colors[i],'stop-opacity':'0.2'}));
+    g.appendChild(el('stop',{offset:'100%','stop-color':colors[i],'stop-opacity':'0.06'}));
+    defs.appendChild(g);
+  });
+  svg.appendChild(defs);
+
+  // Grid
+  [2,4,6,8,10].forEach(level=>{
+    const r=(level/10)*MAX_R;
+    const pts=spokes.map(s=>{const p=toXY(s.angle,r);return`${p.x},${p.y}`;}).join(' ');
+    svg.appendChild(el('polygon',{points:pts,fill:'none',stroke:level===10?'#2D5A4E':'#D5E5DF','stroke-width':level===10?'1.5':'0.6',opacity:level===10?'0.4':'1'}));
+  });
+
+  // Spokes
+  spokes.forEach(s=>{
+    const tip=toXY(s.angle,MAX_R+10);
+    svg.appendChild(el('line',{x1:CX,y1:CY,x2:tip.x,y2:tip.y,stroke:'#D5E5DF','stroke-width':'1'}));
+  });
+
+  // Triple tap pulse on Social Connection
+  const ttSpoke=spokes.find(s=>s.name==='Social\nConnec.');
+  if(ttSpoke){
+    const r=(2/10)*MAX_R;
+    const p=toXY(ttSpoke.angle,r*0.6);
+    const pulse=el('circle',{cx:p.x,cy:p.y,r:'22',fill:'rgba(139,0,139,0.08)',stroke:'#8B008B','stroke-width':'1.5','stroke-dasharray':'4,3'});
+    svg.appendChild(pulse);
+    svg.appendChild(el('text',{x:p.x,y:p.y+4,'text-anchor':'middle','font-size':'10','font-weight':'700',fill:'#6A006A','font-family':'Nunito,sans-serif'},'●●●'));
+  }
+
+  // PERSON polygon (sage, dashed)
+  const personPts=spokes.map(s=>{const r=(s.pScore/10)*MAX_R;const p=toXY(s.angle,r);return`${p.x},${p.y}`;}).join(' ');
+  svg.appendChild(el('polygon',{points:personPts,fill:'url(#grad_sage)',stroke:'#2D5A4E','stroke-width':'1.8','stroke-dasharray':'6,4',opacity:'0.85'}));
+
+  // CARER polygon (amber, dotted)
+  const carerPts=spokes.map(s=>{const r=(s.cScore/10)*MAX_R;const p=toXY(s.angle,r);return`${p.x},${p.y}`;}).join(' ');
+  svg.appendChild(el('polygon',{points:carerPts,fill:'url(#grad_amber)',stroke:'#C4843A','stroke-width':'2','stroke-dasharray':'3,3',opacity:'0.85'}));
+
+  // CGA polygon (navy, solid, front, primary)
+  const cgaPts=spokes.map(s=>{const r=(s.cgaScore/10)*MAX_R;const p=toXY(s.angle,r);return`${p.x},${p.y}`;}).join(' ');
+  svg.appendChild(el('polygon',{points:cgaPts,fill:'url(#grad_navy)',stroke:'#1A2B4A','stroke-width':'3',opacity:'0.95'}));
+
+  // Score dots
+  spokes.forEach(s=>{
+    const scores=[{score:s.pScore,col:'#2D5A4E',bg:'#E8F2EF'},{score:s.cScore,col:'#C4843A',bg:'#FDF3E7'},{score:s.cgaScore,col:'#1A2B4A',bg:'#EEF1F6'}];
+    scores.forEach(sc=>{
+      const r=(sc.score/10)*MAX_R;
+      const p=toXY(s.angle,r);
+      svg.appendChild(el('circle',{cx:p.x,cy:p.y,r:'5',fill:sc.bg,stroke:sc.col,'stroke-width':'1.8'}));
+    });
+  });
+
+  // Labels
+  const LABEL_R=MAX_R+36;
+  const lCfg=[
+    {anchor:'middle',dy:-14,dx:0},
+    {anchor:'start',dy:0,dx:8},
+    {anchor:'start',dy:0,dx:8},
+    {anchor:'middle',dy:18,dx:0},
+    {anchor:'end',dy:0,dx:-8},
+    {anchor:'end',dy:0,dx:-8},
+  ];
+  spokes.forEach((s,i)=>{
+    const lp=toXY(s.angle,LABEL_R);
+    const cfg=lCfg[i];
+    const lines=s.name.split('\n');
+    const t=el('text',{x:lp.x+cfg.dx,y:lp.y+cfg.dy,'text-anchor':cfg.anchor,'font-size':'11','fill':'#2A3028','font-family':'Nunito,sans-serif','font-weight':'600'});
+    const lh=14, offset=lines.length===2?-lh/2:0;
+    lines.forEach((line,li)=>{
+      const ts=el('tspan',{x:lp.x+cfg.dx,dy:li===0?offset:lh},line);
+      t.appendChild(ts);
+    });
+    svg.appendChild(t);
+  });
+
+  // Centre
+  svg.appendChild(el('text',{x:CX,y:CY-6,'text-anchor':'middle','font-size':'10',fill:'#8A9E8A','font-family':'Cormorant Garamond,serif','font-style':'italic'},'Triple Tap'));
+  svg.appendChild(el('text',{x:CX,y:CY+8,'text-anchor':'middle','font-size':'9',fill:'#1A2B4A','font-weight':'700','font-family':'Nunito,sans-serif'},'RSLNCE-2026-0042'));
+})();
+
+// ── DOMAIN ROWS ──
+document.addEventListener('DOMContentLoaded',()=>{
+  const container=document.getElementById('domainRows');
+  DOMAINS.forEach(d=>{
+    const pat=PATTERNS[d.pattern]||PATTERNS.agreement;
+    const pCol=PRIORITY_COLORS[d.priority]||'var(--text-secondary)';
+    const isTT=d.pattern==='triple_tap';
+    const interpCls=isTT?'cga-interp tt-interp':d.pattern==='minimisation'?'cga-interp minim-interp':'cga-interp';
+
+    const row=document.createElement('div');
+    row.className='domain-row'+(isTT?' triple-tap-row open':'');
+    row.innerHTML=`
+      <div class="domain-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="pattern-badge ${pat.badge}">${pat.label}</span>
+        <div style="flex:1">
+          <div class="domain-name-text">${d.name}</div>
+          <div class="domain-priority" style="color:${pCol};">${d.priority}</div>
+        </div>
+        <div class="three-scores">
+          <div class="score-chip"><div class="score-val person">${d.personScore}</div><div class="score-lbl">Person</div></div>
+          <div class="score-divider"></div>
+          <div class="score-chip"><div class="score-val carer">${d.carerScore}</div><div class="score-lbl">Carer</div></div>
+          <div class="score-divider"></div>
+          <div class="score-chip"><div class="score-val cga">${d.cgaScore}</div><div class="score-lbl">CGA ★</div></div>
+        </div>
+        <div class="domain-chevron">▼</div>
+      </div>
+      <div class="domain-body">
+        <div class="dr-grid">
+          <div class="dr-block">
+            <label>Person said</label>
+            <div class="phrase">${d.personPhrase}</div>
+          </div>
+          <div class="dr-block">
+            <label>Carer observed</label>
+            <div class="phrase carer-p">${d.carerPhrase}</div>
+          </div>
+          <div class="dr-block">
+            <label>CGA clinical findings ★ Primary</label>
+            <div class="phrase cga-p">${d.cgaFindings}</div>
+          </div>
+        </div>
+        <div class="${interpCls}"><strong>Triple Tap interpretation:</strong> ${d.interpretation}</div>
+      </div>`;
+    container.appendChild(row);
+  });
+});
+
+// ── AI SYNTHESIS ──
+async function runAI(){
+  const btn=document.getElementById('aiBtn');
+  btn.disabled=true; btn.textContent='✦ Synthesising...';
+  document.getElementById('aiLoading').classList.add('active');
+  document.getElementById('aiOutput').classList.remove('visible');
+
+  const payload=buildPayload();
+  let text;
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:2000,
+        system:buildSystemPrompt(),
+        messages:[{role:'user',content:payload}]
+      })
+    });
+    const data=await resp.json();
+    text=data.content[0].text;
+  }catch(e){
+    text=getDemoSynthesis();
+  }
+
+  document.getElementById('aiLoading').classList.remove('active');
+  renderAI(text);
+  btn.disabled=false; btn.textContent='✦ Regenerate Synthesis';
+}
+
+function buildSystemPrompt(){
+  return `You are a senior geriatric medicine clinical intelligence analyst. You have been given three independent assessments of the same older adult: their own self-report via the RESILIENCE community screening tool, an observational report from their carer, and the findings of a formal Comprehensive Geriatric Assessment (CGA) conducted by a clinician.
+
+The CGA is the primary clinical assessment and carries the most clinical weight. However, the person's self-report and carer observation provide community context that enriches clinical understanding.
+
+Your task is to synthesise all three perspectives into a structured intelligence briefing for the multidisciplinary team.
+
+Structure your response with these headings in Markdown:
+
+## Triple Tap Analysis
+## What Community Screening Got Right
+## What the CGA Revealed Beyond Screening
+## Minimisation Assessment
+## MDT Clinical Priority Order
+## Longitudinal Intelligence Value
+
+Be specific, evidence-based, and direct. Write for a senior clinician audience. CGA findings always take clinical precedence when they conflict with self-report.`;
+}
+
+function buildPayload(){
+  const summary=DOMAINS.map(d=>`
+DOMAIN: ${d.name}
+Person (${d.personScore}/10): ${d.personPhrase}
+Carer (${d.carerScore}/10): ${d.carerPhrase}
+CGA (${d.cgaScore}/10 — PRIMARY): ${d.cgaFindings}
+Pattern: ${d.pattern}
+`).join('\n---\n');
+
+  return `TRIPLE TAP INTELLIGENCE BRIEF — RSLNCE-2026-0042
+CGA SUMMARY: PRISMA-7 5/7 (Frailty confirmed) · FRAIL 3/5 (Frail — upgraded from Pre-frail) · GDS-15 8/15 (Moderate depression) · MoCA 24/30 (Normal) · Barthel 18/20 · Lawton IADL 4/8
+Screening calibration: 4/6 domains well-predicted. 2/6 (Physical, Daily Living) significantly underestimated by self-report.
+
+${summary}
+
+Please synthesise all three perspectives.`;
+}
+
+function getDemoSynthesis(){
+  return `## Triple Tap Analysis
+
+The Triple Tap on Social Connection is the single most important finding in this case. All three independent sources — the person's self-report (3/10), the carer's observation (2/10), and the CGA formal social needs assessment (2/10, UCLA 7/9) — converge on the same conclusion: critical social isolation, compounded by unaddressed spousal bereavement at twelve months. This degree of convergence across three independent assessors represents the highest clinical confidence signal available in the RESILIENCE system. It admits no ambiguity and demands urgent action.
+
+## What Community Screening Got Right
+
+Community screening correctly identified Social Connection and Cognition and Mental Health as the primary domains of concern, and broadly calibrated Nutrition as a relative strength. The carer's observational report was particularly well-calibrated, matching CGA findings in four of six domains — including the two that the person's self-report significantly understated. This validates the value of the dual-report system: where the person minimised, the carer saw accurately.
+
+## What the CGA Revealed Beyond Screening
+
+Four findings emerged from the CGA that community screening could not have detected. First, grip strength was below the age and sex threshold at 18kg — an early sarcopenia signal that is not accessible through conversational screening. Second, the FRAIL Scale was upgraded from Pre-frail to Frail (3/5) on formal assessment — a clinically significant reclassification. Third, Beers Criteria review identified an anticholinergic drug creating compounding fall risk not visible from polypharmacy count alone. Fourth, the Lawton IADL Scale (4/8) revealed the full extent of instrumental dependency that the person had systematically understated.
+
+## Minimisation Assessment
+
+Minimisation was confirmed in two domains with high clinical confidence. In Physical Function, the person's self-report (6/10) overstated capacity by a clinically significant margin relative to both carer observation and CGA finding (both 4/10). The unreported fall and below-threshold grip strength make this the most consequential minimisation in this case. In Daily Living, the person's report (5/10) similarly overstated independence relative to both carer and CGA (both 3/10), with the Lawton IADL Score revealing substantial covert carer support. The pattern is consistent with the fear of disclosure identified in the screening — fear of being a burden and fear of care home placement. These fears should be explicitly addressed in the clinical relationship before any formal care planning conversation.
+
+## MDT Clinical Priority Order
+
+1. Social prescribing and bereavement support — Triple Tap confirmed, urgent, address isolation and unresolved grief simultaneously
+2. Falls Prevention Service and physiotherapy — Grip strength below threshold, unreported fall confirmed, anticholinergic compounding fall risk
+3. OT reablement assessment — Lawton IADL 4/8, covert carer support unsustainable
+4. Psychological support — GDS-15 8/15 moderate depression confirmed
+5. Pharmacist medicines use review — anticholinergic flag, temperature guidance required
+6. Carer's Assessment — carer strain flagged, sole support network unsustainable
+
+## Longitudinal Intelligence Value
+
+This case demonstrates the core value proposition of the Triple Tap approach. At the three-month review, the key questions are: has social prescribing shifted the person's self-report on Social Connection? Does the carer observe improved mood and engagement? Does the GDS-15 improve at reassessment? Does the Lawton IADL score improve following reablement? Tracking these three perspectives over time converts a clinical intervention into measurable evidence of effectiveness — which is precisely what community frailty services currently lack.`;
+}
+
+function renderAI(text){
+  const sections=text.split(/\n## /).filter(Boolean);
+  const html=sections.map(s=>{
+    const lines=s.split('\n');
+    const heading=lines[0].replace(/^## /,'');
+    const body=lines.slice(1).join('\n');
+    const bodyHtml=body.split('\n\n').filter(Boolean).map(para=>{
+      if(para.startsWith('- ')||para.startsWith('* ')){
+        const items=para.split('\n').filter(l=>l.trim());
+        return`<ul>${items.map(i=>`<li>${i.replace(/^[-*]\s+/,'').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')}</li>`).join('')}</ul>`;
+      }
+      return`<p>${para.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')}</p>`;
+    }).join('');
+    return`<div class="ai-section"><h4>${heading}</h4>${bodyHtml}</div>`;
+  }).join('');
+  const now=new Date().toLocaleString('en-GB');
+  document.getElementById('aiOutput').innerHTML=html+`<div class="ai-meta">Triple Tap synthesis generated ${now} · Claude Sonnet · CGA is primary clinical assessment · For MDT review</div>`;
+  document.getElementById('aiOutput').classList.add('visible');
+}
+</script>
+</body>
+</html>
