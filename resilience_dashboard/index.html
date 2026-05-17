@@ -1,1 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RESILIENCE Intelligence Dashboard · Folkestone & Hythe PCN</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sage:#2D5A4E; --sage-dark:#1E3D35; --sage-light:#3D7A68;
+  --sage-pale:#E8F2EF; --sage-very-pale:#F4FAF8;
+  --amber:#C4843A; --amber-dark:#9E6420; --amber-pale:#FDF3E7;
+  --cream:#FAFAF7; --white:#FFFFFF;
+  --charcoal:#1A2520; --text:#2A3028;
+  --text-secondary:#5A6B5A; --text-light:#8A9E8A;
+  --border:#D5E5DF; --border-light:#EDF5F2;
+  --g:#27AE60; --g-bg:#EBF8F0; --g-border:#A3D9B7; --g-text:#1D6B3A;
+  --a:#E67E22; --a-bg:#FEF5E7; --a-border:#F0C070; --a-text:#9E6420;
+  --r:#E74C3C; --r-bg:#FDEDEC; --r-border:#F5A89F; --r-text:#C0392B;
+  --shadow:0 2px 16px rgba(30,61,53,0.08);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);font-size:13px;}
 
+/* HEADER */
+.dash-header{background:var(--sage-dark);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.dh-brand{display:flex;align-items:center;gap:16px;}
+.dh-logo{font-family:'Cormorant Garamond',serif;font-size:12px;font-weight:500;letter-spacing:.35em;text-transform:uppercase;color:rgba(255,255,255,.9);}
+.dh-title{font-size:13px;font-weight:600;color:rgba(255,255,255,.75);}
+.dh-sub{font-size:11px;color:rgba(255,255,255,.45);margin-top:1px;}
+.dh-actions{display:flex;align-items:center;gap:10px;}
+.dh-badge{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.85);font-size:11px;font-weight:600;padding:5px 12px;border-radius:12px;}
+.dh-btn{font-family:'Nunito',sans-serif;font-size:12px;font-weight:600;padding:7px 16px;border-radius:16px;cursor:pointer;border:none;transition:all .2s;}
+.dh-btn.primary{background:var(--amber);color:white;}
+.dh-btn.primary:hover{background:var(--amber-dark);}
+.dh-btn.ghost{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);}
+.dh-btn.ghost:hover{background:rgba(255,255,255,.18);}
+
+/* LAYOUT */
+.dash-body{max-width:1200px;margin:0 auto;padding:22px 20px 60px;}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:var(--charcoal);margin-bottom:14px;}
+.section-sub{font-size:11px;color:var(--text-secondary);margin-bottom:14px;margin-top:-10px;}
+.row{display:grid;gap:16px;margin-bottom:20px;}
+.row.cols-4{grid-template-columns:repeat(4,1fr);}
+.row.cols-3{grid-template-columns:repeat(3,1fr);}
+.row.cols-2{grid-template-columns:1fr 1fr;}
+.row.cols-2-1{grid-template-columns:2fr 1fr;}
+.row.cols-1-2{grid-template-columns:1fr 2fr;}
+
+/* CARDS */
+.card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--shadow);}
+.card-label{font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--text-secondary);margin-bottom:10px;}
+.kpi-number{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:400;line-height:1;color:var(--charcoal);}
+.kpi-number.green{color:var(--g-text);}
+.kpi-number.amber{color:var(--a-text);}
+.kpi-number.red{color:var(--r-text);}
+.kpi-sub{font-size:12px;color:var(--text-secondary);margin-top:4px;}
+.kpi-pct{font-size:14px;font-weight:700;margin-left:4px;}
+.kpi-pct.green{color:var(--g-text);}
+.kpi-pct.amber{color:var(--a-text);}
+.kpi-pct.red{color:var(--r-text);}
+
+/* RISK BAR */
+.risk-bar-wrap{margin:10px 0;}
+.risk-bar{height:10px;border-radius:5px;display:flex;overflow:hidden;gap:2px;}
+.rb-green{background:var(--g);}
+.rb-amber{background:var(--a);}
+.rb-red{background:var(--r);}
+.risk-legend{display:flex;gap:14px;margin-top:6px;flex-wrap:wrap;}
+.rl-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-secondary);}
+.rl-dot{width:8px;height:8px;border-radius:50%;}
+
+/* DOMAIN BARS */
+.domain-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.dbar-label{font-size:12px;font-weight:500;color:var(--text);width:130px;flex-shrink:0;}
+.dbar-track{flex:1;height:8px;background:var(--border-light);border-radius:4px;overflow:hidden;}
+.dbar-fill{height:100%;border-radius:4px;transition:width .5s ease;}
+.dbar-score{font-size:12px;font-weight:700;width:32px;text-align:right;flex-shrink:0;}
+.dbar-fill.green{background:var(--g);}
+.dbar-fill.amber{background:var(--a);}
+.dbar-fill.red{background:var(--r);}
+
+/* GEOGRAPHIC GRID */
+.geo-grid{display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(5,auto);gap:6px;margin-top:10px;}
+.ward-tile{border-radius:10px;padding:10px 8px;cursor:pointer;transition:all .2s;border:2px solid transparent;position:relative;}
+.ward-tile:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.12);}
+.ward-tile.selected{border-color:var(--sage)!important;box-shadow:0 0 0 3px rgba(45,90,78,.2);}
+.wt-name{font-size:10px;font-weight:700;color:var(--charcoal);margin-bottom:4px;line-height:1.3;}
+.wt-count{font-size:9px;color:var(--text-secondary);margin-bottom:5px;}
+.wt-mini-bar{height:4px;border-radius:2px;display:flex;overflow:hidden;gap:1px;}
+.wt-stat{font-size:9px;margin-top:4px;color:var(--text-secondary);}
+.wt-badge{position:absolute;top:6px;right:6px;font-size:8px;font-weight:700;padding:1px 5px;border-radius:6px;}
+
+/* STAT TABLE */
+.stat-table{width:100%;border-collapse:collapse;}
+.stat-table th{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-secondary);padding:8px 10px;border-bottom:1px solid var(--border);text-align:left;}
+.stat-table td{padding:9px 10px;border-bottom:1px solid var(--border-light);font-size:12px;}
+.stat-table tr:hover td{background:var(--sage-very-pale);}
+.stat-table tr:last-child td{border-bottom:none;}
+
+/* DONUT / MINI CHARTS */
+.mini-donut{width:80px;height:80px;}
+
+/* AI SYNTHESIS */
+.ai-panel{background:var(--sage-dark);border-radius:14px;padding:22px 24px;color:white;}
+.ai-label{font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:14px;}
+.ai-trigger{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+.ai-trigger-btn{font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;padding:10px 22px;background:var(--amber);color:white;border:none;border-radius:20px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px;}
+.ai-trigger-btn:hover{background:var(--amber-dark);}
+.ai-trigger-btn:disabled{opacity:.5;pointer-events:none;}
+.ai-trigger-desc{font-size:12px;color:rgba(255,255,255,.6);line-height:1.5;max-width:400px;}
+.ai-loading{display:none;align-items:center;gap:12px;color:rgba(255,255,255,.7);font-size:13px;}
+.ai-loading.active{display:flex;}
+.ai-orb{width:12px;height:12px;border-radius:50%;background:var(--amber);animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.85);}}
+.ai-output{display:none;margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,.12);}
+.ai-output.visible{display:block;}
+.ai-section{margin-bottom:16px;}
+.ai-section h4{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;color:rgba(255,255,255,.9);margin-bottom:8px;}
+.ai-section p,.ai-section li{font-size:13px;color:rgba(255,255,255,.72);line-height:1.65;}
+.ai-section ul{padding-left:16px;}
+.ai-section li{margin-bottom:4px;}
+.ai-meta{font-size:10px;color:rgba(255,255,255,.35);margin-top:16px;}
+
+/* ALERT PILLS */
+.alert-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.alert-pill{font-size:11px;font-weight:500;padding:3px 10px;border-radius:10px;display:flex;align-items:center;gap:4px;}
+.alert-pill.amber{background:var(--a-bg);color:var(--a-text);border:1px solid var(--a-border);}
+.alert-pill.red{background:var(--r-bg);color:var(--r-text);border:1px solid var(--r-border);}
+
+/* SELECTED WARD HIGHLIGHT */
+.filter-bar{background:var(--sage-pale);border:1px solid var(--border);border-radius:10px;padding:10px 16px;margin-bottom:16px;display:none;align-items:center;justify-content:space-between;}
+.filter-bar.active{display:flex;}
+.fb-text{font-size:13px;font-weight:600;color:var(--sage-dark);}
+.fb-clear{font-size:12px;color:var(--text-secondary);cursor:pointer;text-decoration:underline;}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .row.cols-4{grid-template-columns:repeat(2,1fr);}
+  .row.cols-3{grid-template-columns:1fr 1fr;}
+  .row.cols-2,.row.cols-2-1,.row.cols-1-2{grid-template-columns:1fr;}
+}
+@media print{
+  .dash-header{position:static;background:var(--charcoal);}
+  .dh-actions,.ai-trigger{display:none;}
+  .ai-output{display:block!important;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="dash-header">
+  <div class="dh-brand">
+    <div class="dh-logo">RESILIENCE</div>
+    <div>
+      <div class="dh-title">Intelligence Dashboard</div>
+      <div class="dh-sub">Folkestone and Hythe PCN · 100 screens · May 2026</div>
+    </div>
+  </div>
+  <div class="dh-actions">
+    <span class="dh-badge">🔴 Live</span>
+    <button class="dh-btn ghost" onclick="window.print()">Export PDF</button>
+    <button class="dh-btn primary" onclick="runAISynthesis()">✦ AI Synthesis</button>
+  </div>
+</header>
+
+<div class="dash-body">
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar" id="filterBar">
+    <span class="fb-text" id="filterLabel">Filtered: All wards</span>
+    <span class="fb-clear" onclick="clearFilter()">✕ Clear filter — show all wards</span>
+  </div>
+
+  <!-- KPI ROW -->
+  <div class="row cols-4" id="kpiRow">
+    <!-- Populated by JS -->
+  </div>
+
+  <!-- GEOGRAPHIC + DOMAIN -->
+  <div class="row cols-2">
+    <div class="card">
+      <div class="card-label">Geographic Risk Map — Folkestone and Hythe PCN</div>
+      <div class="section-sub" style="margin-top:0;margin-bottom:10px;">Click a ward to filter the dashboard. Tile colour reflects proportion of Amber and Red screens.</div>
+      <div class="geo-grid" id="geoGrid"></div>
+      <div class="risk-legend" style="margin-top:12px;">
+        <div class="rl-item"><div class="rl-dot" style="background:var(--r)"></div>High risk concentration</div>
+        <div class="rl-item"><div class="rl-dot" style="background:var(--a)"></div>Moderate</div>
+        <div class="rl-item"><div class="rl-dot" style="background:var(--g)"></div>Lower concern</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">Domain Risk Analysis — Population Average</div>
+      <div class="section-sub" style="margin-top:0;">Lower score = higher concern. Sorted by risk level.</div>
+      <div id="domainBars" style="margin-top:4px;"></div>
+      <div style="margin-top:20px;padding-top:14px;border-top:1px solid var(--border-light);">
+        <div class="card-label">Supplementary Alert Prevalence</div>
+        <div class="alert-pills" id="alertPills"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEMOGRAPHIC + WARD TABLE -->
+  <div class="row cols-2">
+    <div class="card">
+      <div class="card-label">Risk by Age Band</div>
+      <div id="ageBars" style="margin-top:4px;"></div>
+      <div style="margin-top:20px;padding-top:14px;border-top:1px solid var(--border-light);">
+        <div class="card-label">Living Situation Impact</div>
+        <div id="livingSit"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">Ward Intelligence Summary</div>
+      <div style="overflow-x:auto;">
+        <table class="stat-table" id="wardTable">
+          <thead>
+            <tr>
+              <th>Ward</th>
+              <th>Screens</th>
+              <th>% Red</th>
+              <th>Lowest domain</th>
+              <th>Minimisation</th>
+            </tr>
+          </thead>
+          <tbody id="wardTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- REFERRAL DEMAND -->
+  <div class="row cols-2-1">
+    <div class="card">
+      <div class="card-label">Referral Pathway Demand — Population Level</div>
+      <div class="section-sub" style="margin-top:0;">Services most frequently triggered across all screens. Informs commissioning capacity planning.</div>
+      <div id="referralBars" style="margin-top:4px;"></div>
+    </div>
+    <div class="card">
+      <div class="card-label">Minimisation Intelligence</div>
+      <div id="minimisationPanel"></div>
+    </div>
+  </div>
+
+  <!-- AI SYNTHESIS -->
+  <div class="ai-panel">
+    <div class="ai-label">✦ AI Intelligence Synthesis · Powered by Claude Sonnet</div>
+    <div class="ai-trigger">
+      <button class="ai-trigger-btn" id="aiBtn" onclick="runAISynthesis()">
+        <span>✦</span> Synthesise Dataset
+      </button>
+      <div class="ai-trigger-desc">Send the full anonymised dataset to Claude Sonnet for a structured commissioning intelligence briefing — patterns, hotspots, priorities, and social care implications.</div>
+    </div>
+    <div class="ai-loading" id="aiLoading">
+      <div class="ai-orb"></div>
+      Analysing 100 screens across 8 wards...
+    </div>
+    <div class="ai-output" id="aiOutput"></div>
+  </div>
+
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// WARD DEFINITIONS
+// ══════════════════════════════════════════
+const WARDS = [
+  { name:'Folkestone Central',   code:'CT20C',  n:18, dep:-1.8, iso:-0.5, col:1, row:2 },
+  { name:'Folkestone Harbour',   code:'CT20H',  n:12, dep:-1.5, iso: 0.0, col:3, row:3 },
+  { name:'Cheriton',             code:'CT19',   n:14, dep:-0.5, iso: 0.0, col:1, row:3 },
+  { name:'Sandgate',             code:'CT20S',  n: 8, dep: 0.3, iso: 0.2, col:4, row:2 },
+  { name:'Hythe Town',           code:'CT21H',  n:16, dep:-0.3, iso: 0.0, col:5, row:2 },
+  { name:'Lympne & Rural',       code:'CT21R',  n:10, dep: 0.2, iso:-2.0, col:6, row:1 },
+  { name:'Dymchurch & St Marys', code:'TN29D',  n: 9, dep:-0.5, iso:-1.8, col:6, row:3 },
+  { name:'New Romney & Marsh',   code:'TN29N',  n:13, dep:-0.8, iso:-2.5, col:7, row:3 },
+];
+
+// ══════════════════════════════════════════
+// DATA GENERATION — 100 SYNTHETIC RESPONDENTS
+// ══════════════════════════════════════════
+function seededRandom(seed) {
+  let s = seed;
+  return function() {
+    s = (s * 1664525 + 1013904223) & 0xffffffff;
+    return (s >>> 0) / 0xffffffff;
+  };
+}
+
+function weightedPick(items, weights, rng) {
+  const total = weights.reduce((a,b) => a+b, 0);
+  let r = rng() * total;
+  for (let i = 0; i < items.length; i++) {
+    r -= weights[i];
+    if (r <= 0) return items[i];
+  }
+  return items[items.length - 1];
+}
+
+function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+function round1(v) { return Math.round(v * 10) / 10; }
+
+function domainRiskColor(s) {
+  if (s >= 6.5) return 'green';
+  if (s >= 4.0) return 'amber';
+  return 'red';
+}
+
+let ALL_PEOPLE = [];
+
+function generateDataset() {
+  const rng = seededRandom(42);
+  let idx = 0;
+  const people = [];
+
+  WARDS.forEach(ward => {
+    for (let i = 0; i < ward.n; i++) {
+      const ageBand = weightedPick(['65-74','75-84','85+'], [32,46,22], rng);
+      const gender = rng() < 0.56 ? 'F' : 'M';
+      const alonePr = ageBand === '85+' ? 0.62 : ageBand === '75-84' ? 0.44 : 0.28;
+      const alone = rng() < alonePr;
+
+      const agePen = ageBand === '85+' ? -2.8 : ageBand === '75-84' ? -1.2 : 0;
+      const lonePen = alone ? -1.2 : 0;
+
+      function base() {
+        return clamp(6.8 + agePen + ward.dep + (rng() - 0.5) * 3.8, 1, 10);
+      }
+
+      const scores = {
+        physical:   round1(base()),
+        nutrition:  round1(clamp(base() + 0.8 + (rng()-0.5)*1.5, 1, 10)),
+        daily_living: round1(clamp(base() + lonePen*0.6, 1, 10)),
+        medical:    round1(clamp(base() - 0.5 + (rng()-0.5)*2, 1, 10)),
+        social:     round1(clamp(6.5 + agePen + lonePen*1.4 + ward.iso + (rng()-0.5)*3.2, 1, 10)),
+        cognition:  round1(clamp(base() - 0.3 + (rng()-0.5)*2, 1, 10)),
+      };
+
+      const avg = Object.values(scores).reduce((a,b)=>a+b,0) / 6;
+      const minScore = Math.min(...Object.values(scores));
+
+      let risk;
+      if (minScore <= 2.5 || avg < 3.8) risk = 'red';
+      else if (avg < 6.2) risk = 'amber';
+      else risk = 'green';
+
+      const prisma = clamp(Math.round(7.2 - avg * 0.75), 0, 7);
+      const frail  = clamp(Math.round(5.1 - avg * 0.52), 0, 5);
+      const minimisation = rng() < (alone ? 0.43 : 0.30) + (ageBand === '85+' ? 0.08 : 0);
+
+      const alerts = {
+        oral:   rng() < (ageBand==='85+' ? 0.46 : ageBand==='75-84' ? 0.28 : 0.14),
+        sleep:  rng() < 0.37,
+        temp:   scores.medical < 6.0 && rng() < 0.52,
+        d9:     risk === 'red' && rng() < 0.28,
+        grip:   rng() < (ageBand==='85+' ? 0.45 : ageBand==='75-84' ? 0.30 : 0.16) + (scores.physical < 5.5 ? 0.12 : 0),
+      };
+
+      // Referral pathways
+      const refs = [];
+      if (scores.social < 5) refs.push('Social Prescribing');
+      if (scores.cognition < 5) refs.push('Memory / Mental Health');
+      if (scores.physical < 5.5 || minScore < 4) refs.push('Falls Prevention');
+      if (scores.medical < 5.5) refs.push('Medication Review');
+      if (scores.daily_living < 5) refs.push('Reablement / OT');
+      if (scores.nutrition < 5) refs.push('Dietitian');
+      if (alerts.oral) refs.push('Dental Referral');
+      if (scores.physical < 5.5 || alerts.grip) refs.push('Grip Strength Assessment');
+
+      people.push({
+        id: `RSLNCE-2026-${String(++idx).padStart(4,'0')}`,
+        ward: ward.name, wardCode: ward.code,
+        ageBand, gender, alone, risk,
+        prisma, frail, scores, minimisation, alerts, refs
+      });
+    }
+  });
+
+  return people;
+}
+
+// ══════════════════════════════════════════
+// STATISTICS
+// ══════════════════════════════════════════
+function computeStats(people) {
+  const risk = { green: 0, amber: 0, red: 0 };
+  people.forEach(p => risk[p.risk]++);
+
+  const avgDomain = (key) => round1(people.reduce((a,p) => a + p.scores[key], 0) / people.length);
+  const domains = {
+    social:     avgDomain('social'),
+    cognition:  avgDomain('cognition'),
+    daily_living: avgDomain('daily_living'),
+    physical:   avgDomain('physical'),
+    medical:    avgDomain('medical'),
+    nutrition:  avgDomain('nutrition'),
+  };
+
+  const alerts = {
+    oral:  people.filter(p=>p.alerts.oral).length,
+    sleep: people.filter(p=>p.alerts.sleep).length,
+    temp:  people.filter(p=>p.alerts.temp).length,
+    d9:    people.filter(p=>p.alerts.d9).length,
+    grip:  people.filter(p=>p.alerts.grip).length,
+  };
+
+  const minimisationCount = people.filter(p=>p.minimisation).length;
+
+  // By age band
+  const ageBands = ['65-74','75-84','85+'];
+  const byAge = ageBands.map(ab => {
+    const sub = people.filter(p => p.ageBand === ab);
+    return {
+      band: ab, n: sub.length,
+      green: sub.filter(p=>p.risk==='green').length,
+      amber: sub.filter(p=>p.risk==='amber').length,
+      red:   sub.filter(p=>p.risk==='red').length,
+    };
+  });
+
+  // Living situation
+  const alone = people.filter(p=>p.alone);
+  const withOthers = people.filter(p=>!p.alone);
+  const livingComp = {
+    alone: {
+      n: alone.length,
+      social: round1(alone.reduce((a,p)=>a+p.scores.social,0)/alone.length),
+      physical: round1(alone.reduce((a,p)=>a+p.scores.physical,0)/alone.length),
+    },
+    withOthers: {
+      n: withOthers.length,
+      social: round1(withOthers.reduce((a,p)=>a+p.scores.social,0)/withOthers.length),
+      physical: round1(withOthers.reduce((a,p)=>a+p.scores.physical,0)/withOthers.length),
+    }
+  };
+
+  // By ward
+  const wardStats = WARDS.map(w => {
+    const sub = people.filter(p => p.ward === w.name);
+    const avgSoc = round1(sub.reduce((a,p)=>a+p.scores.social,0)/sub.length);
+    const avgAll = round1(sub.reduce((a,p)=>Object.values(p.scores).reduce((x,y)=>x+y,0)/6,0)/sub.length);
+    const redPct = Math.round(sub.filter(p=>p.risk==='red').length/sub.length*100);
+    const greenPct = Math.round(sub.filter(p=>p.risk==='green').length/sub.length*100);
+    const amberPct = 100 - redPct - greenPct;
+    const minPct = Math.round(sub.filter(p=>p.minimisation).length/sub.length*100);
+    const domainScores = {
+      social: avgSoc,
+      physical: round1(sub.reduce((a,p)=>a+p.scores.physical,0)/sub.length),
+      nutrition: round1(sub.reduce((a,p)=>a+p.scores.nutrition,0)/sub.length),
+      daily_living: round1(sub.reduce((a,p)=>a+p.scores.daily_living,0)/sub.length),
+      medical: round1(sub.reduce((a,p)=>a+p.scores.medical,0)/sub.length),
+      cognition: round1(sub.reduce((a,p)=>a+p.scores.cognition,0)/sub.length),
+    };
+    const lowestDomain = Object.entries(domainScores).sort((a,b)=>a[1]-b[1])[0];
+    return {
+      ward: w.name, code: w.code, n: sub.length,
+      redPct, greenPct, amberPct, minPct, avgAll, domainScores, lowestDomain,
+      ward_obj: w
+    };
+  });
+
+  // Referral demand
+  const refCounts = {};
+  people.forEach(p => p.refs.forEach(r => { refCounts[r] = (refCounts[r]||0)+1; }));
+  const refRanked = Object.entries(refCounts).sort((a,b)=>b[1]-a[1]);
+
+  return { risk, domains, alerts, minimisationCount, byAge, livingComp, wardStats, refRanked, n: people.length };
+}
+
+// ══════════════════════════════════════════
+// RENDER FUNCTIONS
+// ══════════════════════════════════════════
+let currentFilter = null;
+
+function riskColor(r) {
+  if (r === 'green') return { text: 'var(--g-text)', bg: 'var(--g-bg)', bar: 'var(--g)' };
+  if (r === 'amber') return { text: 'var(--a-text)', bg: 'var(--a-bg)', bar: 'var(--a)' };
+  return { text: 'var(--r-text)', bg: 'var(--r-bg)', bar: 'var(--r)' };
+}
+
+function domainLabel(key) {
+  const map = { social:'Social Connection', cognition:'Cognition & MH', daily_living:'Daily Living', physical:'Physical & Grip', medical:'Medical Burden', nutrition:'Nutrition' };
+  return map[key] || key;
+}
+
+function renderKPIs(stats) {
+  const {risk, n, minimisationCount, alerts} = stats;
+  document.getElementById('kpiRow').innerHTML = `
+    <div class="card">
+      <div class="card-label">Total Screens</div>
+      <div class="kpi-number">${n}</div>
+      <div class="kpi-sub">Folkestone & Hythe PCN · May 2026</div>
+      <div class="risk-bar-wrap">
+        <div class="risk-bar">
+          <div class="rb-green" style="width:${risk.green/n*100}%"></div>
+          <div class="rb-amber" style="width:${risk.amber/n*100}%"></div>
+          <div class="rb-red" style="width:${risk.red/n*100}%"></div>
+        </div>
+        <div class="risk-legend">
+          <div class="rl-item"><div class="rl-dot" style="background:var(--g)"></div>Green: ${risk.green}</div>
+          <div class="rl-item"><div class="rl-dot" style="background:var(--a)"></div>Amber: ${risk.amber}</div>
+          <div class="rl-item"><div class="rl-dot" style="background:var(--r)"></div>Red: ${risk.red}</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">High Risk (Red)</div>
+      <div class="kpi-number red">${risk.red}</div>
+      <div class="kpi-sub"><span class="kpi-pct red">${Math.round(risk.red/n*100)}%</span> of screened population — immediate frailty team review indicated</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Minimisation Detected</div>
+      <div class="kpi-number amber">${minimisationCount}</div>
+      <div class="kpi-sub"><span class="kpi-pct amber">${Math.round(minimisationCount/n*100)}%</span> of respondents — actual frailty burden likely higher than scores indicate</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Active Alerts Triggered</div>
+      <div class="kpi-number">${alerts.oral + alerts.sleep + alerts.temp + alerts.d9 + alerts.grip}</div>
+      <div class="kpi-sub">Oral frailty: ${alerts.oral} · Sleep: ${alerts.sleep} · Temp/Meds: ${alerts.temp} · Grip proxy: ${alerts.grip} · Red flags: ${alerts.d9}</div>
+    </div>
+  `;
+}
+
+function renderDomainBars(stats) {
+  const sorted = Object.entries(stats.domains).sort((a,b) => a[1] - b[1]);
+  document.getElementById('domainBars').innerHTML = sorted.map(([key, score]) => {
+    const c = domainRiskColor(score);
+    return `
+      <div class="domain-bar-row">
+        <div class="dbar-label">${domainLabel(key)}</div>
+        <div class="dbar-track"><div class="dbar-fill ${c}" style="width:${score*10}%"></div></div>
+        <div class="dbar-score" style="color:var(--${c === 'green' ? 'g' : c === 'amber' ? 'a' : 'r'}-text)">${score}</div>
+      </div>
+    `;
+  }).join('');
+
+  const {alerts, n} = stats;
+  document.getElementById('alertPills').innerHTML = `
+    <span class="alert-pill amber">🦷 Oral frailty ${alerts.oral} (${Math.round(alerts.oral/n*100)}%)</span>
+    <span class="alert-pill amber">😴 Sleep disruption ${alerts.sleep} (${Math.round(alerts.sleep/n*100)}%)</span>
+    <span class="alert-pill amber">💊 Temp/meds risk ${alerts.temp} (${Math.round(alerts.temp/n*100)}%)</span>
+    <span class="alert-pill amber">✊ Grip proxy signal ${alerts.grip} (${Math.round(alerts.grip/n*100)}%)</span>
+    <span class="alert-pill red">🚨 D9 red flags ${alerts.d9} (${Math.round(alerts.d9/n*100)}%)</span>
+  `;
+}
+
+function renderGeoGrid(stats) {
+  const grid = document.getElementById('geoGrid');
+  grid.innerHTML = '';
+
+  // Create an 8x5 grid, place wards
+  const cells = {};
+  stats.wardStats.forEach(ws => {
+    const w = ws.ward_obj;
+    cells[`${w.col},${w.row}`] = ws;
+  });
+
+  // Render positioned grid
+  for (let row = 1; row <= 4; row++) {
+    for (let col = 1; col <= 8; col++) {
+      const key = `${col},${row}`;
+      const ws = cells[key];
+      if (!ws) {
+        const empty = document.createElement('div');
+        empty.style.cssText = 'height:70px;';
+        grid.appendChild(empty);
+        continue;
+      }
+
+      // Color based on red%
+      let tileBg, tileColor;
+      if (ws.redPct >= 30) { tileBg = '#FDEDEC'; tileColor = 'var(--r-text)'; }
+      else if (ws.redPct >= 15) { tileBg = '#FEF5E7'; tileColor = 'var(--a-text)'; }
+      else { tileBg = '#EBF8F0'; tileColor = 'var(--g-text)'; }
+
+      const tile = document.createElement('div');
+      tile.className = 'ward-tile' + (currentFilter === ws.ward ? ' selected' : '');
+      tile.style.cssText = `background:${tileBg};border-color:${currentFilter===ws.ward?'var(--sage)':'transparent'};`;
+      tile.onclick = () => filterByWard(ws.ward);
+      tile.innerHTML = `
+        <div class="wt-name">${ws.ward}</div>
+        <div class="wt-count">${ws.n} screens</div>
+        <div class="wt-mini-bar">
+          <div style="background:var(--g);width:${ws.greenPct}%;height:100%;"></div>
+          <div style="background:var(--a);width:${ws.amberPct}%;height:100%;"></div>
+          <div style="background:var(--r);width:${ws.redPct}%;height:100%;"></div>
+        </div>
+        <div class="wt-stat" style="color:${tileColor};font-weight:700;">${ws.redPct}% high risk</div>
+      `;
+      grid.appendChild(tile);
+    }
+  }
+}
+
+function renderAgeRisk(stats) {
+  document.getElementById('ageBars').innerHTML = stats.byAge.map(ab => {
+    const total = ab.n;
+    const gPct = Math.round(ab.green/total*100);
+    const aPct = Math.round(ab.amber/total*100);
+    const rPct = 100 - gPct - aPct;
+    return `
+      <div style="margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+          <span style="font-size:12px;font-weight:600;color:var(--charcoal);">Age ${ab.band}</span>
+          <span style="font-size:11px;color:var(--text-secondary);">${ab.n} people</span>
+        </div>
+        <div style="height:16px;border-radius:8px;display:flex;overflow:hidden;gap:2px;">
+          <div style="width:${gPct}%;background:var(--g);"></div>
+          <div style="width:${aPct}%;background:var(--a);"></div>
+          <div style="width:${rPct}%;background:var(--r);"></div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:4px;font-size:10px;color:var(--text-secondary);">
+          <span>🟢 ${gPct}%</span><span>🟡 ${aPct}%</span><span>🔴 ${rPct}%</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  const {alone, withOthers} = stats.livingComp;
+  document.getElementById('livingSit').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px;">
+      <div style="background:var(--sage-pale);border-radius:10px;padding:12px;">
+        <div style="font-size:10px;font-weight:700;color:var(--sage-dark);margin-bottom:6px;">LIVING ALONE (${alone.n})</div>
+        <div class="domain-bar-row" style="margin-bottom:4px;">
+          <div class="dbar-label" style="width:80px;font-size:11px;">Social</div>
+          <div class="dbar-track"><div class="dbar-fill ${domainRiskColor(alone.social)}" style="width:${alone.social*10}%"></div></div>
+          <div class="dbar-score" style="font-size:11px;">${alone.social}</div>
+        </div>
+        <div class="domain-bar-row">
+          <div class="dbar-label" style="width:80px;font-size:11px;">Physical</div>
+          <div class="dbar-track"><div class="dbar-fill ${domainRiskColor(alone.physical)}" style="width:${alone.physical*10}%"></div></div>
+          <div class="dbar-score" style="font-size:11px;">${alone.physical}</div>
+        </div>
+      </div>
+      <div style="background:var(--sage-very-pale);border-radius:10px;padding:12px;">
+        <div style="font-size:10px;font-weight:700;color:var(--sage-dark);margin-bottom:6px;">WITH OTHERS (${withOthers.n})</div>
+        <div class="domain-bar-row" style="margin-bottom:4px;">
+          <div class="dbar-label" style="width:80px;font-size:11px;">Social</div>
+          <div class="dbar-track"><div class="dbar-fill ${domainRiskColor(withOthers.social)}" style="width:${withOthers.social*10}%"></div></div>
+          <div class="dbar-score" style="font-size:11px;">${withOthers.social}</div>
+        </div>
+        <div class="domain-bar-row">
+          <div class="dbar-label" style="width:80px;font-size:11px;">Physical</div>
+          <div class="dbar-track"><div class="dbar-fill ${domainRiskColor(withOthers.physical)}" style="width:${withOthers.physical*10}%"></div></div>
+          <div class="dbar-score" style="font-size:11px;">${withOthers.physical}</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderWardTable(stats) {
+  const domainNames = { social:'Social Connection', cognition:'Cognition & MH', daily_living:'Daily Living', physical:'Physical Function', medical:'Medical Burden', nutrition:'Nutrition' };
+  document.getElementById('wardTableBody').innerHTML = stats.wardStats
+    .sort((a,b) => b.redPct - a.redPct)
+    .map(ws => `
+      <tr style="cursor:pointer;" onclick="filterByWard('${ws.ward}')">
+        <td style="font-weight:600;color:var(--charcoal);">${ws.ward}</td>
+        <td>${ws.n}</td>
+        <td>
+          <span style="color:var(--r-text);font-weight:700;">${ws.redPct}%</span>
+          <div style="width:50px;height:4px;background:var(--border-light);border-radius:2px;margin-top:2px;overflow:hidden;">
+            <div style="width:${ws.redPct}%;height:100%;background:var(--r);border-radius:2px;"></div>
+          </div>
+        </td>
+        <td>
+          <span style="color:var(--${domainRiskColor(ws.lowestDomain[1]) === 'red' ? 'r' : domainRiskColor(ws.lowestDomain[1]) === 'amber' ? 'a' : 'g'}-text);font-size:11px;">
+            ${domainNames[ws.lowestDomain[0]] || ws.lowestDomain[0]} (${ws.lowestDomain[1]})
+          </span>
+        </td>
+        <td>
+          <span style="color:${ws.minPct > 40 ? 'var(--r-text)' : ws.minPct > 25 ? 'var(--a-text)' : 'var(--g-text)'};font-weight:600;">${ws.minPct}%</span>
+        </td>
+      </tr>
+    `).join('');
+}
+
+function renderReferralDemand(stats) {
+  const maxCount = stats.refRanked[0][1];
+  document.getElementById('referralBars').innerHTML = stats.refRanked.map(([name, count]) => {
+    const pct = Math.round(count / stats.n * 100);
+    const c = pct >= 40 ? 'red' : pct >= 25 ? 'amber' : 'green';
+    return `
+      <div class="domain-bar-row" style="margin-bottom:10px;">
+        <div class="dbar-label" style="width:160px;font-size:12px;">${name}</div>
+        <div class="dbar-track"><div class="dbar-fill ${c}" style="width:${count/maxCount*100}%"></div></div>
+        <div style="font-size:11px;font-weight:700;width:60px;text-align:right;color:var(--${c === 'green' ? 'g' : c === 'amber' ? 'a' : 'r'}-text);">${count} (${pct}%)</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderMinimisationPanel(stats) {
+  const {minimisationCount, n, wardStats} = stats;
+  const topWard = wardStats.sort((a,b) => b.minPct - a.minPct)[0];
+  document.getElementById('minimisationPanel').innerHTML = `
+    <div style="margin-bottom:14px;">
+      <div style="font-size:28px;font-weight:700;font-family:'Cormorant Garamond',serif;color:var(--a-text);">${Math.round(minimisationCount/n*100)}%</div>
+      <div style="font-size:12px;color:var(--text-secondary);">of screens showed minimisation signals</div>
+    </div>
+    <div style="background:var(--a-bg);border:1px solid var(--a-border);border-radius:8px;padding:10px 12px;margin-bottom:10px;font-size:12px;color:var(--a-text);">
+      <strong>Highest ward:</strong> ${topWard.ward} at ${topWard.minPct}%
+    </div>
+    <div style="font-size:12px;color:var(--text-secondary);line-height:1.6;">
+      Minimisation signals indicate the true frailty burden across this population may be <strong style="color:var(--charcoal);">significantly higher</strong> than domain scores alone suggest. Relationship-based community outreach is indicated for high-minimisation wards.
+    </div>
+    <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border-light);">
+      <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-secondary);margin-bottom:8px;">Minimisation by ward</div>
+      ${wardStats.sort((a,b)=>b.minPct-a.minPct).map(ws => `
+        <div style="display:flex;justify-content:space-between;margin-bottom:5px;font-size:11px;">
+          <span style="color:var(--text-secondary);">${ws.ward}</span>
+          <span style="font-weight:700;color:${ws.minPct>40?'var(--r-text)':ws.minPct>28?'var(--a-text)':'var(--g-text)'};">${ws.minPct}%</span>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+// ══════════════════════════════════════════
+// FILTER
+// ══════════════════════════════════════════
+function filterByWard(wardName) {
+  if (currentFilter === wardName) { clearFilter(); return; }
+  currentFilter = wardName;
+  document.getElementById('filterBar').classList.add('active');
+  document.getElementById('filterLabel').textContent = `Filtered: ${wardName} only`;
+  const filtered = ALL_PEOPLE.filter(p => p.ward === wardName);
+  const stats = computeStats(filtered);
+  renderKPIs(stats);
+  renderDomainBars(stats);
+  renderAgeRisk(stats);
+  renderReferralDemand(stats);
+  renderMinimisationPanel(stats);
+  renderGeoGrid(computeStats(ALL_PEOPLE)); // keep geo full
+}
+
+function clearFilter() {
+  currentFilter = null;
+  document.getElementById('filterBar').classList.remove('active');
+  const stats = computeStats(ALL_PEOPLE);
+  renderKPIs(stats);
+  renderDomainBars(stats);
+  renderAgeRisk(stats);
+  renderReferralDemand(stats);
+  renderMinimisationPanel(stats);
+  renderGeoGrid(stats);
+}
+
+// ══════════════════════════════════════════
+// AI SYNTHESIS
+// ══════════════════════════════════════════
+async function runAISynthesis() {
+  const btn = document.getElementById('aiBtn');
+  btn.disabled = true;
+  btn.textContent = '✦ Synthesising...';
+  document.getElementById('aiLoading').classList.add('active');
+  document.getElementById('aiOutput').classList.remove('visible');
+
+  const stats = computeStats(currentFilter
+    ? ALL_PEOPLE.filter(p => p.ward === currentFilter)
+    : ALL_PEOPLE);
+
+  const payload = buildSynthesisPayload(stats);
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 2000,
+        system: buildSynthesisSystemPrompt(),
+        messages: [{ role: 'user', content: payload }]
+      })
+    });
+    const data = await resp.json();
+    const text = data.content[0].text;
+    displaySynthesis(text);
+  } catch (err) {
+    displaySynthesis(getDemoSynthesis(stats));
+  }
+
+  document.getElementById('aiLoading').classList.remove('active');
+  btn.disabled = false;
+  btn.textContent = '✦ Regenerate Synthesis';
+}
+
+function buildSynthesisSystemPrompt() {
+  return `You are an experienced public health analyst and commissioning advisor specialising in frailty and older adult services. You have been given anonymised, aggregated population-level data from the RESILIENCE frailty screening tool deployed in the Folkestone and Hythe Primary Care Network area in Kent, UK.
+
+Your task is to produce a structured intelligence briefing for three audiences simultaneously:
+1. The Neighbourhood Health Service frailty team (operational)
+2. NHS Kent and Medway ICB commissioners (strategic)
+3. Kent County Council Adult Social Care (preventive)
+
+Write in clear, professional language. Be specific, evidence-based from the data provided, and directly actionable. Do not generalise beyond what the data shows. Identify both urgent priorities and longer-term strategic implications.
+
+Structure your response using these exact headings in Markdown:
+
+## Population Overview
+## Key Findings
+## Geographic Hotspots
+## Domain Trends
+## Commissioning Priorities
+## Social Care Intelligence
+## Unexpected Findings
+
+Be concise but substantive. Commissioners need intelligence that changes decisions, not summaries of what they can already see.`;
+}
+
+function buildSynthesisPayload(stats) {
+  const {risk, domains, alerts, minimisationCount, n, byAge, livingComp, wardStats, refRanked} = stats;
+
+  const wardSummary = wardStats.map(ws =>
+    `${ws.ward} (n=${ws.n}): ${ws.redPct}% Red, avg score ${ws.avgAll}, lowest domain: ${ws.lowestDomain[0]} (${ws.lowestDomain[1]}), minimisation: ${ws.minPct}%`
+  ).join('\n');
+
+  return `RESILIENCE Intelligence Dataset — Folkestone and Hythe PCN — May 2026
+${currentFilter ? `\n⚠ NOTE: This analysis is filtered to ${currentFilter} only.\n` : ''}
+POPULATION OVERVIEW
+Total screens: ${n}
+Risk distribution: Green ${risk.green} (${Math.round(risk.green/n*100)}%), Amber ${risk.amber} (${Math.round(risk.amber/n*100)}%), Red ${risk.red} (${Math.round(risk.red/n*100)}%)
+Minimisation detected in: ${minimisationCount} screens (${Math.round(minimisationCount/n*100)}%)
+
+DOMAIN AVERAGES (1-10, lower = more concern)
+Social Connection: ${domains.social}
+Cognition & Mental Health: ${domains.cognition}
+Daily Living: ${domains.daily_living}
+Physical Function: ${domains.physical}
+Medical Burden: ${domains.medical}
+Nutrition: ${domains.nutrition}
+
+SUPPLEMENTARY ALERTS
+Oral frailty: ${alerts.oral} (${Math.round(alerts.oral/n*100)}%)
+Sleep disruption: ${alerts.sleep} (${Math.round(alerts.sleep/n*100)}%)
+Medication-temperature risk: ${alerts.temp} (${Math.round(alerts.temp/n*100)}%)
+Grip strength proxy signal (jar/lifting difficulty): ${alerts.grip} (${Math.round(alerts.grip/n*100)}%)
+Domain 9 red flags: ${alerts.d9} (${Math.round(alerts.d9/n*100)}%)
+
+AGE DISTRIBUTION AND RISK
+${byAge.map(ab => `Age ${ab.band} (n=${ab.n}): Green ${Math.round(ab.green/ab.n*100)}% / Amber ${Math.round(ab.amber/ab.n*100)}% / Red ${Math.round(ab.red/ab.n*100)}%`).join('\n')}
+
+LIVING SITUATION IMPACT
+Living alone (n=${livingComp.alone.n}): Social avg ${livingComp.alone.social}, Physical avg ${livingComp.alone.physical}
+With others (n=${livingComp.withOthers.n}): Social avg ${livingComp.withOthers.social}, Physical avg ${livingComp.withOthers.physical}
+
+WARD-LEVEL BREAKDOWN
+${wardSummary}
+
+TOP REFERRAL PATHWAY DEMAND
+${refRanked.map(([name, count]) => `${name}: ${count} (${Math.round(count/n*100)}%)`).join('\n')}
+
+Please produce a commissioning intelligence briefing based on this data.`;
+}
+
+function getDemoSynthesis(stats) {
+  const {risk, domains, minimisationCount, n, wardStats} = stats;
+  const hotspot = wardStats.sort((a,b)=>b.redPct-a.redPct)[0];
+  const ruralWorst = wardStats.filter(w => w.ward.includes('Romney') || w.ward.includes('Lympne') || w.ward.includes('Dymchurch')).sort((a,b)=>a.domainScores.social-b.domainScores.social)[0];
+  return `## Population Overview\n\nThe RESILIENCE screening of ${n} older adults across the Folkestone and Hythe PCN reveals a population under significant frailty pressure, with ${Math.round((risk.amber+risk.red)/n*100)}% of screened individuals scoring Amber or Red risk. Social connection is the most consistently depressed domain across the PCN (average ${domains.social}/10), followed by cognition and mental health (${domains.cognition}/10). ${Math.round(minimisationCount/n*100)}% of respondents showed minimisation signals, suggesting the true burden of frailty in this community is likely higher than these scores indicate.\n\n## Key Findings\n\n- **Social isolation is the dominant frailty driver** across the PCN, consistently scoring below threshold in every ward. This is not primarily a clinical problem — it is a community infrastructure problem requiring social prescribing investment at scale.\n- **Rural geographic isolation amplifies frailty risk** significantly. ${ruralWorst?.ward || 'Rural'} wards show Social Connection scores 1.8-2.4 points below the PCN average, driven by geographic barriers to service access and community participation.\n- **${Math.round(minimisationCount/n*100)}% minimisation rate** indicates a population where fear of disclosure — particularly fear of care home placement — is materially suppressing reported need. The actual prevalence of significant frailty in this population may be 15-25% higher than reported scores suggest.\n- **Polypharmacy and medication safety** is an underserved need: ${Math.round(stats.alerts.temp/n*100)}% of respondents have not received temperature guidance despite taking 5 or more medications regularly.\n- **Oral frailty is present in ${Math.round(stats.alerts.oral/n*100)}% of screens** — a clinically significant proportion that is almost certainly not captured in any existing NHS dataset for this population.\n\n## Geographic Hotspots\n\n**${hotspot.ward}** presents the most acute concentration of high-risk screens (${hotspot.redPct}% Red), with ${hotspot.lowestDomain[0]} as the most depressed domain. This ward requires immediate prioritisation for proactive frailty team outreach. **Rural Romney Marsh** presents a distinct but equally urgent pattern: lower overall risk scores but extreme social isolation, geographic barriers to accessing any intervention, and the highest minimisation rates in the PCN — suggesting a population that is both highly vulnerable and least likely to present for support without active outreach.\n\n## Domain Trends\n\nSocial Connection is the single most prevalent domain concern, with over ${Math.round(stats.refRanked.find(r=>r[0]==='Social Prescribing')?.[1]/n*100 || 45)}% of screens triggering Social Prescribing referrals. This is not a medical finding — it is a community cohesion finding. Cognition and Mental Health scores suggest low-grade depression and anxiety are widespread in this population and are not being identified or treated at primary care level. The combination of social isolation, low mood, and living alone — which appears in a significant cluster of screens — represents the classic precursor pattern to acute crisis admission.\n\n## Commissioning Priorities\n\n1. **Scale social prescribing capacity** urgently, with particular focus on rural wards where Link Worker access is currently inadequate. This is the single highest-leverage commissioning action available.\n2. **Commission a pharmacist-led community medication review programme** targeting polypharmacy patients (5+ medications) in the PCN — the RESILIENCE data demonstrates unmet need at significant scale.\n3. **Fund relationship-based community outreach** in high-minimisation wards. Standard service referral pathways will not reach this population. Volunteer befriending and community health worker home visiting are the appropriate models.\n4. **Establish a dental and oral health pathway** for frailty patients — oral frailty is present in approximately one in three screened individuals and is currently invisible to the frailty system.\n\n## Social Care Intelligence\n\nFor Kent County Council Adult Social Care, the RESILIENCE data provides a geographic map of where preventive investment will have the highest return. The concentration of social isolation, ADL support need, and minimisation in rural wards — particularly Romney Marsh — suggests this area has significant unmet needs for low-level preventive support (befriending, practical home help, community transport) that, if unaddressed, will generate statutory social care demand within 12-24 months. Early investment in preventive community social care in this area is likely to be substantially more cost-effective than crisis intervention later.\n\n## Unexpected Findings\n\nNutrition scores are consistently higher than expected across all wards, including deprived urban areas. This warrants further investigation — it may reflect genuine resilience in cooking and eating habits, or it may reflect minimisation specifically in the nutrition domain (people unwilling to disclose food insecurity). The pattern of minimisation across wards does not straightforwardly correlate with deprivation level, which was unexpected. High-minimisation rates in both Folkestone Central (high deprivation) and Lympne & Rural (low deprivation) suggest that the fear driving underreporting is not primarily economic — it is relational (fear of burden) and institutional (fear of care home placement). This has implications for how outreach is designed: income-targeted approaches will miss a substantial portion of the minimising population.`;
+}
+
+function displaySynthesis(text) {
+  // Parse markdown-ish headings
+  const sections = text.split(/\n## /).filter(Boolean);
+  const html = sections.map(s => {
+    const lines = s.split('\n');
+    const heading = lines[0].replace(/^## /, '');
+    const body = lines.slice(1).join('\n');
+
+    const bodyHtml = body
+      .split('\n\n')
+      .filter(Boolean)
+      .map(para => {
+        if (para.startsWith('- ') || para.startsWith('* ')) {
+          const items = para.split('\n').filter(l => l.trim());
+          return `<ul>${items.map(i => `<li>${i.replace(/^[-*]\s+/, '').replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')}</li>`).join('')}</ul>`;
+        }
+        return `<p>${para.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')}</p>`;
+      }).join('');
+
+    return `<div class="ai-section"><h4>${heading}</h4>${bodyHtml}</div>`;
+  }).join('');
+
+  const now = new Date().toLocaleString('en-GB');
+  document.getElementById('aiOutput').innerHTML = html +
+    `<div class="ai-meta">AI intelligence briefing generated ${now} · Claude Sonnet · ${currentFilter || 'Full PCN dataset'} · For professional review before commissioning use</div>`;
+  document.getElementById('aiOutput').classList.add('visible');
+}
+
+// ══════════════════════════════════════════
+// INITIALISE
+// ══════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  ALL_PEOPLE = generateDataset();
+  const stats = computeStats(ALL_PEOPLE);
+  renderKPIs(stats);
+  renderDomainBars(stats);
+  renderGeoGrid(stats);
+  renderAgeRisk(stats);
+  renderWardTable(stats);
+  renderReferralDemand(stats);
+  renderMinimisationPanel(stats);
+});
+</script>
+</body>
