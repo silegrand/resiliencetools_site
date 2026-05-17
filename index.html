@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RESILIENCE — Community intelligence, built for the NHS</title>
+  <meta name="description" content="RESILIENCE is a community-based frailty screening and intelligence system built for the NHS. It identifies older adults at risk before crisis, gives them something of genuine personal value, and equips clinical teams with the intelligence they need.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ===== CUSTOM PROPERTIES ===== */
+    :root {
+      --sage:         #2D5A4E;
+      --sage-dark:    #1E3D35;
+      --sage-pale:    #EFF4F2;
+      --sage-mid:     rgba(45,90,78,0.07);
+      --amber:        #C4843A;
+      --amber-pale:   #FDF6EE;
+      --amber-light:  rgba(196,132,58,0.14);
+      --cream:        #FAF7F2;
+      --white:        #FFFFFF;
+      --charcoal:     #1C2B26;
+      --text-sec:     #5A6B5A;
+      --text-faint:   rgba(255,255,255,0.55);
+      --border:       rgba(45,90,78,0.13);
+      --shadow:       0 2px 18px rgba(28,43,38,0.07);
+      --shadow-lg:    0 8px 34px rgba(28,43,38,0.14);
+      --r:            14px;
+      --r-sm:         8px;
+      --ff-display:   'Cormorant Garamond', Georgia, serif;
+      --ff-body:      'Nunito', sans-serif;
+    }
+
+    /* ===== RESET ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--ff-body);
+      background: var(--cream);
+      color: var(--charcoal);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* Subtle ambient gradient */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 0% 0%,   rgba(45,90,78,0.055) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 100% 100%, rgba(196,132,58,0.05) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ===== TYPOGRAPHY ===== */
+    h1,h2,h3,h4 { font-family: var(--ff-display); color: var(--charcoal); line-height: 1.15; }
+    p { font-family: var(--ff-body); color: var(--text-sec); line-height: 1.78; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ===== LAYOUT ===== */
+    .container  { max-width: 1120px; margin: 0 auto; padding: 0 2rem; }
+    .section-pad { padding: 7rem 0; }
+    section { position: relative; z-index: 1; }
+
+    .section-label {
+      display: block;
+      font-family: var(--ff-body);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 1rem;
+    }
+
+    .section-headline {
+      font-family: var(--ff-display);
+      font-size: clamp(30px, 3.8vw, 50px);
+      font-weight: 300;
+      line-height: 1.15;
+    }
+
+    /* ===== BUTTONS ===== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.85rem 2rem;
+      border-radius: 50px;
+      font-family: var(--ff-body);
+      font-size: 0.875rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      transition: all 0.28s ease;
+      border: 2px solid transparent;
+    }
+    .btn-primary {
+      background: var(--sage);
+      color: var(--white);
+      border-color: var(--sage);
+    }
+    .btn-primary:hover {
+      background: var(--sage-dark);
+      border-color: var(--sage-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(45,90,78,0.28);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--charcoal);
+      border-color: rgba(28,43,38,0.35);
+    }
+    .btn-ghost:hover {
+      background: var(--charcoal);
+      color: var(--white);
+      border-color: var(--charcoal);
+      transform: translateY(-2px);
+    }
+
+    /* ===== SCROLL ANIMATIONS ===== */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.75s ease, transform 0.75s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+    .d1 { transition-delay: 0.10s; }
+    .d2 { transition-delay: 0.20s; }
+    .d3 { transition-delay: 0.30s; }
+    .d4 { transition-delay: 0.40s; }
+    .d5 { transition-delay: 0.50s; }
+
+    /* ===== NAV ===== */
+    #nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: rgba(250,247,242,0.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      transform: translateY(-100%);
+      transition: transform 0.38s ease;
+    }
+    #nav.show { transform: translateY(0); }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.9rem 2rem;
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+    .nav-logo {
+      font-family: var(--ff-display);
+      font-variant: small-caps;
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: var(--sage);
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.8rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: var(--ff-body);
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text-sec);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--sage); }
+    .nav-cta { padding: 0.45rem 1.1rem !important; font-size: 0.78rem !important; }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--charcoal);
+      transition: all 0.3s;
+      border-radius: 2px;
+    }
+
+    /* Mobile menu */
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--cream);
+      z-index: 998;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a {
+      font-family: var(--ff-display);
+      font-size: 2rem;
+      font-weight: 300;
+      color: var(--charcoal);
+      transition: color 0.2s;
+    }
+    .mobile-nav a:hover { color: var(--sage); }
+    .m-close {
+      position: absolute;
+      top: 1.4rem; right: 1.75rem;
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--charcoal);
+      font-family: var(--ff-body);
+    }
+
+    /* ===== HERO ===== */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 7rem;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-pre {
+      font-family: var(--ff-body);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: au 0.8s ease 0.2s forwards;
+    }
+    .hero-h1 {
+      font-family: var(--ff-display);
+      font-size: clamp(44px, 6.5vw, 80px);
+      font-weight: 300;
+      color: var(--charcoal);
+      max-width: 840px;
+      line-height: 1.08;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: au 0.8s ease 0.4s forwards;
+    }
+    .hero-h1 em { font-style: italic; color: var(--sage); }
+    .hero-sub {
+      font-family: var(--ff-body);
+      font-size: 1.1rem;
+      font-weight: 300;
+      color: var(--text-sec);
+      max-width: 620px;
+      line-height: 1.82;
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: au 0.8s ease 0.6s forwards;
+    }
+    .hero-btns {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: au 0.8s ease 0.8s forwards;
+    }
+    .hero-scroll {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+      animation: au 0.8s ease 1.2s forwards;
+    }
+    .scroll-line {
+      width: 1px;
+      height: 44px;
+      background: linear-gradient(to bottom, var(--sage), transparent);
+      animation: pulse 2.2s ease-in-out infinite;
+    }
+    .hero-scroll span {
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-sec);
+    }
+
+    @keyframes au {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; }
+      50%      { opacity: 0.35; }
+    }
+
+    /* ===== PROBLEM ===== */
+    #problem { background: var(--sage-pale); }
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 2rem;
+    }
+    .prob-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 2.5rem;
+      box-shadow: var(--shadow);
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+    .prob-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+    .prob-num {
+      font-family: var(--ff-display);
+      font-size: 3.5rem;
+      font-weight: 300;
+      color: var(--sage);
+      opacity: 0.22;
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+    .prob-card h3 {
+      font-family: var(--ff-display);
+      font-size: 1.35rem;
+      font-weight: 500;
+      margin-bottom: 0.9rem;
+    }
+
+    /* ===== HOW ===== */
+    #how { background: var(--cream); }
+    .how-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4.5rem;
+      margin-bottom: 5rem;
+    }
+    .how-col p { font-size: 1.04rem; line-height: 1.88; }
+
+    /* Process flow */
+    .process {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      position: relative;
+      padding: 0 1rem;
+    }
+    .process::before {
+      content: '';
+      position: absolute;
+      top: 23px;
+      left: 5%;
+      right: 5%;
+      height: 1px;
+      background: linear-gradient(to right, var(--sage), var(--amber), var(--sage));
+      opacity: 0.2;
+    }
+    .proc-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0.75rem;
+      flex: 1;
+      position: relative;
+      z-index: 1;
+    }
+    .proc-icon {
+      width: 46px;
+      height: 46px;
+      background: var(--sage);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      box-shadow: 0 4px 16px rgba(45,90,78,0.22);
+    }
+    .proc-step h4 {
+      font-family: var(--ff-body);
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--sage);
+      letter-spacing: 0.04em;
+      max-width: 90px;
+      line-height: 1.3;
+    }
+
+    /* ===== TOOLS ===== */
+    #tools { background: var(--white); }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 1.75rem;
+    }
+    .tool-card {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 2.25rem;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s ease;
+      color: inherit;
+    }
+    .tool-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-4px);
+      border-color: rgba(45,90,78,0.35);
+    }
+    .tool-icon { font-size: 1.65rem; margin-bottom: 1.1rem; }
+    .tool-card h3 {
+      font-family: var(--ff-display);
+      font-size: 1.25rem;
+      font-weight: 500;
+      margin-bottom: 0.7rem;
+    }
+    .tool-card p { font-size: 0.86rem; line-height: 1.75; flex: 1; }
+    .tool-arrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: var(--ff-body);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-top: 1.4rem;
+      transition: gap 0.2s;
+    }
+    .tool-card:hover .tool-arrow { gap: 0.65rem; }
+
+    /* Simulation badge */
+    .sim-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: var(--amber-light);
+      border: 1px solid rgba(196,132,58,0.3);
+      color: #8B5A1A;
+      font-family: var(--ff-body);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.28rem 0.7rem;
+      border-radius: 50px;
+      margin-bottom: 1rem;
+      align-self: flex-start;
+    }
+    .sim-badge::before { content: '◎'; font-size: 0.62rem; }
+    .sim-note {
+      font-size: 0.78rem;
+      color: #8B5A1A;
+      font-style: italic;
+      margin-top: 0.75rem;
+      line-height: 1.55;
+    }
+
+    /* 5 cards in 3-col: centre last row */
+    .tool-card:nth-child(4) { grid-column: 1; }
+    .tool-card:nth-child(5) { grid-column: 2; }
+
+    /* ===== PRINCIPLES ===== */
+    #principles { background: var(--sage-dark); }
+    .principles-header .section-label { color: rgba(196,132,58,0.75); }
+    .principles-header .section-headline { color: var(--white); }
+    .principle-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2.75rem;
+      max-width: 740px;
+    }
+    .principle {
+      border-left: 2px solid rgba(196,132,58,0.35);
+      padding-left: 2.25rem;
+    }
+    .principle p {
+      font-size: 1.1rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.8);
+      line-height: 1.82;
+    }
+    .principle strong { font-weight: 700; color: var(--white); }
+
+    /* ===== EVIDENCE ===== */
+    #evidence { background: var(--cream); }
+    .ev-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 1.4rem;
+      margin-bottom: 2.5rem;
+    }
+    .ev-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 1.85rem;
+      box-shadow: var(--shadow);
+    }
+    .ev-card h4 {
+      font-family: var(--ff-display);
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--sage);
+      margin-bottom: 0.5rem;
+    }
+    .ev-card p { font-size: 0.82rem; line-height: 1.68; }
+    .ev-note {
+      background: var(--sage-mid);
+      border-left: 3px solid var(--sage);
+      border-radius: 0 var(--r-sm) var(--r-sm) 0;
+      padding: 2rem 2.5rem;
+    }
+    .ev-note p { font-size: 0.96rem; color: var(--charcoal); line-height: 1.8; }
+
+    /* ===== FOR WHOM ===== */
+    #for-whom { background: var(--sage-pale); }
+    .audience-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 2rem;
+    }
+    .aud-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 2.5rem;
+      box-shadow: var(--shadow);
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+    .aud-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+    .aud-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--amber-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      margin-bottom: 1.25rem;
+    }
+    .aud-card h3 {
+      font-family: var(--ff-display);
+      font-size: 1.3rem;
+      font-weight: 500;
+      margin-bottom: 0.75rem;
+    }
+    .aud-card p { font-size: 0.875rem; line-height: 1.76; }
+
+    /* ===== FOR YOU ===== */
+    #for-you { background: var(--white); }
+    .for-you-intro {
+      max-width: 680px;
+      margin-bottom: 4rem;
+    }
+    .for-you-intro p {
+      font-size: 1.08rem;
+      line-height: 1.88;
+      margin-top: 1.25rem;
+    }
+    .for-you-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+    .fy-card {
+      border-radius: var(--r);
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .fy-card.personal {
+      background: var(--amber-pale);
+      border: 1px solid rgba(196,132,58,0.2);
+    }
+    .fy-card.family {
+      background: var(--sage-pale);
+      border: 1px solid var(--border);
+    }
+    .fy-card.community {
+      background: var(--cream);
+      border: 1px solid var(--border);
+    }
+    .fy-icon {
+      font-size: 2rem;
+      line-height: 1;
+    }
+    .fy-card h3 {
+      font-family: var(--ff-display);
+      font-size: 1.4rem;
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--charcoal);
+    }
+    .fy-card p {
+      font-size: 0.92rem;
+      line-height: 1.8;
+      flex: 1;
+    }
+    .fy-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--ff-body);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-top: 0.5rem;
+      transition: gap 0.2s;
+      text-decoration: none;
+    }
+    .fy-link:hover { gap: 0.7rem; }
+    .fy-quote {
+      background: var(--sage-dark);
+      border-radius: var(--r);
+      padding: 3.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .fy-quote-text {
+      font-family: var(--ff-display);
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--white);
+      line-height: 1.45;
+    }
+    .fy-quote-text em {
+      font-style: normal;
+      color: rgba(196,132,58,0.9);
+    }
+    .fy-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .fy-step {
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+    }
+    .fy-step-num {
+      width: 28px;
+      height: 28px;
+      background: rgba(196,132,58,0.25);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--ff-body);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: rgba(196,132,58,0.9);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .fy-step-text {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.7;
+    }
+    .fy-step-text strong {
+      color: var(--white);
+      font-weight: 600;
+      display: block;
+      margin-bottom: 0.15rem;
+    }
+
+    @media (max-width: 960px) {
+      .for-you-grid { grid-template-columns: 1fr 1fr; }
+      .fy-quote { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+    @media (max-width: 600px) {
+      .for-you-grid { grid-template-columns: 1fr; }
+      .fy-quote { padding: 2.5rem; }
+    }
+
+    /* ===== STATUS ===== */
+    #status { background: var(--amber-pale); }
+    .status-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    .status-text p { font-size: 1rem; line-height: 1.88; margin-top: 1.5rem; }
+    .milestones { display: flex; flex-direction: column; gap: 1.6rem; }
+    .milestone { display: flex; gap: 1.1rem; align-items: flex-start; }
+    .m-dot {
+      width: 10px; height: 10px;
+      background: var(--amber);
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 7px;
+    }
+    .milestone h4 {
+      font-family: var(--ff-body);
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--charcoal);
+      margin-bottom: 0.2rem;
+    }
+    .milestone p { font-size: 0.82rem; }
+
+    /* ===== CONTACT ===== */
+    #contact { background: var(--cream); }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: start;
+    }
+    .contact-lede p {
+      font-size: 1rem;
+      line-height: 1.88;
+      margin-top: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .cf {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .fg { display: flex; flex-direction: column; gap: 0.45rem; }
+    .fg label {
+      font-family: var(--ff-body);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-sec);
+    }
+    .fg input, .fg textarea {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+      padding: 0.85rem 1.2rem;
+      font-family: var(--ff-body);
+      font-size: 0.9rem;
+      color: var(--charcoal);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+    .fg input:focus, .fg textarea:focus {
+      border-color: var(--sage);
+      box-shadow: 0 0 0 3px rgba(45,90,78,0.1);
+    }
+    .fg textarea { min-height: 115px; resize: vertical; }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--sage-dark);
+      padding: 4rem 0 2.25rem;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 4rem;
+      padding-bottom: 3rem;
+      border-bottom: 1px solid rgba(255,255,255,0.09);
+      margin-bottom: 2rem;
+    }
+    .f-brand-logo {
+      font-family: var(--ff-display);
+      font-variant: small-caps;
+      font-size: 1.2rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: var(--white);
+      display: block;
+      margin-bottom: 0.9rem;
+    }
+    .f-tagline {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.75;
+      max-width: 220px;
+    }
+    .f-powered {
+      display: block;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.3);
+      margin-top: 1.4rem;
+    }
+    .f-nav {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 1rem;
+    }
+    .f-nav-col h5 {
+      font-family: var(--ff-body);
+      font-size: 0.66rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.33);
+      margin-bottom: 1rem;
+    }
+    .f-nav-col a {
+      display: block;
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 0.55rem;
+      transition: color 0.2s;
+    }
+    .f-nav-col a:hover { color: var(--white); }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .f-copy { font-size: 0.75rem; color: rgba(255,255,255,0.3); }
+    .f-links { display: flex; gap: 1.5rem; }
+    .f-links a {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.3);
+      transition: color 0.2s;
+    }
+    .f-links a:hover { color: rgba(255,255,255,0.65); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 960px) {
+      .problem-grid,
+      .ev-grid,
+      .audience-grid { grid-template-columns: 1fr 1fr; }
+      .tools-grid { grid-template-columns: 1fr 1fr; }
+      .tool-card:nth-child(4),
+      .tool-card:nth-child(5) { grid-column: auto; }
+      .how-cols,
+      .status-grid,
+      .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .footer-top { grid-template-columns: 1fr; gap: 2rem; }
+      .f-nav { grid-template-columns: repeat(2,1fr); }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .process { flex-wrap: wrap; gap: 2rem; justify-content: center; }
+      .process::before { display: none; }
+      .proc-step { flex: 0 0 30%; }
+    }
+
+    @media (max-width: 600px) {
+      .section-pad { padding: 5rem 0; }
+      .problem-grid,
+      .tools-grid,
+      .ev-grid,
+      .audience-grid { grid-template-columns: 1fr; }
+      .hero-btns { flex-direction: column; align-items: center; }
+      .f-nav { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+      .proc-step { flex: 0 0 40%; }
+    }
+
+    /* ===== PRINT ===== */
+    @media print {
+      #nav, .hero-scroll, .hamburger, .mobile-nav { display: none !important; }
+      .fade-up { opacity: 1 !important; transform: none !important; }
+      body::before { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-logo">Resilience</a>
+    <ul class="nav-links">
+      <li><a href="#problem">The Problem</a></li>
+      <li><a href="#how">How It Works</a></li>
+      <li><a href="#tools">The Tools</a></li>
+      <li><a href="#evidence">Evidence</a></li>
+      <li><a href="#for-whom">For Whom</a></li>
+      <li><a href="#for-you">For You</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#contact" class="btn btn-primary nav-cta">Get in touch</a>
+    <button class="hamburger" id="hbg" aria-label="Open navigation menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mob-nav">
+  <button class="m-close" id="mob-close">✕</button>
+  <a href="#problem"  onclick="closeMob()">The Problem</a>
+  <a href="#how"      onclick="closeMob()">How It Works</a>
+  <a href="#tools"    onclick="closeMob()">The Tools</a>
+  <a href="#evidence" onclick="closeMob()">Evidence</a>
+  <a href="#for-whom" onclick="closeMob()">For Whom</a>
+  <a href="#for-you"  onclick="closeMob()">For You</a>
+  <a href="#contact"  onclick="closeMob()">Contact</a>
+  <a href="#contact" class="btn btn-primary" onclick="closeMob()">Get in touch</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <p class="hero-pre">Resilience Early Screening for Independent Living in the Community</p>
+  <h1 class="hero-h1">Community intelligence, built for the NHS.<br><em>Delivering resilience where it is needed.</em></h1>
+  <p class="hero-sub">RESILIENCE is a community-based frailty screening and intelligence system built for the NHS. It identifies older adults at risk before crisis, gives them something of genuine personal value from the process, and equips clinical teams with the intelligence they need to respond effectively.</p>
+  <div class="hero-btns">
+    <a href="#how"     class="btn btn-primary">See how it works</a>
+    <a href="#contact" class="btn btn-ghost">Get in touch</a>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- THE PROBLEM -->
+<section id="problem" class="section-pad">
+  <div class="container">
+    <div class="section-header" style="margin-bottom:4rem;">
+      <div class="fade-up">
+        <span class="section-label">The Challenge</span>
+        <h2 class="section-headline">Millions of older adults are invisible to the NHS,<br>until it is too late.</h2>
+      </div>
+    </div>
+    <div class="problem-grid">
+      <div class="prob-card fade-up d1">
+        <div class="prob-num">01</div>
+        <h3>The Missing Middle</h3>
+        <p>There is a population of older adults in the UK who are too frail to be fully safe at home but not yet eligible for formal NHS or social care support. They fall between the thresholds. They are one fall, one infection, or one carer breakdown away from an acute hospital admission, often avoidable.</p>
+      </div>
+      <div class="prob-card fade-up d2">
+        <div class="prob-num">02</div>
+        <h3>The Identification Gap</h3>
+        <p>The NHS frailty system is reactive. People appear in it when they arrive at A&E or when crisis has already happened. Proactive community identification of frailty risk, before the system has to respond, barely exists at scale anywhere in the country.</p>
+      </div>
+      <div class="prob-card fade-up d3">
+        <div class="prob-num">03</div>
+        <h3>The Human Cost</h3>
+        <p>For every older adult who loses their independence to an avoidable crisis, there is a family under strain, a carer invisible to health services, and a preventive opportunity that passed without anyone seeing it. RESILIENCE is designed to see it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how" class="section-pad">
+  <div class="container">
+    <div class="fade-up" style="margin-bottom:4rem;">
+      <span class="section-label">The Approach</span>
+      <h2 class="section-headline">A conversation, not a form.</h2>
+    </div>
+    <div class="how-cols">
+      <div class="how-col fade-up d1">
+        <p>RESILIENCE asks older adults about their everyday life in a conversational, voice-first interface powered by Claude Sonnet. They speak freely, in their own words, at their own pace. The AI listens: not just to what is said, but to how it is said. It detects hesitation, minimisation, and the specific fears that prevent older adults from disclosing vulnerability: the fear of being a burden, and the fear of what honest disclosure might lead to.</p>
+      </div>
+      <div class="how-col fade-up d2">
+        <p>From a single conversation, RESILIENCE generates a personalised Wellness Guide for the person, a structured clinical referral for the frailty team, and, with consent, a population intelligence signal for NHS commissioners. Three distinct outputs. One dignified, human conversation. Nothing shared without explicit permission.</p>
+      </div>
+    </div>
+    <div class="process fade-up">
+      <div class="proc-step">
+        <div class="proc-icon">🎙️</div>
+        <h4>Conversation</h4>
+      </div>
+      <div class="proc-step">
+        <div class="proc-icon">🧠</div>
+        <h4>Interpretation</h4>
+      </div>
+      <div class="proc-step">
+        <div class="proc-icon">📄</div>
+        <h4>Wellness Guide</h4>
+      </div>
+      <div class="proc-step">
+        <div class="proc-icon">📋</div>
+        <h4>Clinical Referral</h4>
+      </div>
+      <div class="proc-step">
+        <div class="proc-icon">📊</div>
+        <h4>Population Intelligence</h4>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE TOOLS -->
+<section id="tools" class="section-pad">
+  <div class="container">
+    <div class="fade-up" style="margin-bottom:4rem;">
+      <span class="section-label">The Tool Suite</span>
+      <h2 class="section-headline">Five tools. One integrated pathway.</h2>
+    </div>
+    <div class="tools-grid">
+
+      <a href="/resilience_screening_tool/" class="tool-card fade-up d1">
+        <div class="tool-icon">🎙️</div>
+        <h3>The Screening Tool</h3>
+        <p>A voice-first community frailty screen that interprets free spoken responses using Claude Sonnet. Twelve conversational questions across six clinical domains. Adaptive language for four completing-party types. Safety architecture built throughout.</p>
+        <span class="tool-arrow">Open tool →</span>
+      </a>
+
+      <a href="/resilience_carer/" class="tool-card fade-up d2">
+        <div class="tool-icon">🤝</div>
+        <h3>The Carer Report</h3>
+        <p>An independent observational questionnaire for a nominated carer, linked by consent only. The carer's scores never reach the person; the person's scores never reach the carer. The comparison happens at the clinical layer, where it generates the most value.</p>
+        <span class="tool-arrow">Open tool →</span>
+      </a>
+
+      <a href="/resilience_referral_tool/" class="tool-card fade-up d3">
+        <div class="tool-icon">📋</div>
+        <span class="sim-badge">Simulation</span>
+        <h3>The Clinical Referral</h3>
+        <p>A structured referral document for the frailty team, centred on a Frailty Profile Radar, a six-spoke diagram that communicates the person's risk profile at a glance. Domain detail, minimisation notes, referral priorities, and a CGA preparation brief.</p>
+        <p class="sim-note">This tool shows a simulation of how clinical referral outputs will be presented. It is not yet connected to live screening data.</p>
+        <span class="tool-arrow">View simulation →</span>
+      </a>
+
+      <a href="/resilience_person_carer_referral/" class="tool-card fade-up d4">
+        <div class="tool-icon">⚖️</div>
+        <span class="sim-badge">Simulation</span>
+        <h3>The Dual Report</h3>
+        <p>When both a person's screen and a carer's report are available, two profiles overlay on the radar. Agreement confirms clinical confidence. Divergence is a clinical signal, almost always indicating that the person is understating genuine difficulty.</p>
+        <p class="sim-note">This tool shows a simulation of how dual person and carer outputs will be presented side by side. It is not yet connected to live screening data.</p>
+        <span class="tool-arrow">View simulation →</span>
+      </a>
+
+      <a href="/resilience_dashboard/" class="tool-card fade-up d5">
+        <div class="tool-icon">📊</div>
+        <span class="sim-badge">Simulation</span>
+        <h3>The Intelligence Dashboard</h3>
+        <p>A population-level frailty intelligence interface for NHS commissioning teams. Geographic ward-level risk mapping, domain analysis, referral demand forecasting, and an AI-synthesised commissioning brief from the full anonymised dataset.</p>
+        <p class="sim-note">This tool shows a simulation of how population intelligence outputs will be presented to commissioning teams. It is not yet connected to live screening data.</p>
+        <span class="tool-arrow">View simulation →</span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- PRINCIPLES -->
+<section id="principles" class="section-pad">
+  <div class="container">
+    <div class="principles-header fade-up" style="margin-bottom:4rem;">
+      <span class="section-label">Built Differently</span>
+      <h2 class="section-headline">Responsible AI, by design.<br>Not by compliance.</h2>
+    </div>
+    <div class="principle-list">
+      <div class="principle fade-up d1">
+        <p><strong>RESILIENCE gives before it asks.</strong> Every person receives a personalised Wellness Guide, regardless of what they choose to share with clinical services. The guide belongs to them.</p>
+      </div>
+      <div class="principle fade-up d2">
+        <p><strong>You are the author of your own life.</strong> Nothing happens without the person's permission. Every consent layer is granular, revocable, and explained in plain language.</p>
+      </div>
+      <div class="principle fade-up d3">
+        <p><strong>Everyone wants the same thing.</strong> The older person, the carer, and the clinical team all want the same outcome: safe, well, and at home, on the person's own terms. RESILIENCE closes the information gap between them.</p>
+      </div>
+      <div class="principle fade-up d4">
+        <p><strong>The AI is always under human control.</strong> RESILIENCE uses Claude Sonnet to interpret spoken responses and generate outputs, but the AI operates within a tightly defined set of instructions written by the development team. It does not act freely: it follows a clear clinical framework, asks only the questions it is given, and interprets responses only within the domains it is designed to address. This is a working prototype, and the instruction set will be refined in direct partnership with geriatricians, frailty nurses, and clinical researchers. The system learns through that collaboration, not independently.</p>
+      </div>
+      <div class="principle fade-up d5">
+        <p><strong>Privacy is built in, not bolted on.</strong> RESILIENCE was designed from the outset to be GDPR-compliant by default. No personal data is stored, transmitted, or shared unless the person explicitly chooses to share it. The three-layer consent model gives each individual granular control: a person can receive their Wellness Guide and share nothing further. Data used for population intelligence is anonymised before it leaves the device. There is no profiling, no third-party data sharing, and no commercial use of personal information. Privacy is not a feature of RESILIENCE. It is the foundation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EVIDENCE -->
+<section id="evidence" class="section-pad">
+  <div class="container">
+    <div class="fade-up" style="margin-bottom:4rem;">
+      <span class="section-label">Clinically Grounded</span>
+      <h2 class="section-headline">Built on validated frameworks.</h2>
+    </div>
+    <div class="ev-grid">
+      <div class="ev-card fade-up d1">
+        <h4>PRISMA-7</h4>
+        <p>British Geriatrics Society self-screening frailty identification instrument, embedded invisibly across the twelve screening questions and scored in real time.</p>
+      </div>
+      <div class="ev-card fade-up d2">
+        <h4>FRAIL Scale</h4>
+        <p>Fatigue, Resistance, Ambulation, Illness, and Loss of weight domains mapped across Physical Function, Nutrition, and Medical Burden question categories.</p>
+      </div>
+      <div class="ev-card fade-up d3">
+        <h4>BGS Fit for Frailty</h4>
+        <p>British Geriatrics Society framework informing question categories, clinical domain structure, and referral routing throughout the tool suite.</p>
+      </div>
+      <div class="ev-card fade-up d1">
+        <h4>FINGER Trial</h4>
+        <p>Finnish Geriatric Intervention Study: multidomain intervention evidence base underpinning the personalised Wellness Guide structure and recommendations.</p>
+      </div>
+      <div class="ev-card fade-up d2">
+        <h4>NHS RightCare</h4>
+        <p>NHS RightCare Frailty Pathway informing clinical triage logic, referral routing, and priority weighting within the Clinical Referral tool.</p>
+      </div>
+      <div class="ev-card fade-up d3">
+        <h4>Oral Frailty &amp; Sleep</h4>
+        <p>Peer-reviewed evidence covering oral frailty indicators and sleep disruption as supplementary clinical domains within the screening architecture.</p>
+      </div>
+      <div class="ev-card fade-up d1">
+        <h4>Explainable Machine Learning &amp; Frailty Prediction</h4>
+        <p>A 2025 peer-reviewed study in Geriatric Nursing (Zhang et al., DOI: 10.1016/j.gerinurse.2024.10.025) tested nine machine learning models for predicting frailty in older adults. The best-performing model identified pain level, depression, and functional ability as the three strongest predictors, outperforming objective physical measures. Notably conducted in a chronic pain population, the finding that subjective, self-reported experience carries greater predictive weight than clinical history directly supports RESILIENCE's conversational, voice-first approach to eliciting what standardised forms cannot.</p>
+      </div>
+    </div>
+    <div class="ev-note fade-up">
+      <p>RESILIENCE is a working prototype, developed in response to a real clinical need and grounded in validated evidence frameworks. The clinical domain structure and question architecture have been informed by informal conversations with geriatric specialists and frailty practitioners. The next stage is formal co-development: working directly with those at the cutting edge of delivering support and interventions to this population, to test, challenge, and strengthen every aspect of the system.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOR WHOM -->
+<section id="for-whom" class="section-pad">
+  <div class="container">
+    <div class="fade-up" style="margin-bottom:4rem;">
+      <span class="section-label">Designed For</span>
+      <h2 class="section-headline">Built for everyone in the pathway.</h2>
+    </div>
+    <div class="audience-grid">
+      <div class="aud-card fade-up d1">
+        <div class="aud-icon">🏠</div>
+        <h3>Older Adults &amp; Families</h3>
+        <p>RESILIENCE is for you if you want to stay living well at home and would like to understand what support might help, on your own terms, at your own pace.</p>
+      </div>
+      <div class="aud-card fade-up d2">
+        <div class="aud-icon">🏥</div>
+        <h3>NHS Clinical Teams</h3>
+        <p>RESILIENCE is for frailty nurses, geriatricians, Neighbourhood Health Service coordinators, and GP practices who need to identify at-risk patients in the community before crisis, not after.</p>
+      </div>
+      <div class="aud-card fade-up d3">
+        <div class="aud-icon">📈</div>
+        <h3>Commissioners &amp; System Leaders</h3>
+        <p>RESILIENCE is for ICB commissioners and NHS system leaders who need population-level frailty intelligence to inform commissioning decisions, identify service gaps, and target preventive investment.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- FOR YOU AND YOUR FAMILY -->
+<section id="for-you" class="section-pad">
+  <div class="container">
+    <div class="for-you-intro fade-up">
+      <span class="section-label">For You and Your Family</span>
+      <h2 class="section-headline">Staying well at home, on your own terms.</h2>
+      <p>RESILIENCE is not a clinical assessment and it is not a form. It is a conversation about your everyday life. It will ask you about things like how you are sleeping, whether you feel confident getting around, and what matters most to you about staying at home. At the end, it gives you a personalised Wellness Guide that belongs to you. Nothing is passed on to anyone unless you choose to share it.</p>
+    </div>
+
+    <div class="for-you-grid">
+
+      <div class="fy-card personal fade-up d1">
+        <div class="fy-icon">🏡</div>
+        <h3>If you are wondering how you are doing</h3>
+        <p>Maybe things feel a little harder than they used to. Maybe you are managing fine but would like to understand what support is available before you need it. RESILIENCE asks you about your life in your own words, at your own pace, and gives you something genuinely useful in return. No waiting room. No referral needed. Just a conversation.</p>
+        <a href="/resilience_screening_tool/" class="fy-link">Try the conversation →</a>
+      </div>
+
+      <div class="fy-card family fade-up d2">
+        <div class="fy-icon">❤️</div>
+        <h3>If someone you love is on your mind</h3>
+        <p>Adult children often notice things before anyone else does. A parent who seems a little more tired, a little less steady, a little more reluctant to talk about how they are getting on. If you have noticed something and are not sure what to do next, RESILIENCE can help you understand the picture more clearly, and give your family member something valuable in the process.</p>
+        <a href="/resilience_screening_tool/" class="fy-link">Learn how it works →</a>
+      </div>
+
+      <div class="fy-card community fade-up d3">
+        <div class="fy-icon">🤲</div>
+        <h3>If you work with older adults in your community</h3>
+        <p>Social prescribing link workers, community pharmacists, voluntary sector workers, and faith community leaders are often the first to sense that someone is struggling. RESILIENCE gives you something to offer in that moment: a dignified, voice-first conversation that produces a Wellness Guide the person can keep, and, if they choose, opens a pathway to clinical support.</p>
+        <a href="#contact" class="fy-link">Talk to us about your work →</a>
+      </div>
+
+    </div>
+
+    <div class="fy-quote fade-up">
+      <p class="fy-quote-text">"The guide is <em>yours</em>. We give it to you regardless of what you choose to do next. Nothing leaves this conversation without your permission."</p>
+      <div class="fy-steps">
+        <div class="fy-step">
+          <div class="fy-step-num">1</div>
+          <div class="fy-step-text">
+            <strong>You have a conversation</strong>
+            Twelve questions about your everyday life, spoken in your own words. Takes around ten minutes.
+          </div>
+        </div>
+        <div class="fy-step">
+          <div class="fy-step-num">2</div>
+          <div class="fy-step-text">
+            <strong>You receive your Wellness Guide</strong>
+            A personalised summary of what you shared, with practical suggestions matched to your priorities. Yours to keep.
+          </div>
+        </div>
+        <div class="fy-step">
+          <div class="fy-step-num">3</div>
+          <div class="fy-step-text">
+            <strong>You decide what happens next</strong>
+            If you would like your GP or a community nurse to see what you shared, you can choose to share it. If you would rather keep it private, that is entirely your decision.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- CONTACT -->
+<section id="contact" class="section-pad">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-lede fade-up">
+        <span class="section-label">Get In Touch</span>
+        <h2 class="section-headline">Share your thoughts.</h2>
+        <p>RESILIENCE is developed by Assistiv Systems Limited, Faversham, Kent. If you are a clinician, researcher, or specialist working in this field and would like to explore the prototype or offer feedback, we would welcome the conversation.</p>
+        <a href="mailto:hello@resiliencetools.xyz" class="btn btn-primary">hello@resiliencetools.xyz</a>
+      </div>
+      <form class="cf fade-up d2" onsubmit="handleForm(event)">
+        <div class="fg">
+          <label for="fn">Name</label>
+          <input type="text" id="fn" name="name" placeholder="Your full name" required>
+        </div>
+        <div class="fg">
+          <label for="fo">Organisation</label>
+          <input type="text" id="fo" name="org" placeholder="Your organisation">
+        </div>
+        <div class="fg">
+          <label for="fe">Email</label>
+          <input type="email" id="fe" name="email" placeholder="you@organisation.nhs.uk" required>
+        </div>
+        <div class="fg">
+          <label for="fm">Your interest</label>
+          <textarea id="fm" name="msg" placeholder="Tell us about your work or interest in RESILIENCE."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="align-self:flex-start;">Send message</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <span class="f-brand-logo">Resilience</span>
+        <p class="f-tagline">Community intelligence, built for the NHS. Delivering resilience where it is needed.</p>
+        <span class="f-powered">Powered by Claude Sonnet, Anthropic</span>
+      </div>
+      <nav class="f-nav" aria-label="Footer navigation">
+        <div class="f-nav-col">
+          <h5>The System</h5>
+          <a href="#problem">The Problem</a>
+          <a href="#how">How It Works</a>
+          <a href="#principles">Design Principles</a>
+          <a href="#evidence">Evidence Base</a>
+        </div>
+        <div class="f-nav-col">
+          <h5>The Tools</h5>
+          <a href="/resilience_screening_tool/">Screening Tool</a>
+          <a href="/resilience_carer/">Carer Report</a>
+          <a href="/resilience_referral_tool/">Clinical Referral</a>
+          <a href="/resilience_person_carer_referral/">Dual Report</a>
+          <a href="/resilience_dashboard/">Intelligence Dashboard</a>
+        </div>
+        <div class="f-nav-col">
+          <h5>About</h5>
+          <a href="#for-whom">For Whom</a>
+          <a href="#for-you">For You and Your Family</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      <p class="f-copy">© 2026 Assistiv Systems Limited, Faversham, Kent. All rights reserved.</p>
+      <div class="f-links">
+        <a href="#">Privacy Notice</a>
+        <a href="#">Accessibility</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // NAV show/hide on hero scroll
+  const navEl   = document.getElementById('nav');
+  const heroEl  = document.getElementById('hero');
+  new IntersectionObserver(entries => {
+    navEl.classList.toggle('show', !entries[0].isIntersecting);
+  }, { threshold: 0.1 }).observe(heroEl);
+
+  // Mobile menu
+  const mobNav   = document.getElementById('mob-nav');
+  document.getElementById('hbg').addEventListener('click', () => mobNav.classList.add('open'));
+  document.getElementById('mob-close').addEventListener('click', closeMob);
+  function closeMob() { mobNav.classList.remove('open'); }
+
+  // Scroll-triggered fade-up
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+
+  // Contact form → mailto
+  function handleForm(e) {
+    e.preventDefault();
+    const n = document.getElementById('fn').value;
+    const o = document.getElementById('fo').value;
+    const em = document.getElementById('fe').value;
+    const m = document.getElementById('fm').value;
+    const sub  = encodeURIComponent('RESILIENCE Demo Request: ' + n);
+    const body = encodeURIComponent('Name: ' + n + '\nOrganisation: ' + o + '\nEmail: ' + em + '\n\n' + m);
+    window.location.href = 'mailto:hello@resiliencetools.xyz?subject=' + sub + '&body=' + body;
+  }
+</script>
+
+</body>
+</html>
