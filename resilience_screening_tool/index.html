@@ -1,1 +1,1392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RESILIENCE — Prototype 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sage: #2D5A4E; --sage-dark: #1E3D35; --sage-light: #3D7A68;
+  --sage-pale: #E8F2EF; --sage-very-pale: #F4FAF8;
+  --amber: #C4843A; --amber-light: #D4A05A; --amber-pale: #FDF3E7;
+  --cream: #FAF7F2; --white: #FFFFFF;
+  --charcoal: #1C2B26; --text: #2A3028;
+  --text-secondary: #5A6B5A; --text-light: #8A9E8A;
+  --border: #D5E5DF; --border-light: #EDF5F2;
+  --safety-border: #E8956D; --safety-text: #7B4A20;
+  --rec: #C0392B; --rec-pale: #FDECEA;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Nunito', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+body::before {
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background: radial-gradient(ellipse at 15% 60%, rgba(45,90,78,0.05) 0%, transparent 55%),
+              radial-gradient(ellipse at 85% 15%, rgba(196,132,58,0.04) 0%, transparent 55%);
+}
+#progressBar { position: fixed; top: 0; left: 0; height: 3px; width: 0%; background: linear-gradient(90deg,var(--sage),var(--amber)); transition: width 0.6s ease; z-index: 200; }
+#exitBtn { position: fixed; top: 18px; right: 20px; background: none; border: 1px solid var(--border); color: var(--text-secondary); font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 500; padding: 6px 16px; border-radius: 20px; cursor: pointer; transition: all 0.2s; z-index: 199; display: none; }
+#exitBtn:hover { background: var(--white); border-color: var(--sage); color: var(--text); }
 
+/* SCREENS */
+.screen { display: none; min-height: 100vh; position: relative; z-index: 1; }
+.screen.active { display: flex; flex-direction: column; }
+
+/* UTILS */
+.domain-tag { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--sage); margin-bottom: 22px; opacity: 0.8; }
+.serif { font-family: 'Cormorant Garamond', serif; }
+.btn-primary { display: inline-flex; align-items: center; gap: 10px; background: var(--sage); color: var(--white); font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: 600; padding: 14px 34px; border: none; border-radius: 50px; cursor: pointer; transition: all 0.25s; }
+.btn-primary:hover { background: var(--sage-dark); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(45,90,78,0.22); }
+.btn-primary:disabled { opacity: 0.35; pointer-events: none; }
+.btn-ghost { display: inline-flex; align-items: center; gap: 8px; background: none; border: 1px solid var(--border); color: var(--text-secondary); font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 500; padding: 10px 22px; border-radius: 50px; cursor: pointer; transition: all 0.2s; }
+.btn-ghost:hover { border-color: var(--sage); color: var(--sage); }
+@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+@keyframes pulse { 0%,100% { transform:scale(1); opacity:1; } 50% { transform:scale(1.12); opacity:0.75; } }
+@keyframes ripple { 0% { transform:scale(1); opacity:0.5; } 100% { transform:scale(2.5); opacity:0; } }
+@keyframes breathe { 0%,100% { opacity:0.5; transform:scale(0.95); } 50% { opacity:1; transform:scale(1.05); } }
+
+/* ── AI STATUS INDICATOR ── */
+#aiStatus { position: fixed; top: 18px; left: 20px; display: none; align-items: center; gap: 7px; background: var(--white); border: 1px solid var(--border); border-radius: 20px; padding: 6px 14px; font-size: 12px; font-weight: 600; z-index: 199; box-shadow: 0 2px 8px rgba(30,61,53,0.08); }
+#aiStatus.active-ai { display: flex; color: var(--sage); border-color: var(--sage-pale); }
+#aiStatus.template-mode { display: flex; color: var(--text-secondary); }
+.ai-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--sage); animation: pulse 2s infinite; }
+.ai-dot.offline { background: var(--text-light); animation: none; }
+
+/* ── SETUP SCREEN ── */
+#setup-screen { background: var(--cream); align-items: center; justify-content: center; }
+.setup-wrap { max-width: 520px; width: 100%; padding: 60px 24px; animation: fadeUp 0.5s ease; }
+.setup-logo { font-family: 'Cormorant Garamond', serif; font-size: 12px; font-weight: 500; letter-spacing: 0.38em; text-transform: uppercase; color: var(--sage); margin-bottom: 40px; }
+.setup-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(28px,4vw,40px); font-weight: 300; color: var(--charcoal); line-height: 1.2; margin-bottom: 12px; }
+.setup-title em { font-style: italic; color: var(--sage); }
+.setup-body { font-size: 15px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 32px; }
+.setup-card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 24px 26px; margin-bottom: 20px; }
+.setup-card-title { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sage); margin-bottom: 14px; }
+.setup-capabilities { display: flex; flex-direction: column; gap: 9px; margin-bottom: 20px; }
+.setup-cap { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
+.setup-cap-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.key-input-wrap { position: relative; margin-bottom: 12px; }
+.key-input { width: 100%; padding: 13px 16px; border: 2px solid var(--border); border-radius: 12px; font-family: 'Nunito', sans-serif; font-size: 14px; color: var(--text); background: var(--sage-very-pale); transition: border-color 0.2s; outline: none; letter-spacing: 0.05em; }
+.key-input:focus { border-color: var(--sage); background: var(--white); }
+.key-input::placeholder { color: var(--text-light); letter-spacing: 0; }
+.key-security { font-size: 11px; color: var(--text-light); display: flex; align-items: center; gap: 5px; margin-bottom: 20px; }
+.setup-actions { display: flex; flex-direction: column; gap: 10px; }
+.setup-enable { display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--sage); color: var(--white); font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: 600; padding: 15px 34px; border: none; border-radius: 50px; cursor: pointer; transition: all 0.25s; width: 100%; }
+.setup-enable:hover { background: var(--sage-dark); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(45,90,78,0.2); }
+.setup-skip { text-align: center; font-size: 13px; color: var(--text-light); cursor: pointer; padding: 8px; transition: color 0.2s; }
+.setup-skip:hover { color: var(--text-secondary); }
+.setup-skip a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+
+/* ── WELCOME ── */
+#welcome-screen { background: var(--cream); }
+.welcome-wrap { max-width: 640px; width: 100%; padding: 80px 24px 60px; margin: 0 auto; }
+.welcome-logo { font-family: 'Cormorant Garamond', serif; font-size: 12px; font-weight: 500; letter-spacing: 0.38em; text-transform: uppercase; color: var(--sage); margin-bottom: 52px; opacity: 0; animation: fadeUp 0.5s ease 0.2s forwards; }
+.welcome-step { opacity: 0; transform: translateY(14px); transition: opacity 0.5s ease, transform 0.5s ease; }
+.welcome-step.visible { opacity: 1; transform: translateY(0); }
+.welcome-headline { font-family: 'Cormorant Garamond', serif; font-size: clamp(38px,6vw,58px); font-weight: 300; line-height: 1.12; color: var(--charcoal); margin-bottom: 18px; }
+.welcome-headline em { font-style: italic; color: var(--sage); }
+.welcome-lede { font-size: 18px; font-weight: 300; line-height: 1.75; color: var(--text-secondary); max-width: 500px; margin-bottom: 40px; }
+.w-card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 22px 26px; margin-bottom: 12px; }
+.w-card.sage { background: var(--sage-pale); border-color: rgba(45,90,78,0.22); }
+.w-card.human { background: #FDF8F2; border-color: rgba(196,132,58,0.25); border-left: 4px solid var(--amber); }
+.w-card-title { font-family: 'Cormorant Garamond', serif; font-size: 19px; font-weight: 500; color: var(--sage-dark); margin-bottom: 8px; }
+.w-card-title.amber { color: var(--amber); }
+.w-card-body { font-size: 15px; font-weight: 400; line-height: 1.7; color: var(--text-secondary); }
+.begin-btn { display: inline-flex; align-items: center; gap: 12px; background: var(--sage); color: var(--white); font-family: 'Nunito', sans-serif; font-size: 17px; font-weight: 600; padding: 17px 38px; border: none; border-radius: 50px; cursor: pointer; transition: all 0.25s; margin-top: 28px; }
+.begin-btn:hover { background: var(--sage-dark); transform: translateY(-2px); box-shadow: 0 10px 30px rgba(45,90,78,0.25); }
+.begin-btn svg { transition: transform 0.25s; }
+.begin-btn:hover svg { transform: translateX(5px); }
+
+/* ── PARTY ── */
+.party-wrap { max-width: 640px; width: 100%; padding: 60px 24px; margin: auto; animation: fadeUp 0.4s ease; }
+.party-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(26px,4vw,38px); font-weight: 400; color: var(--charcoal); margin-bottom: 8px; }
+.party-sub { font-size: 15px; color: var(--text-secondary); margin-bottom: 36px; }
+.party-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 32px; }
+.party-card { background: var(--white); border: 2px solid var(--border); border-radius: 16px; padding: 22px 20px; cursor: pointer; transition: all 0.2s; text-align: left; }
+.party-card:hover { border-color: var(--sage-light); background: var(--sage-very-pale); transform: translateY(-2px); }
+.party-card.selected { border-color: var(--sage); background: var(--sage-pale); }
+.party-icon { font-size: 26px; margin-bottom: 12px; }
+.party-card-title { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 500; color: var(--sage-dark); margin-bottom: 4px; }
+.party-card-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.45; }
+#partyContinue { opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+#partyContinue.ready { opacity: 1; pointer-events: all; }
+
+/* ── QUESTION ── */
+#question-screen { align-items: center; justify-content: center; }
+.q-wrap { max-width: 620px; width: 100%; padding: 80px 24px 40px; }
+.q-text { font-family: 'Cormorant Garamond', serif; font-size: clamp(22px,3.5vw,34px); font-weight: 400; line-height: 1.38; color: var(--charcoal); margin-bottom: 32px; }
+
+/* TRANSCRIPT AREA */
+.transcript-area {
+  min-height: 100px; background: var(--white); border: 2px solid var(--border);
+  border-radius: 16px; padding: 20px 22px; margin-bottom: 24px;
+  transition: border-color 0.3s; position: relative;
+}
+.transcript-area.recording { border-color: var(--rec); background: var(--rec-pale); }
+.transcript-area.has-text { border-color: var(--sage); background: var(--sage-very-pale); }
+.transcript-placeholder { font-size: 15px; color: var(--text-light); line-height: 1.6; font-style: italic; }
+.transcript-text { font-size: 17px; color: var(--text); line-height: 1.65; min-height: 40px; }
+.transcript-interim { color: var(--text-secondary); }
+
+/* MIC BUTTON */
+.mic-wrap { display: flex; flex-direction: column; align-items: center; margin-bottom: 28px; gap: 12px; }
+.mic-btn {
+  width: 72px; height: 72px; border-radius: 50%; border: none; cursor: pointer;
+  background: var(--sage); color: white; display: flex; align-items: center; justify-content: center;
+  transition: all 0.25s; position: relative; overflow: visible;
+}
+.mic-btn:hover { background: var(--sage-dark); transform: scale(1.05); }
+.mic-btn.recording { background: var(--rec); animation: pulse 1.5s infinite; }
+.mic-btn.recording::before {
+  content: ''; position: absolute; inset: -8px; border-radius: 50%;
+  border: 2px solid var(--rec); animation: ripple 1.5s infinite;
+}
+.mic-label { font-size: 13px; color: var(--text-secondary); font-weight: 500; }
+.mic-label.recording { color: var(--rec); font-weight: 600; }
+
+/* FALLBACK */
+.fallback-link { font-size: 13px; color: var(--text-light); text-align: center; margin-top: 8px; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.fallback-link:hover { color: var(--sage); }
+.fallback-opts { display: none; flex-direction: column; gap: 10px; margin-top: 20px; }
+.fallback-opts.visible { display: flex; }
+.opt-btn { background: var(--white); border: 2px solid var(--border); border-radius: 12px; padding: 14px 20px; font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 400; color: var(--text); cursor: pointer; text-align: left; transition: all 0.18s; }
+.opt-btn:hover { border-color: var(--sage-light); background: var(--sage-very-pale); }
+.opt-btn.selected { border-color: var(--sage); background: var(--sage-pale); color: var(--sage-dark); font-weight: 600; }
+
+#qContinue { opacity: 0; pointer-events: none; transition: opacity 0.3s; margin-top: 8px; }
+#qContinue.ready { opacity: 1; pointer-events: all; }
+
+/* ── PROCESSING OVERLAY ── */
+#processingOverlay {
+  position: fixed; inset: 0; background: rgba(250,247,242,0.96);
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 24px; z-index: 450;
+  opacity: 0; pointer-events: none; transition: opacity 0.35s;
+}
+#processingOverlay.active { opacity: 1; pointer-events: all; }
+.proc-orb {
+  width: 60px; height: 60px; border-radius: 50%;
+  background: var(--sage); opacity: 0.6;
+  animation: breathe 2.2s ease-in-out infinite;
+}
+.proc-text { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400; font-style: italic; color: var(--text-secondary); text-align: center; }
+
+/* ── REFLECTION OVERLAY ── */
+#reflectionOverlay {
+  position: fixed; inset: 0; background: rgba(30,61,53,0.97);
+  display: flex; align-items: center; justify-content: center; padding: 40px 24px;
+  z-index: 400; opacity: 0; pointer-events: none; transition: opacity 0.4s;
+}
+#reflectionOverlay.active { opacity: 1; pointer-events: all; }
+.reflection-inner { max-width: 540px; text-align: center; }
+.reflection-icon { font-size: 36px; margin-bottom: 24px; }
+.reflection-quote { font-family: 'Cormorant Garamond', serif; font-size: clamp(20px,3.5vw,28px); font-weight: 300; font-style: italic; color: rgba(255,255,255,0.92); line-height: 1.55; margin-bottom: 20px; }
+.reflection-next { font-size: 14px; color: rgba(255,255,255,0.5); margin-bottom: 28px; }
+.reflection-btn { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); color: rgba(255,255,255,0.9); font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 500; padding: 12px 30px; border-radius: 50px; cursor: pointer; transition: all 0.2s; }
+.reflection-btn:hover { background: rgba(255,255,255,0.22); }
+
+/* ── BURDEN/FEAR OVERLAY ── */
+#burdenOverlay {
+  position: fixed; inset: 0; background: #FDF9F3;
+  display: flex; align-items: center; justify-content: center; padding: 40px 24px;
+  z-index: 460; opacity: 0; pointer-events: none; transition: opacity 0.4s;
+}
+#burdenOverlay.active { opacity: 1; pointer-events: all; }
+.burden-inner { max-width: 580px; animation: fadeUp 0.4s ease; }
+.burden-leaf { font-size: 40px; margin-bottom: 24px; }
+.burden-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(26px,4vw,38px); font-weight: 400; color: var(--charcoal); margin-bottom: 20px; line-height: 1.3; }
+.burden-body { font-size: 17px; font-weight: 400; line-height: 1.8; color: var(--text-secondary); margin-bottom: 16px; }
+.burden-body strong { color: var(--sage-dark); font-weight: 600; }
+.burden-affirmation { background: var(--sage-pale); border-left: 4px solid var(--sage); border-radius: 0 12px 12px 0; padding: 18px 22px; margin: 24px 0; font-size: 16px; font-weight: 500; color: var(--sage-dark); line-height: 1.65; font-style: italic; }
+.burden-continue { background: var(--sage); color: white; font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: 600; padding: 14px 34px; border: none; border-radius: 50px; cursor: pointer; transition: all 0.25s; margin-top: 8px; }
+.burden-continue:hover { background: var(--sage-dark); transform: translateY(-2px); }
+
+/* ── SAFETY OVERLAY ── */
+#safetyOverlay { position: fixed; inset: 0; background: #FFF9F5; display: flex; align-items: center; justify-content: center; padding: 40px 24px; z-index: 500; opacity: 0; pointer-events: none; transition: opacity 0.4s; }
+#safetyOverlay.active { opacity: 1; pointer-events: all; }
+.safety-inner { max-width: 560px; width: 100%; animation: fadeUp 0.4s ease; }
+.safety-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(26px,4vw,38px); font-weight: 400; color: var(--charcoal); margin-bottom: 16px; line-height: 1.3; }
+.safety-body { font-size: 17px; line-height: 1.75; color: var(--text-secondary); margin-bottom: 28px; }
+.safety-contacts { display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; }
+.safety-contact { background: var(--white); border: 1px solid var(--border); border-left: 4px solid var(--safety-border); border-radius: 12px; padding: 14px 18px; }
+.safety-org { font-weight: 700; font-size: 15px; color: var(--text); margin-bottom: 2px; }
+.safety-number { font-size: 22px; font-weight: 700; color: var(--safety-text); margin-bottom: 2px; }
+.safety-desc { font-size: 13px; color: var(--text-secondary); }
+.safety-return { background: none; border: 1px solid var(--border); color: var(--text-secondary); font-family: 'Nunito', sans-serif; font-size: 13px; padding: 10px 22px; border-radius: 20px; cursor: pointer; transition: all 0.2s; }
+.safety-return:hover { border-color: var(--sage); color: var(--sage); }
+
+/* ── CONSENT ── */
+#consent-screen { align-items: center; justify-content: center; }
+.consent-wrap { max-width: 640px; width: 100%; padding: 60px 24px; animation: fadeUp 0.4s ease; }
+.consent-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(28px,4vw,42px); font-weight: 400; color: var(--charcoal); margin-bottom: 12px; }
+.consent-lede { font-size: 16px; color: var(--text-secondary); line-height: 1.65; margin-bottom: 40px; }
+.c-layer { background: var(--white); border: 2px solid var(--border); border-radius: 14px; padding: 20px 22px; margin-bottom: 12px; transition: all 0.2s; cursor: pointer; }
+.c-layer.checked { border-color: var(--sage); background: var(--sage-very-pale); }
+.c-layer.locked { border-color: var(--sage); background: var(--sage-pale); cursor: default; }
+.c-header { display: flex; align-items: flex-start; gap: 14px; }
+.c-check { width: 22px; height: 22px; border: 2px solid var(--border); border-radius: 6px; flex-shrink: 0; margin-top: 2px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; transition: all 0.2s; }
+.c-check.on { background: var(--sage); border-color: var(--sage); color: white; }
+.c-tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; padding: 2px 9px; border-radius: 10px; margin-bottom: 6px; }
+.c-tag.green { background: var(--sage-pale); color: var(--sage-dark); }
+.c-tag.amber { background: var(--amber-pale); color: var(--amber); }
+.c-title { font-weight: 600; font-size: 15px; color: var(--text); margin-bottom: 4px; }
+.c-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.55; }
+
+/* ── REPORT ── */
+#report-screen { align-items: center; }
+.report-wrap { max-width: 720px; width: 100%; padding: 60px 24px 80px; }
+.report-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--sage); margin-bottom: 14px; }
+.report-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(34px,5vw,52px); font-weight: 300; color: var(--charcoal); line-height: 1.18; margin-bottom: 18px; }
+.report-intro { font-size: 17px; color: var(--text-secondary); line-height: 1.75; max-width: 600px; margin-bottom: 8px; }
+.divider { height: 1px; background: var(--border); margin: 36px 0; }
+.f-pillar { display: flex; align-items: flex-start; gap: 20px; margin-bottom: 28px; }
+.f-icon-box { width: 52px; height: 52px; background: var(--sage-pale); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+.f-name { font-family: 'Cormorant Garamond', serif; font-size: 21px; font-weight: 500; color: var(--sage-dark); margin-bottom: 7px; }
+.f-text { font-size: 15px; color: var(--text-secondary); line-height: 1.68; margin-bottom: 12px; }
+.f-links { display: flex; flex-wrap: wrap; gap: 8px; }
+.f-link { display: inline-flex; align-items: center; gap: 5px; background: var(--white); border: 1px solid var(--border); border-radius: 20px; padding: 6px 14px; font-size: 13px; color: var(--sage); text-decoration: none; font-weight: 500; transition: all 0.18s; }
+.f-link:hover { background: var(--sage-pale); border-color: var(--sage); }
+.f-divider { height: 1px; background: var(--border-light); margin: 20px 0 24px; }
+.season-alert { background: #FFF8E6; border: 1px solid #F0C040; border-left: 4px solid #E8A500; border-radius: 12px; padding: 16px 20px; margin-bottom: 24px; font-size: 14px; color: #6B5200; line-height: 1.6; }
+.gp-box { background: var(--amber-pale); border: 1px solid rgba(196,132,58,0.3); border-radius: 16px; padding: 28px 30px; margin: 32px 0; }
+.gp-box-title { font-family: 'Cormorant Garamond', serif; font-size: 21px; font-weight: 500; color: var(--amber); margin-bottom: 10px; }
+.gp-box-sub { font-size: 14px; color: var(--text-secondary); margin-bottom: 14px; }
+.gp-starter-text { font-size: 15px; color: var(--text); line-height: 1.72; font-style: italic; }
+.monitor-box { background: var(--sage-pale); border-radius: 16px; padding: 28px 30px; margin-bottom: 32px; }
+.monitor-title { font-family: 'Cormorant Garamond', serif; font-size: 21px; font-weight: 500; color: var(--sage-dark); margin-bottom: 14px; }
+.monitor-sub { font-size: 14px; color: var(--text-secondary); margin-bottom: 18px; }
+.monitor-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.monitor-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 15px; color: var(--text); line-height: 1.5; }
+.monitor-list li::before { content: '→'; color: var(--sage); font-weight: 700; flex-shrink: 0; }
+.report-actions { display: flex; flex-wrap: wrap; gap: 12px; padding-top: 32px; border-top: 1px solid var(--border); margin-top: 36px; }
+.act-btn { display: flex; align-items: center; gap: 8px; background: var(--white); border: 1px solid var(--border); border-radius: 50px; padding: 11px 22px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 500; color: var(--text); cursor: pointer; transition: all 0.2s; }
+.act-btn:hover { border-color: var(--sage); color: var(--sage); }
+.act-btn.primary { background: var(--sage); border-color: var(--sage); color: var(--white); }
+.act-btn.primary:hover { background: var(--sage-dark); }
+
+/* REPORT LOADING */
+.report-loading { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; gap: 24px; }
+.report-loading .proc-orb { width: 50px; height: 50px; }
+.report-loading p { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; font-style: italic; color: var(--text-secondary); text-align: center; }
+
+@media (max-width: 500px) { .party-grid { grid-template-columns: 1fr; } }
+@media print { #exitBtn, .report-actions, #progressBar { display: none !important; } body { background: white; } }
+</style>
+</head>
+<body>
+
+<div id="progressBar"></div>
+<button id="exitBtn" onclick="triggerExit()">Exit anytime ×</button>
+
+<!-- AI STATUS INDICATOR -->
+<div id="aiStatus">
+  <div class="ai-dot" id="aiDot"></div>
+  <span id="aiStatusText">✦ AI Active</span>
+</div>
+
+<!-- ══════════════════════════════
+     SETUP SCREEN
+══════════════════════════════ -->
+<div class="screen active" id="setup-screen">
+  <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;">
+    <div class="setup-wrap">
+      <div class="setup-logo">RESILIENCE — Demo Configuration</div>
+      <h1 class="setup-title">Enable <em>AI-powered</em><br>voice interpretation</h1>
+      <p class="setup-body">RESILIENCE uses Claude Sonnet to genuinely understand what is said — detecting minimisation, generating real MI reflections, and flagging clinical signals in natural speech. Enter your Anthropic API key below to experience this live.</p>
+      <div class="setup-card">
+        <div class="setup-card-title">What AI enables in this demo</div>
+        <div class="setup-capabilities">
+          <div class="setup-cap"><div class="setup-cap-icon">🎙️</div><div>Real-time interpretation of free spoken responses — not checkbox matching</div></div>
+          <div class="setup-cap"><div class="setup-cap-icon">🧠</div><div>Detection of minimisation, burden concern, and care home fear in natural language</div></div>
+          <div class="setup-cap"><div class="setup-cap-icon">💚</div><div>Genuine MI reflections that respond to the specific words the person used</div></div>
+          <div class="setup-cap"><div class="setup-cap-icon">🛡️</div><div>Pattern-based safety signal detection across the full conversation</div></div>
+          <div class="setup-cap"><div class="setup-cap-icon">📋</div><div>Fully personalised Wellness Guide written from what was actually said</div></div>
+        </div>
+        <div class="key-input-wrap">
+          <input class="key-input" type="password" id="apiKeyInput" placeholder="sk-ant-api03-..." autocomplete="off" spellcheck="false" onkeydown="if(event.key==='Enter')enableAI()" />
+        </div>
+        <div class="key-security">🔒 Used only for this session · Never stored, saved, or shared · Disappears when the tab closes</div>
+        <div class="setup-actions">
+          <button class="setup-enable" onclick="enableAI()">
+            <span>✦</span> Enable AI-Powered Demo
+          </button>
+        </div>
+      </div>
+      <div class="setup-skip">
+        <a onclick="skipAI()">Continue without AI — use template responses instead</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     WELCOME
+══════════════════════════════ -->
+<div class="screen" id="welcome-screen">
+  <div class="welcome-wrap">
+    <div class="welcome-logo">RESILIENCE</div>
+
+    <div class="welcome-step visible" id="ws-0">
+      <h1 class="welcome-headline">A conversation<br>about <em>how you<br>are getting on</em></h1>
+      <p class="welcome-lede">Not a test. Not a form.<br>A gentle, private conversation — at your own pace, in your own words.</p>
+    </div>
+
+    <div class="welcome-step" id="ws-1">
+      <div class="w-card">
+        <div class="w-card-title">What this is</div>
+        <div class="w-card-body">RESILIENCE listens to you talk about your everyday life — how you get around, how you are feeling, who you have around you. There are no forms to fill in. Just speak, in your own words, and the tool will do the rest. It takes around ten to fifteen minutes.</div>
+      </div>
+    </div>
+
+    <div class="welcome-step" id="ws-2">
+      <div class="w-card">
+        <div class="w-card-title">What this is not</div>
+        <div class="w-card-body">This is not a medical test, and no decisions will be made about you on the basis of what you share. There are no right or wrong answers — only your experience.</div>
+      </div>
+    </div>
+
+    <div class="welcome-step" id="ws-3">
+      <div class="w-card human">
+        <div class="w-card-title amber">One thing worth saying before we begin</div>
+        <div class="w-card-body">Many people find it difficult to say how things really are — whether it is not wanting to worry someone they love, or worrying about what might happen as a result. <strong style="color:var(--text);">That is a deeply human and completely understandable feeling.</strong><br><br>The people who care about you simply want you to be well. And if a little support would help with that, they would almost certainly want that for you — and would not mind at all.<br><br><strong style="color:var(--sage-dark);">Nothing here leads anywhere without your permission. You are the author of your own life.</strong> This conversation is simply here to help you think things through and make the decisions you want — without fear, without pressure, and entirely on your own terms.</div>
+      </div>
+    </div>
+
+    <div class="welcome-step" id="ws-4">
+      <div class="w-card sage">
+        <div class="w-card-title">Your information is yours</div>
+        <div class="w-card-body">Nothing is saved and nothing is shared without your permission. At the end of the conversation, you choose exactly what happens with what you have told us. Whatever you decide, you will receive a personal Wellness Guide — yours to keep.</div>
+      </div>
+      <p style="font-size:14px;color:var(--text-light);margin:18px 0 4px;line-height:1.65;">You can stop at any point. There is no pressure and no obligation.</p>
+      <button class="begin-btn" onclick="goToParty()">
+        When you are ready, begin
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     PARTY
+══════════════════════════════ -->
+<div class="screen" id="party-screen">
+  <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;">
+    <div class="party-wrap">
+      <div class="domain-tag">Before we begin</div>
+      <h2 class="party-title">Who is completing this conversation today?</h2>
+      <p class="party-sub">This helps us choose the right language and approach throughout.</p>
+      <div class="party-grid">
+        <div class="party-card" onclick="selectParty('self',this)">
+          <div class="party-icon">🙋</div>
+          <div class="party-card-title">Myself</div>
+          <div class="party-card-desc">I am completing this for myself, in my own words</div>
+        </div>
+        <div class="party-card" onclick="selectParty('carer',this)">
+          <div class="party-icon">🤝</div>
+          <div class="party-card-title">With help</div>
+          <div class="party-card-desc">A family member or friend is helping me complete this</div>
+        </div>
+        <div class="party-card" onclick="selectParty('worker',this)">
+          <div class="party-icon">👩‍⚕️</div>
+          <div class="party-card-title">Community worker</div>
+          <div class="party-card-desc">I am a community health worker or volunteer</div>
+        </div>
+        <div class="party-card" onclick="selectParty('clinical',this)">
+          <div class="party-icon">🏥</div>
+          <div class="party-card-title">GP or clinical staff</div>
+          <div class="party-card-desc">I am a GP, nurse, or practice staff member</div>
+        </div>
+      </div>
+      <button class="btn-primary" id="partyContinue" onclick="startQuestions()">Begin the conversation →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     QUESTION
+══════════════════════════════ -->
+<div class="screen" id="question-screen">
+  <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;">
+    <div class="q-wrap">
+      <div class="domain-tag" id="domainTag"></div>
+      <div class="q-text" id="qText"></div>
+
+      <div class="transcript-area" id="transcriptArea">
+        <div class="transcript-placeholder" id="tPlaceholder">Tap the microphone and speak when you are ready...</div>
+        <div class="transcript-text" id="tText" style="display:none"></div>
+      </div>
+
+      <div class="mic-wrap">
+        <button class="mic-btn" id="micBtn" onclick="toggleRecording()" title="Tap to speak">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </button>
+        <div class="mic-label" id="micLabel">Tap to speak</div>
+      </div>
+
+      <div style="text-align:center;margin-bottom:20px;">
+        <button class="btn-primary" id="qContinue" onclick="submitResponse()">I have finished speaking →</button>
+      </div>
+
+      <div style="text-align:center;">
+        <span class="fallback-link" onclick="toggleFallback()">I would rather choose from a list instead</span>
+      </div>
+      <div class="fallback-opts" id="fallbackOpts"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROCESSING OVERLAY -->
+<div id="processingOverlay">
+  <div class="proc-orb"></div>
+  <div class="proc-text">Taking a moment to understand<br>what you shared...</div>
+</div>
+
+<!-- REFLECTION OVERLAY -->
+<div id="reflectionOverlay">
+  <div class="reflection-inner">
+    <div class="reflection-icon" id="rIcon">💚</div>
+    <div class="reflection-quote" id="rQuote"></div>
+    <div class="reflection-next" id="rNext"></div>
+    <button class="reflection-btn" onclick="closeReflection()">Continue →</button>
+  </div>
+</div>
+
+<!-- BURDEN / CARE HOME FEAR OVERLAY -->
+<div id="burdenOverlay">
+  <div class="burden-inner">
+    <div class="burden-leaf">🌿</div>
+    <h2 class="burden-title">One thing worth saying...</h2>
+    <p class="burden-body">Many people find it difficult to say how things really are — whether it is not wanting to worry someone they love, or worrying about what might happen as a result. That is a <strong>deeply human and completely understandable</strong> feeling, and you are far from alone in it.</p>
+    <p class="burden-body">The people in your life who care about you simply want you to be well. If a little support would help with that, they would almost certainly want that for you — and they would not mind at all.</p>
+    <div class="burden-affirmation">"Nothing here leads anywhere without your permission. You are the author of your own life. This conversation is simply here to help you think things through and make the decisions you want — without fear, without pressure, and entirely on your own terms."</div>
+    <button class="burden-continue" onclick="closeBurden()">Thank you — continue the conversation →</button>
+  </div>
+</div>
+
+<!-- SAFETY OVERLAY -->
+<div id="safetyOverlay">
+  <div class="safety-inner">
+    <div style="font-size:40px;margin-bottom:20px;">🌿</div>
+    <h2 class="safety-title">It sounds like things have been quite hard recently</h2>
+    <p class="safety-body">That is completely understandable, and you do not have to manage it alone. Sometimes it helps just to talk to someone — someone who is simply there to listen, without judgement.</p>
+    <div class="safety-contacts">
+      <div class="safety-contact">
+        <div class="safety-org">Samaritans</div>
+        <div class="safety-number">116 123</div>
+        <div class="safety-desc">Free and confidential. Available 24 hours a day, every day of the year.</div>
+      </div>
+      <div class="safety-contact">
+        <div class="safety-org">NHS 111</div>
+        <div class="safety-number">111</div>
+        <div class="safety-desc">If you need medical help or are not sure what to do next.</div>
+      </div>
+      <div class="safety-contact">
+        <div class="safety-org">Your GP surgery</div>
+        <div class="safety-number">Call or book online</div>
+        <div class="safety-desc">Your GP is there to support your mental as well as physical health.</div>
+      </div>
+    </div>
+    <button class="safety-return" onclick="closeSafety()">I have read this — return to the conversation</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     CONSENT
+══════════════════════════════ -->
+<div class="screen" id="consent-screen">
+  <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;">
+    <div class="consent-wrap">
+      <div class="domain-tag">Almost there</div>
+      <h2 class="consent-title">You are in control of what happens next</h2>
+      <p class="consent-lede">Your Wellness Guide is ready. Before we show it to you, please choose what you are comfortable with. You can change your mind at any time.</p>
+      <div class="c-layer locked">
+        <div class="c-header" style="cursor:default;">
+          <div class="c-check on">✓</div>
+          <div><div class="c-tag green">Always included</div><div class="c-title">My personal Wellness Guide</div><div class="c-desc">Your Wellness Guide is created from what you have shared and belongs entirely to you. It is never shared with anyone. This is always included.</div></div>
+        </div>
+      </div>
+      <div class="c-layer" id="cl-b" onclick="toggleConsent('b')">
+        <div class="c-header"><div class="c-check" id="cb-b"></div><div><div class="c-tag amber">Optional — your choice</div><div class="c-title">Help us understand local needs</div><div class="c-desc">Anonymous, non-identifiable information can be combined with others in Folkestone and Hythe to help health services understand where support is most needed. No personal details are ever included.</div></div></div>
+      </div>
+      <div class="c-layer" id="cl-c" onclick="toggleConsent('c')">
+        <div class="c-header"><div class="c-check" id="cb-c"></div><div><div class="c-tag amber">Optional — your choice</div><div class="c-title">Share my results with a health professional</div><div class="c-desc">I am happy for the Neighbourhood Health Service or my GP practice to receive a copy of my results so they can offer support if it would be helpful.</div></div></div>
+      </div>
+      <div style="margin-top:32px;">
+        <button class="btn-primary" onclick="showReport()">See my Wellness Guide →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     REPORT
+══════════════════════════════ -->
+<div class="screen" id="report-screen">
+  <div style="display:flex;justify-content:center;width:100%;">
+    <div class="report-wrap">
+      <div id="reportContent">
+        <div class="report-loading">
+          <div class="proc-orb"></div>
+          <p>Putting together your personal<br>Wellness Guide...</p>
+        </div>
+      </div>
+
+      <!-- CARER INVITATION -->
+      <div id="carerInvite" style="display:none;margin-top:40px;padding-top:32px;border-top:2px solid var(--border-light);">
+        <div style="max-width:580px;">
+          <div style="font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);margin-bottom:14px;">One more thing to consider</div>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:clamp(22px,3.5vw,30px);font-weight:400;color:var(--charcoal);margin-bottom:14px;line-height:1.3;">Would you like to involve someone who cares about you?</h3>
+          <p style="font-size:15px;color:var(--text-secondary);line-height:1.75;margin-bottom:14px;">You know better than anyone what you need to stay well at home. But sometimes the people who love us notice things that are really useful for a health team to understand — not to make decisions without you, but to make sure any support fits your life.</p>
+          <div style="background:var(--sage-pale);border-radius:14px;padding:18px 20px;margin-bottom:18px;">
+            <p style="font-size:15px;font-weight:600;color:var(--charcoal);margin-bottom:8px;">Everyone involved wants the same thing for you</p>
+            <p style="font-size:14px;color:var(--text-secondary);line-height:1.7;">The people who care about you, and the health team, all want you to be happy, well, and at home on your own terms. Involving someone you trust helps services understand exactly what support would make the biggest difference — for your life, in your way.</p>
+          </div>
+          <p style="font-size:14px;color:var(--text-secondary);line-height:1.7;margin-bottom:18px;">If you'd like, we can send a short questionnaire to someone you trust. <strong style="color:var(--charcoal);">Their answers and yours stay completely separate.</strong> You won't see theirs and they won't see yours — it simply gives the health team a fuller picture.</p>
+          <div id="carerFormWrap" style="display:none;background:var(--white);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:14px;">
+            <div style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:12px;letter-spacing:.05em;text-transform:uppercase;">Who would you like to invite?</div>
+            <div style="margin-bottom:10px;">
+              <label style="font-size:12px;color:var(--text-secondary);display:block;margin-bottom:5px;">Their name (optional)</label>
+              <input id="carerName" type="text" placeholder="e.g. Sarah or my daughter" style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'Nunito',sans-serif;font-size:14px;outline:none;">
+            </div>
+            <div style="margin-bottom:14px;">
+              <label style="font-size:12px;color:var(--text-secondary);display:block;margin-bottom:5px;">Their email address</label>
+              <input id="carerEmail" type="email" placeholder="their.email@example.com" style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'Nunito',sans-serif;font-size:14px;outline:none;">
+            </div>
+            <button onclick="sendCarerInvite()" style="background:var(--sage);color:white;font-family:'Nunito',sans-serif;font-size:15px;font-weight:600;padding:12px 26px;border:none;border-radius:50px;cursor:pointer;">Send them a link →</button>
+          </div>
+          <div id="carerSentMsg" style="display:none;background:var(--sage-pale);border:1px solid var(--border);border-radius:12px;padding:14px 18px;font-size:14px;color:var(--sage-dark);margin-bottom:14px;">
+            ✓ <strong>Invitation sent.</strong> They will receive a short questionnaire to complete at their own pace. Thank you for including them.
+          </div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;" id="carerBtns">
+            <button onclick="showCarerForm()" style="background:var(--sage);color:white;font-family:'Nunito',sans-serif;font-size:15px;font-weight:600;padding:12px 28px;border:none;border-radius:50px;cursor:pointer;">Yes — involve someone I trust</button>
+            <button onclick="document.getElementById('carerInvite').style.opacity='.4';document.getElementById('carerBtns').style.display='none';" style="background:none;border:1px solid var(--border);color:var(--text-secondary);font-family:'Nunito',sans-serif;font-size:14px;font-weight:500;padding:11px 22px;border-radius:50px;cursor:pointer;">Not for now</button>
+          </div>
+          <p style="font-size:12px;color:var(--text-light);margin-top:12px;line-height:1.6;">This is entirely your choice and there is no obligation. You can ask the Neighbourhood Health Service to send a link at any time if you change your mind.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     JAVASCRIPT
+══════════════════════════════ -->
+<script>
+// ──────────────────────────────
+// STATE
+// ──────────────────────────────
+let API_KEY = '';
+
+const S = {
+  party: null,
+  qIndex: 0,
+  conversation: [],          // [{id, domain, question, transcript, interpretation}]
+  minimisationCount: 0,
+  burdenShown: false,
+  safetyShown: false,
+  consentB: false,
+  consentC: false,
+  isRecording: false,
+  recognition: null,
+  currentTranscript: '',
+  interimTranscript: '',
+  silenceTimer: null,
+};
+
+// ──────────────────────────────
+// SETUP
+// ──────────────────────────────
+function enableAI() {
+  const key = document.getElementById('apiKeyInput').value.trim();
+  if (!key) {
+    document.getElementById('apiKeyInput').style.borderColor = 'var(--rec)';
+    document.getElementById('apiKeyInput').placeholder = 'Please enter your Anthropic API key';
+    return;
+  }
+  API_KEY = key;
+  const status = document.getElementById('aiStatus');
+  status.classList.add('active-ai');
+  document.getElementById('aiDot').classList.remove('offline');
+  document.getElementById('aiStatusText').textContent = '✦ AI Active';
+  show('welcome-screen');
+  document.getElementById('exitBtn').style.display = 'block';
+  initWelcome();
+}
+
+function skipAI() {
+  API_KEY = '';
+  const status = document.getElementById('aiStatus');
+  status.classList.add('template-mode');
+  document.getElementById('aiDot').classList.add('offline');
+  document.getElementById('aiStatusText').textContent = 'Template mode';
+  show('welcome-screen');
+  document.getElementById('exitBtn').style.display = 'block';
+  initWelcome();
+}
+
+function initWelcome() {
+  let step = 1;
+  const t = setInterval(() => {
+    const el = document.getElementById('ws-' + step);
+    if (el) el.classList.add('visible');
+    step++;
+    if (step > 4) clearInterval(t);
+  }, 700);
+  initSpeech();
+}
+
+// ──────────────────────────────
+// QUESTIONS
+// ──────────────────────────────
+const Qs = [
+  {
+    id: 'about_you', domain: 'About You',
+    text: 'To start, could you tell me a little about yourself — roughly how old you are, and whether you live alone or with someone at home?',
+    prisma: 'PRISMA-7: age >85 indicator; living situation context for social isolation and care availability.',
+    fallback: ['I am 65 to 74 and live alone','I am 65 to 74 and live with someone','I am 75 to 84 and live alone','I am 75 to 84 and live with someone','I am 85 or over and live alone','I am 85 or over and live with someone'],
+    reflection: true, domainNext: null
+  },
+  {
+    id: 'mobility', domain: 'Getting Around',
+    text: 'How are you finding getting around day to day? I am thinking about things like walking to the shops, climbing stairs, or getting up from a chair.',
+    prisma: 'PRISMA-7 items 3 and 5: health problems limiting activities; unable to leave home. FRAIL: Resistance and Ambulation domains.',
+    fallback: ['I manage very well','Getting a little harder lately','I need some help with this','I find it quite difficult'],
+    reflection: false, domainNext: null
+  },
+  {
+    id: 'falls', domain: 'Getting Around',
+    text: 'Have you had any falls in the past year, or do you find yourself being cautious or careful about falling?',
+    prisma: 'Falls history: strong independent frailty predictor. Fear of falling associated with activity restriction and deconditioning.',
+    fallback: ['No falls and not worried','No falls but I am careful','One fall in the past year','More than one fall'],
+    reflection: true, domainNext: null
+  },
+  {
+    id: 'grip_strength', domain: 'Getting Around',
+    text: 'Have you noticed that tasks involving gripping or lifting have become harder recently — things like opening jars or bottles, carrying shopping bags, or turning taps?',
+    prisma: 'Fried Frailty Phenotype: grip strength proxy. Reduced grip is one of the five Fried criteria and correlates strongly with overall muscle mass, cardiovascular health, cognitive decline, and mortality risk. Sarcopenia indicator. Recommend dynamometer assessment at CGA if concern flagged here.',
+    fallback: ['No, I manage these easily', 'A little harder than before', 'Quite difficult now', 'I need help with these tasks'],
+    reflection: true, domainNext: 'Now a few questions about food and energy.'
+  },
+  {
+    id: 'appetite', domain: 'Eating Well',
+    text: 'How has your appetite been lately — and are you managing to eat and cook regular meals?',
+    prisma: 'FRAIL: Loss of weight domain. Malnutrition and sarcopenia risk.',
+    fallback: ['Appetite is good, no change','Appetite has reduced a little','I often skip meals','I have lost weight without trying'],
+    reflection: false, domainNext: null
+  },
+  {
+    id: 'energy', domain: 'Energy and Vitality',
+    text: 'How would you describe your energy levels at the moment — compared to how you felt a year or so ago?',
+    prisma: 'FRAIL: Fatigue domain. Deconditioning and sarcopenia signal.',
+    fallback: ['About the same as before','A little lower than before','Noticeably lower','Much lower than before'],
+    reflection: true, domainNext: 'Now some questions about how you have been feeling in yourself.'
+  },
+  {
+    id: 'mood', domain: 'How You Are Feeling',
+    text: 'How have you been feeling in yourself recently — your mood, and your general outlook on things?',
+    prisma: 'Cognitive and mental health domain. Depression and anxiety as frailty contributors.',
+    fallback: ['Generally well','Up and down','Low more often than not','Quite low or anxious'],
+    reflection: false, domainNext: null
+  },
+  {
+    id: 'future', domain: 'How You Are Feeling',
+    text: 'Do you ever feel that things are unlikely to get better, or that the future feels uncertain?',
+    prisma: 'Hopelessness indicator. Safety signal contributor. Burden/fear signal contributor.',
+    fallback: ['Rarely or never','Sometimes','Often','Most of the time'],
+    reflection: false, domainNext: null,
+    safetyDomain: true
+  },
+  {
+    id: 'burden_q', domain: 'How You Are Feeling',
+    text: 'Do you ever feel that you might be a bit of a burden on the people around you?',
+    prisma: 'Burden concern indicator. Safety signal and minimisation contributor.',
+    fallback: ['Rarely or never','Sometimes','Often','Most of the time'],
+    reflection: true, domainNext: 'A few questions now about the people in your life.',
+    safetyDomain: true
+  },
+  {
+    id: 'social', domain: 'Connection and Support',
+    text: 'How often do you get to spend time with people who matter to you — family, friends, or neighbours?',
+    prisma: 'PRISMA-7 item 6: social support availability. Social isolation as frailty predictor.',
+    fallback: ['Most days','A few times a week','Once a week or less','Rarely or never'],
+    reflection: false, domainNext: null
+  },
+  {
+    id: 'support', domain: 'Connection and Support',
+    text: 'Is there someone you could call on if you really needed help — someone you feel confident would genuinely be there for you?',
+    prisma: 'PRISMA-7 item 6. Social support network robustness.',
+    fallback: ['Yes, definitely','Yes, I think so','Not really','No'],
+    reflection: true, domainNext: 'Finally, a couple of questions about your health and medicines.'
+  },
+  {
+    id: 'health', domain: 'Your Health',
+    text: 'Could you tell me roughly how many regular medicines you take, and whether you have any long-term health conditions?',
+    prisma: 'FRAIL: Illness domain (>5 conditions). Polypharmacy flag (≥5 medications).',
+    fallback: ['No medicines, no conditions','1-4 medicines, 1-3 conditions','5-8 medicines, 4+ conditions','9 or more medicines'],
+    reflection: false, domainNext: null
+  },
+  {
+    id: 'tempmed', domain: 'Your Health',
+    text: 'Has your GP or pharmacist ever mentioned that any of your medicines need extra care in very hot or very cold weather?',
+    prisma: 'Medication-temperature interaction awareness. Non-awareness flag for polypharmacy patients.',
+    fallback: ['Yes, I have been told this','No, I have not been told this','I am not sure'],
+    reflection: true, domainNext: null
+  }
+];
+
+// ──────────────────────────────
+// WELCOME
+// ──────────────────────────────
+function goToParty() {
+  show('party-screen');
+  setProgress(4);
+}
+
+// ──────────────────────────────
+// PARTY
+// ──────────────────────────────
+function selectParty(p, el) {
+  S.party = p;
+  document.querySelectorAll('.party-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('partyContinue').classList.add('ready');
+}
+function startQuestions() {
+  if (!S.party) return;
+  show('question-screen');
+  renderQ();
+}
+
+// ──────────────────────────────
+// SPEECH RECOGNITION
+// ──────────────────────────────
+function initSpeech() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return;
+  S.recognition = new SR();
+  S.recognition.continuous = true;
+  S.recognition.interimResults = true;
+  S.recognition.lang = 'en-GB';
+
+  S.recognition.onresult = (e) => {
+    let fin = '', inter = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      if (e.results[i].isFinal) fin += e.results[i][0].transcript + ' ';
+      else inter += e.results[i][0].transcript;
+    }
+    if (fin) S.currentTranscript += fin;
+    S.interimTranscript = inter;
+    updateTranscriptDisplay();
+
+    // Reset silence timer
+    clearTimeout(S.silenceTimer);
+    S.silenceTimer = setTimeout(() => {
+      if (S.isRecording && S.currentTranscript.trim().length > 10) {
+        // Auto-ready after 3s silence with content
+        document.getElementById('qContinue').classList.add('ready');
+      }
+    }, 3000);
+  };
+
+  S.recognition.onerror = () => {
+    stopRecording();
+  };
+
+  S.recognition.onend = () => {
+    if (S.isRecording) {
+      try { S.recognition.start(); } catch(e) {}
+    }
+  };
+}
+
+function updateTranscriptDisplay() {
+  const area = document.getElementById('transcriptArea');
+  const placeholder = document.getElementById('tPlaceholder');
+  const text = document.getElementById('tText');
+  const full = S.currentTranscript + S.interimTranscript;
+
+  if (full.trim()) {
+    placeholder.style.display = 'none';
+    text.style.display = 'block';
+    text.innerHTML = S.currentTranscript +
+      (S.interimTranscript ? `<span class="transcript-interim">${S.interimTranscript}</span>` : '');
+    if (S.currentTranscript.trim().length > 5) {
+      area.classList.add('has-text');
+      document.getElementById('qContinue').classList.add('ready');
+    }
+  }
+}
+
+function toggleRecording() {
+  if (S.isRecording) stopRecording();
+  else startRecording();
+}
+
+function startRecording() {
+  if (!S.recognition) {
+    alert('Voice input is not available in this browser. Please use Chrome, or use the fallback options below.');
+    document.getElementById('fallbackOpts').classList.add('visible');
+    return;
+  }
+  S.isRecording = true;
+  S.currentTranscript = '';
+  S.interimTranscript = '';
+
+  const area = document.getElementById('transcriptArea');
+  const btn = document.getElementById('micBtn');
+  const label = document.getElementById('micLabel');
+  const placeholder = document.getElementById('tPlaceholder');
+  const text = document.getElementById('tText');
+
+  area.classList.remove('has-text');
+  area.classList.add('recording');
+  btn.classList.add('recording');
+  label.textContent = 'Tap again when finished';
+  label.classList.add('recording');
+  placeholder.style.display = 'none';
+  text.style.display = 'block';
+  text.textContent = '';
+  document.getElementById('qContinue').classList.remove('ready');
+
+  try { S.recognition.start(); } catch(e) {}
+}
+
+function stopRecording() {
+  S.isRecording = false;
+  clearTimeout(S.silenceTimer);
+
+  const area = document.getElementById('transcriptArea');
+  const btn = document.getElementById('micBtn');
+  const label = document.getElementById('micLabel');
+
+  area.classList.remove('recording');
+  btn.classList.remove('recording');
+  label.textContent = 'Tap to speak';
+  label.classList.remove('recording');
+
+  if (S.recognition) {
+    try { S.recognition.stop(); } catch(e) {}
+  }
+}
+
+// ──────────────────────────────
+// QUESTION RENDERING
+// ──────────────────────────────
+function renderQ() {
+  const q = Qs[S.qIndex];
+  if (!q) { goConsent(); return; }
+
+  document.getElementById('domainTag').textContent = q.domain;
+  document.getElementById('qText').textContent = q.text;
+
+  // Reset transcript area
+  S.currentTranscript = '';
+  S.interimTranscript = '';
+  document.getElementById('tPlaceholder').style.display = 'block';
+  document.getElementById('tText').style.display = 'none';
+  document.getElementById('tText').textContent = '';
+  document.getElementById('transcriptArea').classList.remove('has-text', 'recording');
+  document.getElementById('micBtn').classList.remove('recording');
+  document.getElementById('micLabel').textContent = 'Tap to speak';
+  document.getElementById('micLabel').classList.remove('recording');
+  document.getElementById('qContinue').classList.remove('ready');
+
+  // Fallback options
+  const fallbackOpts = document.getElementById('fallbackOpts');
+  fallbackOpts.innerHTML = '';
+  fallbackOpts.classList.remove('visible');
+  q.fallback.forEach((opt, i) => {
+    const b = document.createElement('button');
+    b.className = 'opt-btn';
+    b.textContent = opt;
+    b.onclick = () => selectFallback(opt, b);
+    fallbackOpts.appendChild(b);
+  });
+
+  // Animate
+  const wrap = document.querySelector('.q-wrap');
+  wrap.style.cssText = 'opacity:0;transform:translateY(14px);transition:opacity .35s ease,transform .35s ease;';
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    wrap.style.opacity = '1';
+    wrap.style.transform = 'translateY(0)';
+  }));
+
+  setProgress(Math.round((S.qIndex / Qs.length) * 82) + 5);
+}
+
+function selectFallback(val, btn) {
+  S.currentTranscript = val;
+  document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  document.getElementById('tPlaceholder').style.display = 'none';
+  document.getElementById('tText').style.display = 'block';
+  document.getElementById('tText').textContent = val;
+  document.getElementById('transcriptArea').classList.add('has-text');
+  document.getElementById('qContinue').classList.add('ready');
+}
+
+function toggleFallback() {
+  const opts = document.getElementById('fallbackOpts');
+  opts.classList.toggle('visible');
+}
+
+// ──────────────────────────────
+// SUBMIT + INTERPRET
+// ──────────────────────────────
+async function submitResponse() {
+  if (S.isRecording) stopRecording();
+  const transcript = S.currentTranscript.trim();
+  if (!transcript) return;
+
+  const q = Qs[S.qIndex];
+  document.getElementById('processingOverlay').classList.add('active');
+
+  let interpretation;
+  try {
+    interpretation = await callSonnet(transcript, q);
+  } catch(err) {
+    interpretation = fallbackInterpretation(transcript, q);
+  }
+
+  document.getElementById('processingOverlay').classList.remove('active');
+
+  // Store
+  S.conversation.push({
+    id: q.id, domain: q.domain, question: q.text,
+    transcript, interpretation
+  });
+
+  // Check minimisation / burden / fear
+  if (
+    interpretation.minimisation_detected ||
+    interpretation.burden_concern_detected ||
+    interpretation.care_home_fear_detected
+  ) {
+    S.minimisationCount++;
+    if (S.minimisationCount >= 2 && !S.burdenShown) {
+      S.burdenShown = true;
+      S.pendingReflection = interpretation.reflection ? { text: interpretation.reflection, next: q.domainNext } : null;
+      document.getElementById('burdenOverlay').classList.add('active');
+      return;
+    }
+  }
+
+  // Check safety
+  if (interpretation.safety_signals && interpretation.safety_signals.length > 0 && !S.safetyShown) {
+    S.safetyShown = true;
+    document.getElementById('safetyOverlay').classList.add('active');
+    return;
+  }
+
+  // Show reflection
+  if (q.reflection && interpretation.reflection) {
+    showReflection(interpretation.reflection, q.domainNext);
+  } else {
+    advance();
+  }
+}
+
+// ──────────────────────────────
+// ANTHROPIC API
+// ──────────────────────────────
+async function callSonnet(transcript, q) {
+  if (!API_KEY) return fallbackInterpretation(transcript, q);
+  const systemPrompt = buildSystemPrompt(q);
+  const userMessage = `Question asked to the person: "${q.text}"\n\nWhat the person said (spoken aloud): "${transcript}"`;
+
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': API_KEY,
+      'anthropic-version': '2023-06-01',
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: userMessage }]
+    })
+  });
+
+  const data = await resp.json();
+  if (data.error) throw new Error(data.error.message);
+  const rawText = data.content[0].text;
+  const cleaned = rawText.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim();
+  return JSON.parse(cleaned);
+}
+
+function buildSystemPrompt(q) {
+  return `You are the clinical intelligence layer of RESILIENCE — a compassionate, community-based frailty screening tool for older adults in Folkestone and Hythe, Kent, UK. You operate on Motivational Interviewing principles.
+
+DOMAIN BEING ASSESSED: ${q.domain}
+CLINICAL CONTEXT: ${q.prisma}
+
+Your task is to interpret a free spoken response from an older adult and return a structured clinical assessment.
+
+CRITICAL CLINICAL CONTEXT — READ CAREFULLY:
+This cohort commonly minimises difficulties for deeply human reasons:
+1. Fear of worrying family members or being seen as a burden
+2. Fear that reporting the reality of their difficulties will result in care home placement
+3. Lifelong habits of stoicism and self-reliance
+4. Not wanting to "make a fuss"
+
+Watch specifically for:
+- "I manage fine" / "I'm not too bad" / "I get by" combined with descriptions of actual difficulty
+- "I don't want to worry [family member]" or "I don't want to be a bother"
+- "I just want to stay in my own home" / "I don't want to end up in a home"
+- Excessive reassurance followed by contradictory detail
+- Minimising language: "just a little", "only sometimes", "not really", "it's nothing"
+- Describing falls, pain, loneliness, or cognitive changes in a dismissive tone
+These are not dishonesty — they are deeply human responses to vulnerability. Flag them sensitively.
+
+SCORING GUIDANCE:
+- Score 1-3 (Green): Robust, no significant concern
+- Score 4-6 (Amber): Some concern, monitoring warranted
+- Score 7-10 (Red): Significant concern, referral indicated
+
+RETURN ONLY valid JSON, no preamble, no explanation, no markdown fences:
+{
+  "reflection": "Warm, empathic MI response to show the person. 1-2 sentences. Acknowledge specifically what they shared. Never clinical, never alarming. Use their own words where possible.",
+  "domain_score": <integer 1-10>,
+  "risk_band": "<green|amber|red>",
+  "clinical_signals": ["array of specific clinical observations extracted from their words"],
+  "minimisation_detected": <boolean — true if deflection, dismissal or downplaying of genuine difficulty detected>,
+  "burden_concern_detected": <boolean — true if explicit or implicit worry about being a burden>,
+  "care_home_fear_detected": <boolean — true if fear of losing independence or residential care placement>,
+  "safety_signals": ["array of safety concerns — suicidal ideation, self-neglect, abuse, hopelessness. Empty array if none."],
+  "key_phrase": "The single most clinically significant thing they said, verbatim or near-verbatim"
+}`;
+}
+
+function fallbackInterpretation(transcript, q) {
+  // Graceful fallback if API unavailable
+  return {
+    reflection: "Thank you for sharing that with us.",
+    domain_score: 5, risk_band: 'amber',
+    clinical_signals: ['Response recorded — API interpretation unavailable'],
+    minimisation_detected: false, burden_concern_detected: false, care_home_fear_detected: false,
+    safety_signals: [], key_phrase: transcript.substring(0, 80)
+  };
+}
+
+// ──────────────────────────────
+// OVERLAYS
+// ──────────────────────────────
+function showReflection(text, next) {
+  document.getElementById('rIcon').textContent = '💚';
+  document.getElementById('rQuote').textContent = text;
+  document.getElementById('rNext').textContent = next || '';
+  document.getElementById('reflectionOverlay').classList.add('active');
+}
+function closeReflection() {
+  document.getElementById('reflectionOverlay').classList.remove('active');
+  advance();
+}
+function closeBurden() {
+  document.getElementById('burdenOverlay').classList.remove('active');
+  // Check safety too
+  const lastInterp = S.conversation[S.conversation.length - 1]?.interpretation;
+  if (lastInterp && lastInterp.safety_signals && lastInterp.safety_signals.length > 0 && !S.safetyShown) {
+    S.safetyShown = true;
+    document.getElementById('safetyOverlay').classList.add('active');
+    return;
+  }
+  // Show pending reflection if any
+  if (S.pendingReflection) {
+    const p = S.pendingReflection;
+    S.pendingReflection = null;
+    showReflection(p.text, p.next);
+  } else {
+    advance();
+  }
+}
+function closeSafety() {
+  document.getElementById('safetyOverlay').classList.remove('active');
+  advance();
+}
+
+function advance() {
+  S.qIndex++;
+  if (S.qIndex >= Qs.length) { goConsent(); return; }
+  renderQ();
+}
+
+// ──────────────────────────────
+// CONSENT
+// ──────────────────────────────
+function goConsent() {
+  show('consent-screen');
+  setProgress(93);
+}
+function toggleConsent(l) {
+  const active = l === 'b' ? !S.consentB : !S.consentC;
+  if (l === 'b') S.consentB = active; else S.consentC = active;
+  const cb = document.getElementById('cb-' + l);
+  const cl = document.getElementById('cl-' + l);
+  cb.classList.toggle('on', active);
+  cb.textContent = active ? '✓' : '';
+  cl.classList.toggle('checked', active);
+}
+
+// ──────────────────────────────
+// REPORT
+// ──────────────────────────────
+function showReport() {
+  show('report-screen');
+  setProgress(100);
+  buildReport();
+}
+
+// ── CARER INVITATION ──
+function showCarerForm() {
+  document.getElementById('carerFormWrap').style.display = 'block';
+  document.getElementById('carerBtns').style.display = 'none';
+}
+function sendCarerInvite() {
+  const email = document.getElementById('carerEmail').value.trim();
+  if (!email) { document.getElementById('carerEmail').style.borderColor = 'var(--rec)'; return; }
+  document.getElementById('carerFormWrap').style.display = 'none';
+  document.getElementById('carerSentMsg').style.display = 'block';
+}
+
+async function buildReport() {
+  // Build conversation summary for Sonnet
+  const summary = S.conversation.map(c => {
+    const interp = c.interpretation;
+    return `DOMAIN: ${c.domain}
+QUESTION: ${c.question}
+WHAT THEY SAID: "${c.transcript}"
+CLINICAL SIGNALS: ${(interp.clinical_signals || []).join('; ')}
+RISK SCORE: ${interp.domain_score}/10 (${interp.risk_band})
+KEY PHRASE: "${interp.key_phrase || ''}"
+MINIMISATION DETECTED: ${interp.minimisation_detected}
+BURDEN CONCERN: ${interp.burden_concern_detected}`;
+  }).join('\n\n---\n\n');
+
+  let reportData;
+  try {
+    reportData = await callSonnetReport(summary);
+  } catch(e) {
+    reportData = buildFallbackReport();
+  }
+
+  renderReport(reportData);
+}
+
+async function callSonnetReport(summary) {
+  if (!API_KEY) throw new Error('No API key');
+  const systemPrompt = `You are generating a warm, personalised Wellness Guide for an older adult who has just completed the RESILIENCE frailty screening conversation in Folkestone and Hythe, Kent, UK.
+
+The guide is structured around the FINGER framework (Finnish Geriatric Intervention Study to Prevent Cognitive Impairment and Disability), which demonstrated that multidomain lifestyle interventions significantly reduce cognitive decline and frailty.
+
+TONE AND LANGUAGE:
+- Warm, unhurried, and human — never clinical
+- Plain English, Flesch-Kincaid Grade 6-8
+- Use "many people find..." not "you should..."
+- Affirm strengths, not just flag risks
+- Build on what they already do well
+- Never use terms like "frailty", "risk", "score", "assessment"
+- Write as if a wise, caring friend is speaking
+
+If minimisation or burden concern was detected, be especially warm and affirming without referencing it directly.
+
+Return ONLY valid JSON, no preamble, no markdown fences:
+{
+  "intro": "2-sentence personal introduction acknowledging specifically what they shared. Warm and genuine.",
+  "pillars": [
+    {"name": "Keeping Active", "icon": "🚶", "text": "2-3 sentences personalised to their mobility and energy responses."},
+    {"name": "Eating Well", "icon": "🥗", "text": "2-3 sentences personalised to their appetite and nutrition responses."},
+    {"name": "Keeping Your Mind Active", "icon": "🧠", "text": "2-3 sentences personalised to their mood and cognitive responses."},
+    {"name": "Staying Connected", "icon": "💬", "text": "2-3 sentences personalised to their social connection and support responses."},
+    {"name": "Managing Your Health", "icon": "💊", "text": "2-3 sentences personalised to their health and medication responses."}
+  ],
+  "gp_starter": "First-person paragraph the person could take to their GP. Based on their flagged areas. Plain language.",
+  "weekly_checks": ["question 1", "question 2", "question 3", "question 4"],
+  "closing": "One warm, affirming closing sentence."
+}`;
+
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': API_KEY,
+      'anthropic-version': '2023-06-01',
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 2000,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: `Here is a summary of this person's conversation:\n\n${summary}\n\nPlease generate their personalised Wellness Guide.` }]
+    })
+  });
+
+  const data = await resp.json();
+  if (data.error) throw new Error(data.error.message);
+  const cleaned = data.content[0].text.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim();
+  return JSON.parse(cleaned);
+}
+
+function buildFallbackReport() {
+  return {
+    intro: "Thank you for taking the time to complete this conversation. Here is your personal Wellness Guide, based on what you shared with us today.",
+    pillars: [
+      { name:"Keeping Active", icon:"🚶", text:"Gentle, regular movement — even short walks or simple exercises at home — makes a real difference to how we feel day to day. Little and often is what the evidence supports." },
+      { name:"Eating Well", icon:"🥗", text:"Eating well supports our energy, our strength, and our mood. If cooking or appetite has been harder lately, there is practical local support available in Folkestone and Hythe." },
+      { name:"Keeping Your Mind Active", icon:"🧠", text:"Keeping the mind engaged — through reading, conversation, puzzles, or learning something new — is one of the most protective things we can do as we get older." },
+      { name:"Staying Connected", icon:"💬", text:"The people we can turn to make such a difference to our health and wellbeing. Even one regular arrangement — a call, a walk, a cup of tea — can mean a great deal." },
+      { name:"Managing Your Health", icon:"💊", text:"Your local pharmacist is a brilliant, free source of advice about your medicines and health. A free medicines review is available to anyone taking several medicines regularly." }
+    ],
+    gp_starter: "I completed a RESILIENCE wellbeing conversation recently and wanted to take the opportunity to talk through how I have been getting on.",
+    weekly_checks: [
+      "How has my energy been this week?",
+      "Have I managed to get outside or move around today?",
+      "Have I spoken to or spent time with someone I care about this week?",
+      "Is there one small thing I could do this week to look after myself?"
+    ],
+    closing: "You have done something genuinely valuable for yourself today — and that matters."
+  };
+}
+
+function renderReport(data) {
+  // Seasonal alert
+  const month = new Date().getMonth() + 1;
+  const highMeds = S.conversation.find(c => c.id === 'health' &&
+    (c.interpretation.domain_score >= 6 || (c.transcript && /[5-9]|\bseven\b|\beight\b|\bnine\b|\bten\b/i.test(c.transcript))));
+  const noTempAdvice = S.conversation.find(c => c.id === 'tempmed' &&
+    (c.interpretation.domain_score >= 5 || /no|not sure|never/i.test(c.transcript)));
+  let seasonalHTML = '';
+  if (highMeds && noTempAdvice) {
+    if (month >= 6 && month <= 8) {
+      seasonalHTML = `<div class="season-alert"><strong>⚠️ A note for warm weather:</strong> Some medicines can behave differently in hot weather. Given the medicines you take, it is worth checking with your GP or pharmacist whether any need extra care during warm spells — particularly around staying well hydrated.</div>`;
+    } else if (month >= 11 || month <= 3) {
+      seasonalHTML = `<div class="season-alert"><strong>⚠️ A note for cold weather:</strong> Some medicines can behave differently in cold weather. It is worth asking your GP or pharmacist whether any of yours need extra care during cold snaps.</div>`;
+    }
+  }
+
+  // Local links per pillar
+  const localLinks = {
+    'Keeping Active': [
+      {n:'Age UK Folkestone — exercise classes', u:'https://www.ageuk.org.uk/folkestonehythe/'},
+      {n:'Folkestone Healthy Walks', u:'https://www.kent.gov.uk/leisure-and-community/countryside/walking'},
+      {n:'NHS — activity for older adults', u:'https://www.nhs.uk/live-well/exercise/'},
+    ],
+    'Eating Well': [
+      {n:'Kent Meals on Wheels', u:'https://www.kent.gov.uk/social-care-and-health/care-and-support-for-adults/care-at-home/meals-and-food'},
+      {n:'Age UK Folkestone — practical help', u:'https://www.ageuk.org.uk/folkestonehythe/our-services/'},
+      {n:'NHS — eating well as you get older', u:'https://www.nhs.uk/live-well/eat-well/'},
+    ],
+    'Keeping Your Mind Active': [
+      {n:'Folkestone Library — groups and activities', u:'https://www.kent.gov.uk/libraries-and-archives/libraries'},
+      {n:'Age UK — memory cafes in Kent', u:'https://www.ageuk.org.uk/kent/'},
+      {n:'NHS — five steps to mental wellbeing', u:'https://www.nhs.uk/mental-health/self-help/guides-tools-and-activities/five-steps-to-mental-wellbeing/'},
+    ],
+    'Staying Connected': [
+      {n:'Contact the Elderly — befriending', u:'https://www.contact-the-elderly.org.uk/'},
+      {n:'Age UK Folkestone — social activities', u:'https://www.ageuk.org.uk/folkestonehythe/'},
+      {n:'Folkestone & Hythe CVS', u:'https://www.folkestoneandhydecvs.org.uk/'},
+    ],
+    'Managing Your Health': [
+      {n:'Find a local pharmacy', u:'https://www.nhs.uk/service-search/pharmacy/find-a-pharmacy'},
+      {n:'NHS free medicines review', u:'https://www.nhs.uk/nhs-services/pharmacies/'},
+      {n:'NHS Health Check', u:'https://www.nhs.uk/conditions/nhs-health-check/'},
+    ]
+  };
+
+  const pillarsHTML = data.pillars.map((p, i) => {
+    const links = (localLinks[p.name] || []).map(l =>
+      `<a class="f-link" href="${l.u}" target="_blank" rel="noopener">↗ ${l.n}</a>`
+    ).join('');
+    return `
+      <div class="f-pillar">
+        <div class="f-icon-box">${p.icon}</div>
+        <div style="flex:1">
+          <div class="f-name">${p.name}</div>
+          <div class="f-text">${p.text}</div>
+          <div class="f-links">${links}</div>
+        </div>
+      </div>
+      ${i < data.pillars.length-1 ? '<div class="f-divider"></div>' : ''}
+    `;
+  }).join('');
+
+  const checksHTML = (data.weekly_checks || []).map(c => `<li>${c}</li>`).join('');
+
+  document.getElementById('reportContent').innerHTML = `
+    <div class="report-eyebrow">Your Personal Wellness Guide</div>
+    <h1 class="report-title">Based on what you shared with us today</h1>
+    <p class="report-intro">${data.intro}</p>
+    ${seasonalHTML}
+    <div class="divider"></div>
+    <h3 style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400;color:var(--charcoal);margin-bottom:30px;">Five areas that research tells us matter most</h3>
+    ${pillarsHTML}
+    <div class="gp-box">
+      <div class="gp-box-title">Your GP conversation starter</div>
+      <div class="gp-box-sub">Print this and bring it to your next appointment, or use it as a prompt for what to say.</div>
+      <div class="gp-starter-text">"${data.gp_starter}"</div>
+    </div>
+    <div class="monitor-box">
+      <div class="monitor-title">My weekly wellbeing check</div>
+      <div class="monitor-sub">A few questions to ask yourself each week. Print this and put it somewhere you will see it.</div>
+      <ul class="monitor-list">${checksHTML}</ul>
+      <p style="font-size:13px;color:var(--text-light);margin-top:16px;">If things feel harder than usual, please talk to your GP or call the Neighbourhood Health Service.</p>
+    </div>
+    <p style="font-family:'Cormorant Garamond',serif;font-size:19px;font-style:italic;color:var(--sage-dark);text-align:center;margin:32px 0;">${data.closing}</p>
+    <div class="report-actions">
+      <button class="act-btn primary" onclick="window.print()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Print my Wellness Guide
+      </button>
+      <button class="act-btn" onclick="alert('Email sharing will be available in the full release.')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Email to someone I trust
+      </button>
+      <button class="act-btn" onclick="alert('Print this guide and bring it to your next GP appointment.')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Share with my GP
+      </button>
+    </div>
+    <p style="font-size:12px;color:var(--text-light);margin-top:24px;line-height:1.7;">
+      RESILIENCE — Folkestone and Hythe Neighbourhood Health Service &nbsp;·&nbsp;
+      <a href="#" style="color:var(--sage);text-decoration:none;">Privacy notice</a> &nbsp;·&nbsp;
+      <a href="#" style="color:var(--sage);text-decoration:none;">Delete my data</a> &nbsp;·&nbsp;
+      Prototype 2
+    </p>
+  `;
+  // Show carer invitation after report is built
+  setTimeout(() => {
+    const el = document.getElementById('carerInvite');
+    if (el) { el.style.display = 'block'; el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  }, 800);
+}
+
+// ──────────────────────────────
+// SCREEN + PROGRESS
+// ──────────────────────────────
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'instant' });
+}
+function setProgress(pct) {
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+
+// ──────────────────────────────
+// EXIT
+// ──────────────────────────────
+function triggerExit() {
+  if (confirm('Are you sure you want to exit? Nothing you have shared will be saved.')) {
+    if (S.isRecording) stopRecording();
+    Object.assign(S, {
+      party:null, qIndex:0, conversation:[], minimisationCount:0,
+      burdenShown:false, safetyShown:false, consentB:false, consentC:false,
+      isRecording:false, currentTranscript:'', interimTranscript:'', pendingReflection:null
+    });
+    show('welcome-screen');
+    document.getElementById('exitBtn').style.display = 'none';
+    setProgress(0);
+  }
+}
+</script>
+</body>
+</html>
