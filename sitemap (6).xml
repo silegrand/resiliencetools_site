@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+  <!-- Homepage -->
+  <url>
+    <loc>https://silegrand.github.io/resiliencetools_site/</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- The Challenge — why the problem exists -->
+  <url>
+    <loc>https://silegrand.github.io/resiliencetools_site/#challenge</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- How It Works — the approach and architecture -->
+  <url>
+    <loc>https://silegrand.github.io/resiliencetools_site/#how</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- The Tool Suite — all six tools -->
+  <url>
+    <loc>https://silegrand.github.io/resiliencetools_site/#tools</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Design Principles — responsible AI, privacy, consent -->
+  <url>
+    <loc>https://silegrand.github.io/resiliencetools_site/#principles</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+
+  <!-- Evidence Base — clinical frameworks -->
+  <url>
+    <loc>https://silegrand.github.io/resiliencetools_site/#evidence</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Designed For — NHS, commissioners, community -->
+  <url>
+    <loc>https://silegrand.github.io/resiliencetools_site/#for-whom</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+
+  <!-- For You and Your Family — public-facing -->
+  <url>
+    <loc>https://silegrand.github.io/resiliencetools_site/#for-you</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+
+  <!-- Contact -->
+  <url>
+    <loc>https://silegrand.github.io/resiliencetools_site/#contact</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Individual tools (live and simulation) -->
+  <url>
+    <loc>https://silegrand.github.io/resiliencetools_site/resilience_screening_tool/</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://silegrand.github.io/resiliencetools_site/resilience_carer/</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://silegrand.github.io/resiliencetools_site/resilience_referral_tool/</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://silegrand.github.io/resiliencetools_site/resilience_person_carer_referral/</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://silegrand.github.io/resiliencetools_site/resilience_dashboard/</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://silegrand.github.io/resiliencetools_site/resilience_triple_tap/</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+</urlset>

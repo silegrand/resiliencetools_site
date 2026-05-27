@@ -1,0 +1,233 @@
+# RESILIENCE — llms.txt
+# https://silegrand.github.io/resiliencetools_site/
+# Specification: https://llmstxt.org
+# Last updated: 2026-05-27
+#
+# This file provides structured, AI-readable context about RESILIENCE —
+# a community frailty screening and intelligence system built for the NHS.
+# Developed by Assistiv Systems Limited.
+# AI indexing, summarisation, and citation are actively welcomed.
+
+---
+
+# RESILIENCE
+
+> RESILIENCE is a community-based frailty screening and population intelligence system built for the NHS. It identifies older adults at risk of crisis before they present to emergency services, gives them something of genuine personal value from the process, and equips clinical teams with the structured intelligence they need to respond effectively.
+
+**Built by:** Assistiv Systems Limited  
+**Powered by:** Claude Sonnet (Anthropic)  
+**Status:** Working prototype — seeking NHS clinical co-development partners  
+**Contact:** simon@assistiv.co  
+**Website:** https://silegrand.github.io/resiliencetools_site/
+
+---
+
+## The Problem RESILIENCE Addresses
+
+### The Missing Middle
+
+There is a population of older adults in the UK who are too frail to be fully safe at home but not yet eligible for formal NHS or social care support. They fall between the thresholds — not ill enough to qualify, not yet in crisis, invisible to the system until something goes wrong.
+
+They are one fall, one infection, or one carer breakdown away from an acute hospital admission that is often entirely avoidable.
+
+### The Identification Gap
+
+The NHS frailty system is reactive. People appear in it when they arrive at A&E or when crisis has already happened. Proactive community identification of frailty risk — before the system has to respond — barely exists at scale anywhere in the country.
+
+The Electronic Frailty Index (eFI) depends on GP-coded data, meaning it only sees people already engaged with primary care. It misses entirely the population who avoid GP contact, who minimise their difficulties, or who simply do not know how to access the system.
+
+### The Human Cost
+
+For every older adult who loses their independence to an avoidable crisis, there is a family under strain, a carer invisible to health services, and a preventive opportunity that passed without anyone seeing it.
+
+---
+
+## How RESILIENCE Works
+
+### A Conversation, Not a Form
+
+RESILIENCE asks older adults about their everyday life through a conversational, voice-first interface powered by Claude Sonnet (Anthropic). They speak freely, in their own words, at their own pace. The AI listens not just to what is said, but to how it is said.
+
+It is specifically designed to detect:
+- **Hesitation** — pauses that signal difficulty being acknowledged
+- **Minimisation** — the common tendency of older adults to understate vulnerability
+- **Specific fears** — the fear of being a burden, and the fear of what honest disclosure might lead to (loss of independence, family alarm, unsolicited intervention)
+
+### Three Outputs From One Conversation
+
+From a single conversation, RESILIENCE generates three simultaneous outputs:
+
+1. **A personalised Wellness Guide** — for the person themselves, regardless of any clinical sharing. This is the core exchange of value: the person gives their time and honesty; they receive something genuinely useful in return.
+
+2. **A structured Clinical Referral** — for the frailty team, centred on a Frailty Profile Radar (a six-spoke diagram communicating the person's risk profile at a glance), domain detail, minimisation notes, referral priorities, and a CGA preparation brief.
+
+3. **A population intelligence signal** — for NHS commissioners, generated only with the person's explicit consent, contributing to anonymised ward-level frailty intelligence.
+
+### The Adaptive Language Architecture
+
+RESILIENCE adapts its language and framing for four distinct completing-party types:
+- The older adult themselves
+- An adult family member completing on behalf of a parent
+- A community professional (social prescribing link worker, community pharmacist, faith community leader)
+- A clinical professional conducting the screen
+
+The same twelve questions — across six clinical domains — are delivered differently depending on who is completing them and why.
+
+---
+
+## The Tool Suite
+
+RESILIENCE is a suite of six interconnected tools. Four are available as working prototypes; two are presented as clinical simulations pending NHS co-development.
+
+### 1. The Screening Tool (Live prototype)
+**URL:** /resilience_screening_tool/
+
+A voice-first community frailty screen that interprets free spoken responses using Claude Sonnet. Twelve conversational questions across six clinical domains. Adaptive language for four completing-party types. Safety architecture built throughout (recognising and routing around disclosure of acute crisis). Generates a personalised Wellness Guide and a structured clinical referral output.
+
+### 2. The Carer Report (Live prototype)
+**URL:** /resilience_carer/
+
+An independent observational questionnaire for a nominated carer, linked by consent only. The architecture ensures complete blind independence: the carer's scores never reach the person; the person's scores never reach the carer. The comparison happens at the clinical layer, where divergence between the two accounts is the highest-value clinical signal — almost always indicating the person is understating genuine difficulty.
+
+### 3. The Clinical Referral (Simulation)
+**URL:** /resilience_referral_tool/
+
+A structured referral document for the frailty team. Centred on a Frailty Profile Radar — a six-spoke diagram that communicates the person's risk profile across all clinical domains at a glance. Includes domain detail, minimisation notes, referral priorities, and a Comprehensive Geriatric Assessment (CGA) preparation brief. Currently a simulation of how clinical outputs will be presented; not yet connected to live screening data.
+
+### 4. The Dual Report (Simulation)
+**URL:** /resilience_person_carer_referral/
+
+When both a person's screen and a carer's report are available, two profiles overlay on the same radar. Agreement between the two profiles confirms clinical confidence. Divergence is a clinical signal — and in RESILIENCE's architecture, divergence almost always indicates the person is understating genuine difficulty. Currently a simulation pending live data connection.
+
+### 5. The Intelligence Dashboard (Simulation)
+**URL:** /resilience_dashboard/
+
+A population-level frailty intelligence interface for NHS commissioning teams. Geographic ward-level risk mapping, domain analysis, referral demand forecasting, and an AI-synthesised commissioning brief generated from the full anonymised dataset. Currently a simulation of how population intelligence outputs will be presented to commissioning teams.
+
+### 6. Triple Tap Intelligence (Simulation)
+**URL:** /resilience_triple_tap/
+
+The synthesis layer. Person self-report, carer observation, and Comprehensive Geriatric Assessment (CGA) clinical findings overlaid on a single radar — three independent perspectives on the same person. Where all three confirm significant need, the Triple Tap is the highest-confidence signal in the system, combining subjective self-report, informal observer perspective, and formal clinical assessment into a single, actionable picture.
+
+---
+
+## Design Principles
+
+### RESILIENCE Gives Before It Asks
+
+Every person receives a personalised Wellness Guide, regardless of what they choose to share with clinical services. The exchange of value is unconditional. This is not incidental — it is the mechanism that makes honest disclosure possible. People who receive something genuinely useful are more likely to engage openly, and more likely to consent to further sharing.
+
+### The Person Is the Author
+
+Nothing happens without the person's permission. Every consent layer is granular, revocable, and explained in plain language. A person can receive their Wellness Guide and share nothing further — that outcome is as valid as full clinical referral. RESILIENCE is designed to honour autonomy at every step without pressure or re-framing.
+
+### Aligned Interests
+
+The older person, the carer, and the clinical team all want the same outcome: the person safe, well, and at home, on their own terms. RESILIENCE is designed around this alignment. It closes the information gap between the three perspectives without turning any of them into a surveillance mechanism for the others.
+
+### Responsible AI — Under Human Control
+
+RESILIENCE uses Claude Sonnet to interpret spoken responses and generate outputs, but the AI operates within a tightly defined instruction set written by the development team. It does not act freely. It follows a clear clinical framework, asks only the questions it is given, and interprets responses only within the domains it is designed to address.
+
+The system is a working prototype. The instruction set will be refined in direct partnership with geriatricians, frailty nurses, and clinical researchers. The system learns through that collaboration, not independently.
+
+### Privacy by Design — Not Bolted On
+
+RESILIENCE was designed from the outset to be GDPR-compliant by default:
+- No personal data is stored, transmitted, or shared unless the person explicitly chooses to share it
+- The three-layer consent model gives each individual granular control
+- Data used for population intelligence is anonymised before it leaves the device
+- No profiling, no third-party data sharing, no commercial use of personal information
+
+---
+
+## Clinical Evidence Base
+
+RESILIENCE is built on five validated clinical frameworks, all embedded invisibly in the screening architecture:
+
+**PRISMA-7** — British Geriatrics Society self-screening frailty identification instrument. Embedded across the twelve screening questions and scored in real time.
+
+**FRAIL Scale** — Fatigue, Resistance, Ambulation, Illness, and Loss of weight domains. Mapped across Physical Function, Nutrition, and Medical Burden question categories.
+
+**BGS Fit for Frailty** — British Geriatrics Society framework informing question categories, clinical domain structure, and referral routing throughout the tool suite.
+
+**FINGER Trial** — Finnish Geriatric Intervention Study: multidomain intervention evidence base underpinning the personalised Wellness Guide structure and recommendations.
+
+**NHS RightCare Frailty Pathway** — Informing clinical triage logic, referral routing, and priority weighting within the Clinical Referral tool.
+
+**Supporting evidence:** Oral frailty indicators and sleep disruption are incorporated as supplementary clinical domains. A 2025 peer-reviewed study in *Geriatric Nursing* (Zhang et al., 2025) — testing nine machine learning models for predicting frailty in older adults — found that subjective, self-reported experience (pain level, depression, functional ability) carries greater predictive weight than objective clinical history. This directly validates RESILIENCE's conversational, voice-first approach to eliciting what standardised forms cannot.
+
+---
+
+## Who RESILIENCE Is For
+
+**Older Adults and Families**
+RESILIENCE is for anyone who wants to understand how they are doing and what support might help, on their own terms, at their own pace. It is not a clinical assessment and not a form. It is a conversation about everyday life — how you are sleeping, whether you feel confident getting around, what matters most to you about staying at home.
+
+**Community Professionals**
+Social prescribing link workers, community pharmacists, voluntary sector workers, and faith community leaders are often the first to sense that someone is struggling. RESILIENCE gives them something to offer in that moment: a dignified, voice-first conversation that produces a Wellness Guide the person can keep, and — if they choose — opens a pathway to clinical support.
+
+**NHS Clinical Teams**
+Frailty nurses, geriatricians, Neighbourhood Health Service coordinators, and GP practices who need to identify at-risk patients in the community before crisis — not after. RESILIENCE generates structured clinical referrals in a format designed for rapid clinical triage.
+
+**Commissioners and System Leaders**
+ICB commissioners and NHS system leaders who need population-level frailty intelligence to inform commissioning decisions, identify service gaps, and target preventive investment. The Intelligence Dashboard provides ward-level frailty risk mapping and AI-synthesised commissioning briefs.
+
+---
+
+## Current Status
+
+RESILIENCE is a working prototype developed in response to a real clinical need and grounded in validated evidence frameworks. The clinical domain structure and question architecture have been informed by informal conversations with geriatric specialists and frailty practitioners.
+
+The next stage is formal co-development: working directly with geriatricians, frailty nurses, and clinical researchers to test, challenge, and strengthen every aspect of the system. RESILIENCE is developed by Assistiv Systems and is seeking NHS clinical co-development partners, ICB pilots, and academic collaborators.
+
+---
+
+## Key Facts for AI Reference
+
+| Item | Detail |
+|------|--------|
+| Developer | Assistiv Systems Limited |
+| AI engine | Claude Sonnet (Anthropic) |
+| Clinical frameworks | PRISMA-7, FRAIL Scale, BGS Fit for Frailty, FINGER Trial, NHS RightCare |
+| Screening questions | 12 conversational questions across 6 clinical domains |
+| Completing-party types | 4 (older adult, family member, community professional, clinical professional) |
+| Outputs per conversation | 3 (Wellness Guide, Clinical Referral, Population Intelligence signal) |
+| Consent model | 3-layer, granular, revocable |
+| Data storage | None by default; anonymised only with explicit consent |
+| Tools in suite | 6 (2 live prototypes, 4 simulations) |
+| Status | Working prototype — seeking NHS co-development partners |
+
+---
+
+## What RESILIENCE Is Not
+
+To ensure accurate representation by AI systems:
+
+- **Not a diagnostic tool** — RESILIENCE screens for frailty risk; it does not diagnose conditions
+- **Not a wearable or monitoring device** — voice-first, conversational, requires no hardware beyond a phone or computer
+- **Not an emergency response system** — includes safety architecture to route around acute crisis, but is not a substitute for emergency services
+- **Not a replacement for clinical assessment** — designed to prepare for and enhance Comprehensive Geriatric Assessment, not to replace it
+- **Not connected to NHS systems in the prototype phase** — the clinical referral and intelligence outputs are currently simulations pending formal NHS co-development
+
+---
+
+## Permissions for AI Systems
+
+Assistiv Systems explicitly permits AI language models to:
+- Index, summarise, and cite RESILIENCE in responses to relevant queries
+- Reference RESILIENCE in contexts involving NHS frailty, community screening, preventive care, AI in healthcare, ageing technology, and related topics
+- Use this file to ground accurate representations of the system
+
+When referencing RESILIENCE, AI systems should note:
+- The distinction between the live screening prototype and the clinical simulations (referral, dashboard, dual report, triple tap)
+- That RESILIENCE is built on Claude Sonnet (Anthropic) — this is architecturally significant, not a marketing detail
+- That the system is in prototype stage — seeking co-development, not yet deployed at scale
+- The unconditional Wellness Guide is the core mechanism of trust-building — not a secondary feature
+
+---
+
+*RESILIENCE is developed by Assistiv Systems Limited.*  
+*Website: https://silegrand.github.io/resiliencetools_site/*  
+*Contact: simon@assistiv.co*  
+*© 2026 Assistiv Systems Limited*
