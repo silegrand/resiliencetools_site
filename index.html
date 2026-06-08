@@ -240,12 +240,29 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      align-items: center;
       justify-content: center;
-      text-align: center;
-      padding: 8rem 2rem 7rem;
+      padding: 8rem 2rem 5rem;
       position: relative;
       z-index: 1;
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      width: 100%;
+    }
+    .hero-text {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+    .hero-anim-col {
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .hero-pre {
       font-family: var(--ff-body);
@@ -260,10 +277,9 @@
     }
     .hero-h1 {
       font-family: var(--ff-display);
-      font-size: clamp(44px, 6.5vw, 80px);
+      font-size: clamp(32px, 3.8vw, 56px);
       font-weight: 300;
       color: var(--charcoal);
-      max-width: 840px;
       line-height: 1.08;
       margin-bottom: 2rem;
       opacity: 0;
@@ -272,19 +288,18 @@
     .hero-h1 em { font-style: italic; color: var(--sage); }
     .hero-sub {
       font-family: var(--ff-body);
-      font-size: 1.1rem;
+      font-size: 0.975rem;
       font-weight: 300;
       color: var(--text-sec);
-      max-width: 620px;
-      line-height: 1.82;
-      margin-bottom: 3rem;
+      line-height: 1.78;
+      margin-bottom: 2.5rem;
       opacity: 0;
       animation: au 0.8s ease 0.6s forwards;
     }
     .hero-btns {
       display: flex;
       gap: 1rem;
-      justify-content: center;
+      justify-content: flex-start;
       flex-wrap: wrap;
       opacity: 0;
       animation: au 0.8s ease 0.8s forwards;
@@ -878,6 +893,13 @@
       .proc-step { flex: 0 0 30%; }
     }
 
+    @media (max-width: 860px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+      .hero-text { text-align: center; }
+      .hero-btns { justify-content: center; }
+      .hero-anim-col { order: -1; }
+      #mini-res-canvas { height: 190px; }
+    }
     @media (max-width: 600px) {
       .section-pad { padding: 5rem 0; }
       .problem-grid,
@@ -920,7 +942,69 @@
       font-size: 0.48rem; letter-spacing: 0.18em;
       text-transform: uppercase; line-height: 1; color: #2d6b47; opacity: 0.75;
     }
-    </style>
+    
+    /* ---- MINI RESILIENCE ANIMATION ---- */
+    .mini-res-wrap {
+      width: 100%;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+    .mini-res-label {
+      font-family: var(--ff-body);
+      font-size: 0.58rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--sage);
+      padding: 0.5rem 1rem 0;
+      opacity: 0.7;
+    }
+    #mini-res-canvas {
+      display: block;
+      width: 100%;
+      height: 240px;
+    }
+    .mini-res-footer {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.35rem 1rem 0.5rem;
+      border-top: 1px solid var(--border);
+      background: var(--sage-pale);
+    }
+    .mini-res-stage {
+      font-family: var(--ff-body);
+      font-size: 0.62rem;
+      font-weight: 600;
+      color: var(--sage);
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .mini-res-dots { display: flex; gap: 4px; flex-shrink: 0; }
+    .mres-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: rgba(45,90,78,0.2);
+      cursor: pointer; transition: background 0.2s;
+    }
+    .mres-dot.active { background: var(--sage); }
+    .mini-res-link {
+      font-family: var(--ff-body);
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--sage);
+      text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .mini-res-link:hover { text-decoration: underline; }
+
+  </style>
   <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@500;700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -970,12 +1054,39 @@
 
 <!-- HERO -->
 <section id="hero">
-  <p class="hero-pre">Resilience Early Screening for Independent Living in the Community</p>
-  <h1 class="hero-h1">Community intelligence, built for the NHS.<br><em>Delivering resilience where it is needed.</em></h1>
-  <p class="hero-sub">RESILIENCE is a community-based frailty screening and intelligence system built for the NHS. It identifies older adults at risk before crisis, gives them something of genuine personal value from the process, and equips clinical teams with the intelligence they need to respond effectively.</p>
-  <div class="hero-btns">
-    <a href="#how"     class="btn btn-primary">See how it works</a>
-    <a href="#contact" class="btn btn-ghost">Get in touch</a>
+  <div class="hero-inner">
+
+    <!-- LEFT: text -->
+    <div class="hero-text">
+      <p class="hero-pre">Resilience Early Screening for Independent Living in the Community</p>
+      <h1 class="hero-h1">Community intelligence, built for the NHS.<br><em>Delivering resilience where it is needed.</em></h1>
+      <p class="hero-sub">RESILIENCE is a community-based frailty screening and intelligence system built for the NHS. It identifies older adults at risk before crisis, gives them something of genuine personal value from the process, and equips clinical teams with the intelligence they need to respond effectively.</p>
+      <div class="hero-btns">
+        <a href="#how"     class="btn btn-primary">See how it works</a>
+        <a href="#contact" class="btn btn-ghost">Get in touch</a>
+      </div>
+    </div>
+
+    <!-- RIGHT: mini animation -->
+    <div class="hero-anim-col">
+      <div class="mini-res-wrap">
+        <div class="mini-res-label">A conversation, not a form</div>
+        <canvas id="mini-res-canvas" aria-label="RESILIENCE conversation flow"></canvas>
+        <div class="mini-res-footer">
+          <span class="mini-res-stage" id="mres-label">Voice conversation</span>
+          <div class="mini-res-dots">
+            <span class="mres-dot active" data-s="0"></span>
+            <span class="mres-dot" data-s="1"></span>
+            <span class="mres-dot" data-s="2"></span>
+            <span class="mres-dot" data-s="3"></span>
+            <span class="mres-dot" data-s="4"></span>
+            <span class="mres-dot" data-s="5"></span>
+          </div>
+          <a href="resilience-conversation-animation.html" class="mini-res-link">Full walkthrough →</a>
+        </div>
+      </div>
+    </div>
+
   </div>
   <div class="hero-scroll">
     <div class="scroll-line"></div>
@@ -1400,6 +1511,326 @@
     const body = encodeURIComponent('Name: ' + n + '\nOrganisation: ' + o + '\nEmail: ' + em + '\n\n' + m);
     window.location.href = 'mailto:simon@assistiv.co?subject=' + sub + '&body=' + body;
   }
+</script>
+
+
+<!-- MINI RESILIENCE ANIMATION -->
+<script>
+(function () {
+  const canvas = document.getElementById('mini-res-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W, H, DPR = 1, t = 0, stage = 0, raf, running = true, autoTimer;
+
+  const LABELS = [
+    'Voice conversation',
+    'AI listening',
+    'Hesitation detection',
+    'Interpretation layer',
+    'Three outputs',
+    'Consent & privacy'
+  ];
+
+  const C = {
+    sage:     '#2D5A4E', sageDark:'#1E3D35',
+    sagePale: '#EFF4F2', sageL:'rgba(45,90,78,0.16)',
+    amber:    '#C4843A', amberPale:'rgba(196,132,58,0.12)',
+    cream:    '#FAF7F2', charcoal:'#1C2B26',
+    textSec:  '#5A6B5A', border:'rgba(45,90,78,0.13)',
+    white:    '#FFFFFF', rose:'#8a4a5a',
+  };
+
+  /* ── DPR-aware resize ── */
+  function resize() {
+    DPR = window.devicePixelRatio || 1;
+    const cssW = canvas.parentElement.getBoundingClientRect().width || 500;
+    const cssH = canvas.offsetHeight || 240;
+    canvas.width  = Math.round(cssW * DPR);
+    canvas.height = Math.round(cssH * DPR);
+    canvas.style.width  = cssW + 'px';
+    canvas.style.height = cssH + 'px';
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    W = cssW; H = cssH;
+  }
+
+  /* ── Helpers ── */
+  if (!CanvasRenderingContext2D.prototype.roundRect) {
+    CanvasRenderingContext2D.prototype.roundRect = function(x,y,w,h,r){
+      this.beginPath();
+      this.moveTo(x+r,y);this.lineTo(x+w-r,y);this.arcTo(x+w,y,x+w,y+r,r);
+      this.lineTo(x+w,y+h-r);this.arcTo(x+w,y+h,x+w-r,y+h,r);
+      this.lineTo(x+r,y+h);this.arcTo(x,y+h,x,y+h-r,r);
+      this.lineTo(x,y+r);this.arcTo(x,y,x+r,y,r);this.closePath();
+    };
+  }
+
+  function pill(x,y,w,h,col,lbl,a=1,fs=8) {
+    ctx.save(); ctx.globalAlpha=a;
+    ctx.fillStyle=col+'22'; ctx.strokeStyle=col; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.roundRect(x-w/2,y-h/2,w,h,h/2); ctx.fill(); ctx.stroke();
+    if(lbl){
+      ctx.fillStyle=col; ctx.font=`600 ${fs}px Nunito,sans-serif`;
+      ctx.textAlign='center'; ctx.fillText(lbl,x,y+fs*.36);
+    }
+    ctx.restore();
+  }
+
+  function badge(x,y,w,h,col,lbl,sub=null,a=1) {
+    ctx.save(); ctx.globalAlpha=a;
+    ctx.fillStyle=col; ctx.shadowColor=col+'55'; ctx.shadowBlur=10;
+    ctx.beginPath(); ctx.roundRect(x-w/2,y-h/2,w,h,8); ctx.fill();
+    ctx.shadowBlur=0;
+    ctx.fillStyle=C.white; ctx.textAlign='center';
+    ctx.font=`600 9px Nunito,sans-serif`;
+    ctx.fillText(lbl,x,sub?y-2:y+3);
+    if(sub){ ctx.font=`400 7.5px Nunito,sans-serif`; ctx.fillStyle='rgba(255,255,255,0.65)'; ctx.fillText(sub,x,y+10); }
+    ctx.restore();
+  }
+
+  function lbl(x,y,txt,col,a=0.6,fs=8) {
+    ctx.save(); ctx.globalAlpha=a; ctx.fillStyle=col;
+    ctx.font=`400 ${fs}px Nunito,sans-serif`;
+    ctx.textAlign='center'; ctx.fillText(txt,x,y);
+    ctx.restore();
+  }
+
+  /* ── Stage 0: Voice conversation ── */
+  function s0() {
+    const cx=W/2, cy=H*0.42;
+    const pulse=0.5+0.5*Math.sin(t*0.05);
+    ctx.save();
+    for(const[r,a]of[[42,.04+.02*pulse],[28,.07+.03*pulse],[16,.12+.05*pulse]]){
+      ctx.globalAlpha=a; ctx.strokeStyle=C.sage; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.stroke();
+    }
+    ctx.restore();
+    // Mic
+    ctx.save(); ctx.globalAlpha=0.9;
+    ctx.fillStyle=C.sage; ctx.shadowColor=C.sage+'66'; ctx.shadowBlur=16;
+    ctx.beginPath(); ctx.arc(cx,cy,14,0,Math.PI*2); ctx.fill();
+    ctx.shadowBlur=0;
+    ctx.font='11px sans-serif'; ctx.textAlign='center';
+    ctx.fillText('🎙️',cx,cy+4);
+    ctx.restore();
+    // Waveform
+    ctx.save(); ctx.strokeStyle=C.sage; ctx.lineWidth=1.5; ctx.globalAlpha=0.6;
+    ctx.beginPath();
+    for(let i=0;i<=60;i++){
+      const px=cx+22+i/60*W*0.32;
+      const env=Math.sin((i/60)*Math.PI);
+      const py=cy+(Math.sin(i*0.5+t*0.08)+Math.sin(i*0.22+t*0.05)*0.5)*H*0.08*env;
+      i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+    }
+    ctx.stroke(); ctx.restore();
+    // Question bubbles
+    const QS=['How are you managing?','Do you feel safe?','How is your appetite?','Do you see people?'];
+    QS.forEach((q,i)=>{
+      const seed=i*91.3;
+      const bx=W*0.1+((seed*1.4)%1)*W*0.8;
+      const prog=((t*0.003+i*0.25)%1);
+      const by=H*0.82-prog*H*0.55;
+      pill(bx,by,q.length*4.2+16,17,C.sage,q,Math.sin(prog*Math.PI)*0.5,7);
+    });
+    lbl(cx,H*0.92,'Speaking freely, in their own words',C.textSec,0.5);
+  }
+
+  /* ── Stage 1: AI listening ── */
+  function s1() {
+    const cx=W/2, cy=H*0.42;
+    const pulse=0.5+0.5*Math.sin(t*0.04);
+    ctx.save();
+    for(const[r,a]of[[38,.04+.02*pulse],[24,.08+.04*pulse]]){
+      ctx.globalAlpha=a; ctx.strokeStyle=C.amber; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.stroke();
+    }
+    ctx.restore();
+    badge(cx,cy,100,34,C.sageDark,'CLAUDE SONNET','Listening',0.92);
+    const DOMAINS=[['Mobility',C.sage],['Cognition',C.amber],['Mood',C.sage],
+                   ['Nutrition',C.amber],['Social',C.sage],['Home',C.amber]];
+    DOMAINS.forEach(([d,col],i)=>{
+      const ang=(i/6)*Math.PI*2-Math.PI/2;
+      const dist=Math.min(W,H)*0.32;
+      const nx=cx+Math.cos(ang)*dist, ny=cy+Math.sin(ang)*dist;
+      ctx.save();
+      ctx.globalAlpha=0.15+0.07*pulse; ctx.strokeStyle=col; ctx.lineWidth=1;
+      ctx.setLineDash([3,5]); ctx.lineDashOffset=-(t*0.7)%8;
+      ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(nx,ny); ctx.stroke();
+      ctx.setLineDash([]); ctx.restore();
+      pill(nx,ny,d.length*4.8+14,17,col,d,0.8,7.5);
+      // particle
+      const frac=((t*0.006+i/6)%1);
+      ctx.save(); ctx.globalAlpha=0.8*Math.sin(frac*Math.PI); ctx.fillStyle=col;
+      ctx.beginPath(); ctx.arc(cx+Math.cos(ang)*dist*frac, cy+Math.sin(ang)*dist*frac, 3,0,Math.PI*2); ctx.fill();
+      ctx.restore();
+    });
+    lbl(cx,H*0.92,'Twelve questions · Six clinical domains',C.textSec,0.5);
+  }
+
+  /* ── Stage 2: Hesitation detection ── */
+  function s2() {
+    const cx=W/2, waveY=H*0.36;
+    ctx.save(); ctx.strokeStyle=C.sage; ctx.lineWidth=1.5; ctx.globalAlpha=0.55;
+    ctx.beginPath();
+    for(let i=0;i<=100;i++){
+      const px=W*0.08+i/100*W*0.84;
+      const h1=Math.max(0,1-Math.abs((i/100)-0.35)*14);
+      const h2=Math.max(0,1-Math.abs((i/100)-0.70)*12);
+      const amp=(1-h1*0.8-h2*0.75);
+      const py=waveY+(Math.sin(i*0.4+t*0.06)+Math.sin(i*0.18+t*0.04)*0.4)*H*0.09*amp;
+      i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+    }
+    ctx.stroke(); ctx.restore();
+    // Hesitation markers
+    [[0.35,'"I manage fine, really"',C.amber],[0.70,'"Don't want to be a burden"',C.rose]].forEach(([pos,txt,col])=>{
+      const x=W*0.08+pos*W*0.84;
+      ctx.save(); ctx.globalAlpha=0.45; ctx.strokeStyle=col; ctx.lineWidth=1;
+      ctx.setLineDash([2,3]);
+      ctx.beginPath(); ctx.moveTo(x,waveY-H*0.1); ctx.lineTo(x,waveY+H*0.1); ctx.stroke();
+      ctx.setLineDash([]); ctx.restore();
+      ctx.save(); ctx.globalAlpha=0.9; ctx.fillStyle=col+'22'; ctx.strokeStyle=col; ctx.lineWidth=1.5;
+      ctx.beginPath(); ctx.arc(x,waveY,5.5,0,Math.PI*2); ctx.fill(); ctx.stroke(); ctx.restore();
+      pill(x,waveY-H*0.16,txt.length*4.2+16,17,col,txt,0.75,7);
+    });
+    // Detection tags
+    [['Minimisation',C.amber],['Fear of burden',C.rose],['Pace slowing',C.sage]].forEach(([s,col],i)=>{
+      pill(W*0.15+i*(W*0.7/2.4),H*0.72,s.length*5+16,18,col,s,0.6,7.5);
+    });
+    lbl(cx,H*0.91,'Listening beneath the words',C.textSec,0.5);
+  }
+
+  /* ── Stage 3: Radar / interpretation ── */
+  function s3() {
+    const cx=W/2, cy=H*0.44;
+    const R=Math.min(W,H)*0.27;
+    const DOMAINS=['Mobility','Cognition','Mood','Nutrition','Social','Home'];
+    const STATED=[0.78,0.55,0.62,0.44,0.71,0.58];
+    const INTERP=[0.55,0.38,0.45,0.28,0.55,0.40];
+    // grid
+    ctx.save(); ctx.globalAlpha=0.07; ctx.strokeStyle=C.sage; ctx.lineWidth=1;
+    [1,0.67,0.33].forEach(sc=>{
+      ctx.beginPath();
+      DOMAINS.forEach((_,i)=>{
+        const a=(i/6)*Math.PI*2-Math.PI/2;
+        const x=cx+Math.cos(a)*R*sc, y=cy+Math.sin(a)*R*sc;
+        i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+      });
+      ctx.closePath(); ctx.stroke();
+    });
+    ctx.restore();
+    // Stated (dashed sage)
+    ctx.save(); ctx.globalAlpha=0.3; ctx.strokeStyle=C.sage; ctx.lineWidth=1.2; ctx.setLineDash([3,4]);
+    ctx.beginPath();
+    STATED.forEach((s,i)=>{ const a=(i/6)*Math.PI*2-Math.PI/2; const pt={x:cx+Math.cos(a)*R*s,y:cy+Math.sin(a)*R*s}; i===0?ctx.moveTo(pt.x,pt.y):ctx.lineTo(pt.x,pt.y); });
+    ctx.closePath(); ctx.stroke(); ctx.setLineDash([]); ctx.restore();
+    // Interpreted (amber filled)
+    const prog=Math.min(1,t/70);
+    ctx.save(); ctx.fillStyle=C.amber+'28'; ctx.strokeStyle=C.amber; ctx.lineWidth=1.8; ctx.globalAlpha=0.9;
+    ctx.beginPath();
+    INTERP.forEach((s,i)=>{ const a=(i/6)*Math.PI*2-Math.PI/2; const pt={x:cx+Math.cos(a)*R*s*prog,y:cy+Math.sin(a)*R*s*prog}; i===0?ctx.moveTo(pt.x,pt.y):ctx.lineTo(pt.x,pt.y); });
+    ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore();
+    // labels
+    DOMAINS.forEach((d,i)=>{ const a=(i/6)*Math.PI*2-Math.PI/2; lbl(cx+Math.cos(a)*(R+16),cy+Math.sin(a)*(R+16)+3,d,C.sage,0.65,7); });
+    lbl(cx,H*0.91,'Spoken tone modifies the clinical score',C.textSec,0.5);
+  }
+
+  /* ── Stage 4: Three outputs ── */
+  function s4() {
+    const cx=W/2, srcY=H*0.18;
+    const pulse=0.5+0.5*Math.sin(t*0.04);
+    ctx.save(); ctx.globalAlpha=0.07+0.04*pulse; ctx.fillStyle=C.sage;
+    ctx.beginPath(); ctx.arc(cx,srcY,34,0,Math.PI*2); ctx.fill(); ctx.restore();
+    badge(cx,srcY,116,34,C.sageDark,'ONE CONVERSATION',null,0.9);
+    const OUTS=[
+      {x:W*0.18,y:H*0.73,col:C.sage,lbl:'WELLNESS GUIDE',sub:'For the person'},
+      {x:W*0.50,y:H*0.73,col:C.amber,lbl:'CLINICAL REFERRAL',sub:'Frailty team'},
+      {x:W*0.82,y:H*0.73,col:C.charcoal,lbl:'POPULATION DATA',sub:'With consent'},
+    ];
+    OUTS.forEach(({x,y,col,lbl:lb,sub},i)=>{
+      const cp={x:cx+(x-cx)*0.3,y:srcY+(y-srcY)*0.5};
+      ctx.save(); ctx.globalAlpha=0.18; ctx.strokeStyle=col; ctx.lineWidth=1.5;
+      ctx.setLineDash([4,6]); ctx.lineDashOffset=-(t*1.2)%10;
+      ctx.beginPath(); ctx.moveTo(cx,srcY+18); ctx.quadraticCurveTo(cp.x,cp.y,x,y-22); ctx.stroke();
+      ctx.setLineDash([]); ctx.restore();
+      // particle
+      const frac=((t*0.007+i/3)%1);
+      const px=Math.pow(1-frac,2)*cx+2*(1-frac)*frac*cp.x+frac*frac*x;
+      const py=Math.pow(1-frac,2)*(srcY+18)+2*(1-frac)*frac*cp.y+frac*frac*(y-22);
+      ctx.save(); ctx.globalAlpha=Math.sin(frac*Math.PI)*0.9; ctx.fillStyle=col;
+      ctx.beginPath(); ctx.arc(px,py,3.5,0,Math.PI*2); ctx.fill(); ctx.restore();
+      badge(x,y,108,36,col,lb,sub,Math.min(0.92,(t-i*18)/40));
+    });
+    lbl(cx,H*0.93,'Three outputs. One conversation.',C.textSec,0.5);
+  }
+
+  /* ── Stage 5: Consent rings ── */
+  function s5() {
+    const cx=W/2, cy=H*0.44;
+    const RINGS=[
+      {r:H*0.33,col:C.sage,lbl:'Wellness Guide',sub:'Always'},
+      {r:H*0.22,col:C.amber,lbl:'Clinical Referral',sub:'With permission'},
+      {r:H*0.11,col:C.charcoal,lbl:'Population Signal',sub:'Explicit consent',dash:true},
+    ];
+    RINGS.forEach(({r,col,lbl:lb,sub,dash},i)=>{
+      const pulse=0.5+0.5*Math.sin(t*0.04+i);
+      ctx.save(); ctx.globalAlpha=0.05+0.02*pulse; ctx.fillStyle=col;
+      ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill();
+      ctx.globalAlpha=0.35; ctx.strokeStyle=col; ctx.lineWidth=1.5;
+      if(dash){ctx.setLineDash([4,6]);}
+      ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.stroke();
+      ctx.setLineDash([]); ctx.restore();
+      pill(cx,cy-r-8,lb.length*4.8+14,17,col,lb,0.7,7.5);
+    });
+    // Person
+    ctx.save(); ctx.globalAlpha=0.9;
+    ctx.fillStyle=C.sage+'22'; ctx.strokeStyle=C.sage; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.arc(cx,cy,14,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    ctx.font='11px sans-serif'; ctx.textAlign='center'; ctx.fillText('👤',cx,cy+4);
+    ctx.restore();
+    // Locks
+    [{r:H*.11},{r:H*.22}].forEach(({r})=>{
+      ctx.save(); ctx.globalAlpha=0.6; ctx.font='10px sans-serif'; ctx.textAlign='center';
+      ctx.fillText('🔐',cx,cy-r+5); ctx.restore();
+    });
+    lbl(cx,H*0.92,'The person holds the keys',C.textSec,0.5);
+  }
+
+  /* ── Draw loop ── */
+  function draw() {
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle=C.white; ctx.fillRect(0,0,W,H);
+    if(stage===0) s0();
+    else if(stage===1) s1();
+    else if(stage===2) s2();
+    else if(stage===3) s3();
+    else if(stage===4) s4();
+    else if(stage===5) s5();
+    t++;
+    if(running) raf=requestAnimationFrame(draw);
+  }
+
+  function setStage(s) {
+    stage=s; t=0;
+    document.getElementById('mres-label').textContent=LABELS[s];
+    document.querySelectorAll('.mres-dot').forEach((d,i)=>d.classList.toggle('active',i===s));
+    if(!running){running=true;raf=requestAnimationFrame(draw);}
+    clearInterval(autoTimer);
+    autoTimer=setInterval(()=>setStage((stage+1)%6),9500);
+  }
+
+  document.querySelectorAll('.mres-dot').forEach(d=>
+    d.addEventListener('click',()=>setStage(+d.dataset.s))
+  );
+
+  window.addEventListener('resize',()=>{
+    cancelAnimationFrame(raf); resize();
+    if(running) raf=requestAnimationFrame(draw);
+  });
+
+  requestAnimationFrame(()=>{
+    resize(); draw();
+    autoTimer=setInterval(()=>setStage((stage+1)%6),9500);
+  });
+})();
 </script>
 
 </body>
