@@ -1541,10 +1541,12 @@
   };
 
   /* ── DPR-aware resize ── */
+
   function resize() {
     DPR = window.devicePixelRatio || 1;
-    const cssW = canvas.parentElement.getBoundingClientRect().width || 500;
-    const cssH = canvas.offsetHeight || 240;
+    const rect = canvas.getBoundingClientRect();
+    const cssW = (rect.width  > 10 ? rect.width  : canvas.parentElement.getBoundingClientRect().width)  || 500;
+    const cssH = (rect.height > 10 ? rect.height : 240);
     canvas.width  = Math.round(cssW * DPR);
     canvas.height = Math.round(cssH * DPR);
     canvas.style.width  = cssW + 'px';
@@ -1681,7 +1683,7 @@
     }
     ctx.stroke(); ctx.restore();
     // Hesitation markers
-    [[0.35,'"I manage fine, really"',C.amber],[0.70,'"Don't want to be a burden"',C.rose]].forEach(([pos,txt,col])=>{
+    [[0.35,'"I manage fine, really"',C.amber],[0.70,'"Don\'t want to be a burden"',C.rose]].forEach(([pos,txt,col])=>{
       const x=W*0.08+pos*W*0.84;
       ctx.save(); ctx.globalAlpha=0.45; ctx.strokeStyle=col; ctx.lineWidth=1;
       ctx.setLineDash([2,3]);
@@ -1826,10 +1828,14 @@
     if(running) raf=requestAnimationFrame(draw);
   });
 
-  requestAnimationFrame(()=>{
-    resize(); draw();
-    autoTimer=setInterval(()=>setStage((stage+1)%6),9500);
-  });
+  function _init() {
+    resize();
+    if (W < 10 || H < 10) { requestAnimationFrame(_init); return; }
+    draw();
+    autoTimer = setInterval(() => setStage((stage + 1) % 6), 9500);
+  }
+  /* Double rAF ensures browser has completed layout before we measure */
+  requestAnimationFrame(() => requestAnimationFrame(_init));
 })();
 </script>
 
