@@ -167,7 +167,7 @@ nav {
 /* ── OUTPUT LEGEND ─────────────────────────────────────── */
 .outputs-legend {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
   margin-top: 2rem;
 }
@@ -198,6 +198,9 @@ nav {
 .output-card.clinical .output-tag { border-color: var(--amber); color: var(--amber); }
 .output-card.population .output-tag { border-color: var(--charcoal); color: var(--charcoal); }
 
+@media (max-width: 860px) {
+  .outputs-legend { grid-template-columns: repeat(2, 1fr); }
+}
 @media (max-width: 640px) {
   .outputs-legend { grid-template-columns: 1fr; }
   #res-canvas { height: 260px; }
@@ -241,7 +244,7 @@ nav {
       </div>
       <div class="snav" data-s="4">
         <div class="snav-num">05</div>
-        <div class="snav-label">Three<br>Outputs</div>
+        <div class="snav-label">Four<br>Outputs</div>
       </div>
       <div class="snav" data-s="5">
         <div class="snav-num">06</div>
@@ -276,11 +279,17 @@ nav {
       <div class="output-desc">A structured frailty referral centred on a six-spoke Radar diagram. Domain scores, minimisation notes, and a CGA preparation brief.</div>
       <span class="output-tag">For the frailty team</span>
     </div>
+    <div class="output-card assistiv">
+      <div class="output-icon">🏠</div>
+      <div class="output-title">Assistiv Services</div>
+      <div class="output-desc">For those below the acute threshold: preventative care, home support, and care coordination delivered through the Assistiv platform — on the person's terms.</div>
+      <span class="output-tag" style="border-color:#1E3D35;color:#1E3D35">assistiv.co</span>
+    </div>
     <div class="output-card population">
       <div class="output-icon">📊</div>
-      <div class="output-title">Population Intelligence</div>
-      <div class="output-desc">With explicit consent only: an anonymised signal that feeds NHS commissioning intelligence. Never linked to the individual.</div>
-      <span class="output-tag">With consent · NHS commissioners</span>
+      <div class="output-title">Intelligence Data</div>
+      <div class="output-desc">With explicit consent only: an anonymised signal returned to the Assistiv.Health platform, feeding population frailty intelligence for NHS commissioners.</div>
+      <span class="output-tag">With consent · assistiv.health</span>
     </div>
   </div>
 
@@ -298,7 +307,7 @@ const CAPTIONS = [
   '<strong>AI Listening</strong> — Claude Sonnet listens to every response. Not just the words, but the rhythm — pauses, corrections, qualifications. Twelve questions across six clinical domains, each one adaptive to what came before.',
   '<strong>Hesitation Detection</strong> — The AI detects minimisation: "I manage fine, really." It recognises the two specific fears that prevent honest disclosure — the fear of being a burden, and the fear of what honest disclosure might lead to.',
   '<strong>Interpretation Layer</strong> — Every response is scored across six clinical domains: mobility, cognition, mood, nutrition, social connection, and home environment. The spoken tone modifies the clinical score.',
-  '<strong>Three Outputs</strong> — From a single conversation: a Wellness Guide for the person, a structured clinical referral for the frailty team, and — with consent — a population intelligence signal for NHS commissioners.',
+  '<strong>Four Outputs</strong> — From a single conversation: a Wellness Guide for the person, a structured clinical referral for the frailty team, access to Assistiv preventative services, and — with consent — a population intelligence signal back to the Assistiv.Health platform for NHS commissioners.',
   '<strong>Consent & Privacy</strong> — Nothing is shared without explicit permission at every stage. The person holds the keys. Population intelligence is always anonymised and aggregated. The conversation belongs to the person.',
 ];
 
@@ -318,6 +327,7 @@ const C = {
   wellness: '#2D5A4E',
   clinical: '#C4843A',
   popn:     '#1C2B26',
+  assistiv: '#1E3D35',
   rose:     '#8a4a5a',
 };
 
@@ -654,9 +664,9 @@ function s3() {
   label(cx,H*0.90,'Spoken tone modifies the clinical score',C.textSec,0.5,9);
 }
 
-/* ── Stage 4: Three outputs ── */
+/* ── Stage 4: Four outputs ── */
 function s4() {
-  const cx=W/2, sourceY=H*0.22;
+  const cx=W/2, sourceY=H*0.18;
 
   /* Source conversation node */
   const pulse=0.5+0.5*Math.sin(t*0.04);
@@ -666,94 +676,198 @@ function s4() {
   ctx.restore();
   badge(cx,sourceY,130,40,C.sageDark,'ONE CONVERSATION',null,0.92);
 
-  /* Three output destinations */
+  /* Four output destinations — evenly spaced across width */
   const OUTPUTS = [
-    { x:W*0.18, y:H*0.72, col:C.wellness, label:'WELLNESS GUIDE', sub:'For the person', icon:'📄' },
-    { x:W*0.50, y:H*0.72, col:C.clinical, label:'CLINICAL REFERRAL', sub:'Frailty team', icon:'📋' },
-    { x:W*0.82, y:H*0.72, col:C.popn,    label:'POPULATION DATA', sub:'With consent only', icon:'📊' },
+    { x:W*0.12, y:H*0.70, col:C.wellness, label:'WELLNESS GUIDE',   sub:'For the person',    icon:'📄' },
+    { x:W*0.37, y:H*0.70, col:C.clinical, label:'CLINICAL REFERRAL',sub:'Frailty team',       icon:'📋' },
+    { x:W*0.63, y:H*0.70, col:C.assistiv, label:'ASSISTIV SERVICES',sub:'assistiv.co',        icon:'🏠' },
+    { x:W*0.88, y:H*0.70, col:C.popn,    label:'INTELLIGENCE DATA', sub:'assistiv.health',    icon:'📊' },
   ];
 
   OUTPUTS.forEach(({x,y,col,label:lbl,sub,icon},i) => {
     /* Flow line with animated particle */
-    const cp1x=cx+(x-cx)*0.3, cp1y=sourceY+(y-sourceY)*0.5;
+    const cp1x=cx+(x-cx)*0.35, cp1y=sourceY+(y-sourceY)*0.45;
     ctx.save();
-    ctx.globalAlpha=0.2; ctx.strokeStyle=col; ctx.lineWidth=1.5;
+    ctx.globalAlpha=0.22; ctx.strokeStyle=col; ctx.lineWidth=1.5;
     ctx.setLineDash([5,7]); ctx.lineDashOffset=-(t*1.2)%12;
     ctx.beginPath();
     ctx.moveTo(cx,sourceY+20);
-    ctx.quadraticCurveTo(cp1x,cp1y,x,y-25);
+    ctx.quadraticCurveTo(cp1x,cp1y,x,y-24);
     ctx.stroke(); ctx.setLineDash([]); ctx.restore();
 
     /* Particle on path */
-    const frac=((t*0.007+i/3)%1);
+    const frac=((t*0.007+i/4)%1);
     const pt_x=Math.pow(1-frac,2)*cx+2*(1-frac)*frac*cp1x+frac*frac*x;
-    const pt_y=Math.pow(1-frac,2)*(sourceY+20)+2*(1-frac)*frac*cp1y+frac*frac*(y-25);
+    const pt_y=Math.pow(1-frac,2)*(sourceY+20)+2*(1-frac)*frac*cp1y+frac*frac*(y-24);
     ctx.save(); ctx.globalAlpha=Math.sin(frac*Math.PI)*0.9;
     ctx.fillStyle=col;
     ctx.beginPath(); ctx.arc(pt_x,pt_y,4,0,Math.PI*2); ctx.fill();
     ctx.restore();
 
     /* Output badge */
-    const prog=Math.min(1,Math.max(0,(t-i*20)/50));
-    badge(x,y,118,42,col,lbl,sub,prog*0.92);
+    const prog=Math.min(1,Math.max(0,(t-i*18)/50));
+    badge(x,y,108,40,col,lbl,sub,prog*0.92);
 
     /* Icon above badge */
     ctx.save(); ctx.globalAlpha=prog*0.9;
-    ctx.font='16px sans-serif'; ctx.textAlign='center';
-    ctx.fillText(icon,x,y-32);
+    ctx.font='15px sans-serif'; ctx.textAlign='center';
+    ctx.fillText(icon,x,y-30);
     ctx.restore();
   });
 
-  label(cx,H*0.93,'Three distinct outputs. One dignified conversation.',C.textSec,0.5,9);
+  label(cx,H*0.90,'Four outputs. One dignified conversation.',C.textSec,0.5,9);
 }
 
-/* ── Stage 5: Consent & privacy ── */
+/* ── Stage 5: Consent & privacy — horizontal card layout ── */
 function s5() {
-  const cx=W/2, cy=H*0.46;
+  const cx = W/2;
 
-  /* Three concentric permission rings */
-  const RINGS = [
-    { r:H*0.32, col:C.wellness, label:'Wellness Guide', sub:'Always created', dash:false },
-    { r:H*0.22, col:C.clinical, label:'Clinical Referral', sub:'With permission', dash:false },
-    { r:H*0.12, col:C.popn,    label:'Population Signal', sub:'Explicit consent only', dash:true },
-  ];
-
-  RINGS.forEach(({r,col,label:lbl,sub,dash},i) => {
-    const pulse=0.5+0.5*Math.sin(t*0.04+i);
-    ctx.save();
-    ctx.globalAlpha=0.06+0.03*pulse; ctx.fillStyle=col;
-    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill();
-    ctx.globalAlpha=0.35;
-    ctx.strokeStyle=col; ctx.lineWidth=1.5;
-    if(dash){ ctx.setLineDash([5,7]); }
-    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.stroke();
-    ctx.setLineDash([]); ctx.restore();
-
-    /* Ring label at top */
-    const lx=cx, ly=cy-r-10;
-    pill(lx,ly,lbl.length*5.4+16,20,col,lbl,0.75,8);
-    label(lx,ly+18,sub,col,0.5,7.5);
-  });
-
-  /* Person icon at centre */
-  ctx.save(); ctx.globalAlpha=0.9;
-  ctx.fillStyle=C.sage+'22'; ctx.strokeStyle=C.sage; ctx.lineWidth=1.5;
-  ctx.beginPath(); ctx.arc(cx,cy,18,0,Math.PI*2); ctx.fill(); ctx.stroke();
-  ctx.font='14px sans-serif'; ctx.textAlign='center';
-  ctx.fillText('👤',cx,cy+5);
+  /* Header */
+  ctx.save();
+  ctx.fillStyle = C.charcoal;
+  ctx.globalAlpha = 0.85;
+  ctx.font = '300 13px Cormorant Garamond,Georgia,serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Nothing is shared without your permission', cx, H*0.10);
   ctx.restore();
 
-  /* Lock icons at gate points */
-  const GATES=[{a:-Math.PI/2,r:H*.12},{a:-Math.PI/2,r:H*.22}];
-  GATES.forEach(({a,r}) => {
-    const gx=cx+Math.cos(a)*r, gy=cy+Math.sin(a)*r;
-    ctx.save(); ctx.globalAlpha=0.6;
-    ctx.font='11px sans-serif'; ctx.textAlign='center';
-    ctx.fillText('🔐',gx,gy+4);
+  /* Four permission cards laid out horizontally */
+  const CARDS = [
+    {
+      icon: '📄',
+      title: 'Wellness Guide',
+      gate: 'Always created',
+      gateCol: C.wellness,
+      desc: 'Returned to you after every conversation. Always. No permission needed.',
+      col: C.wellness,
+      lock: false,
+    },
+    {
+      icon: '📋',
+      title: 'Clinical Referral',
+      gate: 'Your permission',
+      gateCol: C.clinical,
+      desc: 'Only sent to the frailty team if you agree at the end of the conversation.',
+      col: C.clinical,
+      lock: true,
+    },
+    {
+      icon: '🏠',
+      title: 'Assistiv Services',
+      gate: 'Your choice',
+      gateCol: C.assistiv,
+      desc: 'Preventative support offered to you. You decide whether to engage.',
+      col: C.assistiv,
+      lock: true,
+    },
+    {
+      icon: '📊',
+      title: 'Intelligence Data',
+      gate: 'Explicit consent',
+      gateCol: C.popn,
+      desc: 'Anonymised signal to assistiv.health. Never linked to you. Explicit opt-in only.',
+      col: C.popn,
+      lock: true,
+    },
+  ];
+
+  const margin   = W * 0.03;
+  const cardW    = (W - margin * 2 - (CARDS.length - 1) * margin) / CARDS.length;
+  const cardH    = H * 0.70;
+  const cardTop  = H * 0.16;
+
+  CARDS.forEach(({icon, title, gate, gateCol, desc, col, lock}, i) => {
+    const x  = margin + i * (cardW + margin);
+    const cy2 = cardTop + cardH / 2;
+    const prog = Math.min(1, Math.max(0, (t - i * 14) / 40));
+    if (prog <= 0) return;
+
+    /* Card background */
+    ctx.save();
+    ctx.globalAlpha = prog * (0.92 + 0.06 * Math.sin(t * 0.03 + i));
+    ctx.fillStyle   = C.white;
+    ctx.shadowColor = col + '33';
+    ctx.shadowBlur  = 14;
+    ctx.strokeStyle = col;
+    ctx.lineWidth   = 1.5;
+    ctx.beginPath(); ctx.roundRect(x, cardTop, cardW, cardH, 10);
+    ctx.fill(); ctx.stroke();
+    ctx.shadowBlur = 0;
+    ctx.restore();
+
+    /* Top colour band */
+    ctx.save();
+    ctx.globalAlpha = prog * 0.85;
+    ctx.fillStyle = col;
+    ctx.beginPath(); ctx.roundRect(x, cardTop, cardW, 5, [10, 10, 0, 0]);
+    ctx.fill();
+    ctx.restore();
+
+    /* Icon */
+    ctx.save();
+    ctx.globalAlpha = prog * 0.9;
+    ctx.font = `${Math.round(cardW * 0.12)}px sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.fillText(icon, x + cardW/2, cardTop + cardH * 0.20);
+    ctx.restore();
+
+    /* Title */
+    ctx.save();
+    ctx.globalAlpha = prog;
+    ctx.fillStyle = col;
+    ctx.font = `600 ${Math.max(8, Math.round(cardW * 0.062))}px Nunito,sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.fillText(title, x + cardW/2, cardTop + cardH * 0.36);
+    ctx.restore();
+
+    /* Gate badge */
+    const badgeY = cardTop + cardH * 0.48;
+    const badgeW = cardW * 0.82;
+    ctx.save();
+    ctx.globalAlpha = prog * 0.9;
+    ctx.fillStyle = col + '18';
+    ctx.strokeStyle = col;
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.roundRect(x + cardW/2 - badgeW/2, badgeY - 7, badgeW, 14, 7);
+    ctx.fill(); ctx.stroke();
+    ctx.fillStyle = col;
+    ctx.font = `700 ${Math.max(6, Math.round(cardW * 0.052))}px Nunito,sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.fillText(gate.toUpperCase(), x + cardW/2, badgeY + 4);
+    ctx.restore();
+
+    /* Lock or tick */
+    ctx.save();
+    ctx.globalAlpha = prog * 0.7;
+    ctx.font = `${Math.round(cardW * 0.07)}px sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.fillText(lock ? '🔐' : '✓', x + cardW/2, cardTop + cardH * 0.62);
+    ctx.restore();
+
+    /* Description — word-wrapped */
+    ctx.save();
+    ctx.globalAlpha = prog * 0.7;
+    ctx.fillStyle = C.textSec;
+    const fs = Math.max(6, Math.round(cardW * 0.052));
+    ctx.font = `400 ${fs}px Nunito,sans-serif`;
+    ctx.textAlign = 'center';
+    const words = desc.split(' ');
+    const maxLineW = cardW * 0.86;
+    let line = '', lineY = cardTop + cardH * 0.72;
+    const lineH = fs * 1.5;
+    words.forEach((word, wi) => {
+      const test = line ? line + ' ' + word : word;
+      if (ctx.measureText(test).width > maxLineW && line) {
+        ctx.fillText(line, x + cardW/2, lineY);
+        line = word; lineY += lineH;
+      } else { line = test; }
+      if (wi === words.length - 1) ctx.fillText(line, x + cardW/2, lineY);
+    });
     ctx.restore();
   });
 
-  label(cx, H*0.90, 'The person holds the keys. Nothing shared without permission.', C.textSec,0.5,9);
+  /* Footer */
+  label(cx, H*0.93, 'The person holds the keys. The conversation belongs to them.', C.textSec, 0.5, 9);
 }
 
 /* ── Main draw loop ── */
