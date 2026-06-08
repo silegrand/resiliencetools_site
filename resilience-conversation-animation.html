@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RESILIENCE — A Conversation, Not a Form</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sage:       #2D5A4E;
+  --sage-dark:  #1E3D35;
+  --sage-pale:  #EFF4F2;
+  --sage-mid:   rgba(45,90,78,0.07);
+  --amber:      #C4843A;
+  --amber-pale: #FDF6EE;
+  --cream:      #FAF7F2;
+  --white:      #FFFFFF;
+  --charcoal:   #1C2B26;
+  --text-sec:   #5A6B5A;
+  --border:     rgba(45,90,78,0.13);
+  --ff-display: 'Cormorant Garamond', Georgia, serif;
+  --ff-body:    'Nunito', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: var(--ff-body);
+  background: var(--cream);
+  color: var(--charcoal);
+  line-height: 1.7;
+}
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 0% 0%, rgba(45,90,78,0.055) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 100% 100%, rgba(196,132,58,0.05) 0%, transparent 60%);
+  pointer-events: none; z-index: 0;
+}
+
+/* ── NAV ───────────────────────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 1rem 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(250,247,242,0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-brand {
+  font-family: var(--ff-display);
+  font-size: 1.1rem; font-weight: 500;
+  color: var(--sage); letter-spacing: 0.04em;
+  text-decoration: none;
+}
+.nav-back {
+  font-family: var(--ff-body); font-size: 0.75rem;
+  color: var(--text-sec); text-decoration: none; letter-spacing: 0.06em;
+}
+.nav-back:hover { color: var(--sage); }
+
+/* ── PAGE ──────────────────────────────────────────────── */
+.page {
+  max-width: 1040px; margin: 0 auto;
+  padding: 7rem 2rem 5rem;
+  position: relative; z-index: 1;
+}
+.section-label {
+  display: block;
+  font-family: var(--ff-body); font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--amber); margin-bottom: 1rem;
+}
+.section-headline {
+  font-family: var(--ff-display);
+  font-size: clamp(28px, 3.5vw, 46px);
+  font-weight: 300; line-height: 1.15;
+  color: var(--charcoal); margin-bottom: 1.5rem;
+}
+.section-headline em { font-style: italic; color: var(--sage); }
+.section-sub {
+  font-size: 1rem; color: var(--text-sec);
+  max-width: 600px; line-height: 1.78; margin-bottom: 3rem;
+}
+
+/* ── ANIMATION CARD ────────────────────────────────────── */
+.anim-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(28,43,38,0.09);
+  margin-bottom: 2rem;
+}
+
+/* Stage nav — top bar */
+.stage-nav {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  background: var(--white);
+  overflow-x: auto;
+}
+.snav {
+  flex: 1; min-width: 0;
+  padding: 0.7rem 0.5rem 0.6rem;
+  border-right: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.18s;
+  position: relative;
+  text-align: center;
+}
+.snav:last-child { border-right: none; }
+.snav:hover { background: var(--sage-pale); }
+.snav.active { background: var(--sage-pale); }
+.snav.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px; background: var(--sage);
+}
+.snav-num {
+  font-family: var(--ff-body); font-size: 0.55rem;
+  font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--text-sec);
+  margin-bottom: 0.15rem;
+}
+.snav-label {
+  font-family: var(--ff-body); font-size: 0.65rem;
+  font-weight: 600; color: var(--charcoal); line-height: 1.25;
+}
+.snav.active .snav-num { color: var(--sage); }
+.snav.active .snav-label { color: var(--sage-dark); }
+
+/* Canvas */
+#res-canvas {
+  display: block; width: 100%; height: 320px;
+}
+
+/* Caption */
+.caption {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border);
+  background: var(--sage-pale);
+  display: flex; align-items: center; gap: 1rem;
+}
+.caption-body {
+  flex: 1;
+  font-size: 0.875rem; color: var(--text-sec); line-height: 1.55;
+}
+.caption-body strong { color: var(--charcoal); font-weight: 600; }
+.caption-controls { display: flex; gap: 0.5rem; flex-shrink: 0; }
+.btn-sm {
+  font-family: var(--ff-body); font-size: 0.65rem; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 0.4rem 0.85rem; border-radius: 50px;
+  border: 1.5px solid var(--border);
+  background: var(--white); color: var(--text-sec);
+  cursor: pointer; transition: all 0.15s;
+}
+.btn-sm:hover { border-color: var(--sage); color: var(--sage); }
+.btn-sm.primary {
+  background: var(--sage); color: var(--white); border-color: var(--sage);
+}
+.btn-sm.primary:hover { background: var(--sage-dark); }
+
+/* ── OUTPUT LEGEND ─────────────────────────────────────── */
+.outputs-legend {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.output-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem 1.25rem 1rem;
+  transition: box-shadow 0.2s;
+}
+.output-card:hover { box-shadow: 0 4px 20px rgba(28,43,38,0.08); }
+.output-icon { font-size: 1.4rem; margin-bottom: 0.6rem; }
+.output-title {
+  font-family: var(--ff-display); font-size: 1.05rem;
+  font-weight: 500; color: var(--charcoal); margin-bottom: 0.35rem;
+}
+.output-desc {
+  font-size: 0.8rem; color: var(--text-sec); line-height: 1.55;
+}
+.output-tag {
+  display: inline-block; margin-top: 0.65rem;
+  font-size: 0.6rem; font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; padding: 0.2rem 0.6rem;
+  border-radius: 50px; border: 1px solid var(--border);
+  color: var(--text-sec); background: var(--cream);
+}
+.output-card.wellness .output-tag { border-color: var(--sage); color: var(--sage); }
+.output-card.clinical .output-tag { border-color: var(--amber); color: var(--amber); }
+.output-card.population .output-tag { border-color: var(--charcoal); color: var(--charcoal); }
+
+@media (max-width: 640px) {
+  .outputs-legend { grid-template-columns: 1fr; }
+  #res-canvas { height: 260px; }
+  .stage-nav { flex-wrap: wrap; }
+  .snav { min-width: 33.33%; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="https://www.resiliencetools.xyz">RESILIENCE</a>
+  <a class="nav-back" href="https://www.resiliencetools.xyz">← Back to site</a>
+</nav>
+
+<div class="page">
+
+  <span class="section-label">The Approach</span>
+  <h2 class="section-headline">A conversation, <em>not a form.</em></h2>
+  <p class="section-sub">One dignified conversation. Three distinct outputs. Nothing shared without explicit permission.</p>
+
+  <div class="anim-card">
+
+    <!-- Stage nav -->
+    <div class="stage-nav">
+      <div class="snav active" data-s="0">
+        <div class="snav-num">01</div>
+        <div class="snav-label">Voice<br>Conversation</div>
+      </div>
+      <div class="snav" data-s="1">
+        <div class="snav-num">02</div>
+        <div class="snav-label">AI<br>Listening</div>
+      </div>
+      <div class="snav" data-s="2">
+        <div class="snav-num">03</div>
+        <div class="snav-label">Hesitation<br>Detection</div>
+      </div>
+      <div class="snav" data-s="3">
+        <div class="snav-num">04</div>
+        <div class="snav-label">Interpretation<br>Layer</div>
+      </div>
+      <div class="snav" data-s="4">
+        <div class="snav-num">05</div>
+        <div class="snav-label">Three<br>Outputs</div>
+      </div>
+      <div class="snav" data-s="5">
+        <div class="snav-num">06</div>
+        <div class="snav-label">Consent<br>& Privacy</div>
+      </div>
+    </div>
+
+    <canvas id="res-canvas" aria-label="RESILIENCE conversation flow animation"></canvas>
+
+    <div class="caption">
+      <div class="caption-body" id="cap-text">
+        <strong>Voice Conversation</strong> — The person speaks freely, in their own words, at their own pace. No tick-boxes. No clinical forms. Just a warm, unhurried conversation about everyday life.
+      </div>
+      <div class="caption-controls">
+        <button class="btn-sm" id="btn-play">Pause</button>
+        <button class="btn-sm primary" id="btn-next">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Output cards -->
+  <div class="outputs-legend">
+    <div class="output-card wellness">
+      <div class="output-icon">📄</div>
+      <div class="output-title">Wellness Guide</div>
+      <div class="output-desc">A personalised document returned to the person — affirming, practical, written in plain English. Something of genuine value from the conversation.</div>
+      <span class="output-tag">For the person</span>
+    </div>
+    <div class="output-card clinical">
+      <div class="output-icon">📋</div>
+      <div class="output-title">Clinical Referral</div>
+      <div class="output-desc">A structured frailty referral centred on a six-spoke Radar diagram. Domain scores, minimisation notes, and a CGA preparation brief.</div>
+      <span class="output-tag">For the frailty team</span>
+    </div>
+    <div class="output-card population">
+      <div class="output-icon">📊</div>
+      <div class="output-title">Population Intelligence</div>
+      <div class="output-desc">With explicit consent only: an anonymised signal that feeds NHS commissioning intelligence. Never linked to the individual.</div>
+      <span class="output-tag">With consent · NHS commissioners</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function () {
+
+const canvas = document.getElementById('res-canvas');
+const ctx    = canvas.getContext('2d');
+let W, H, DPR = 1, t = 0, stage = 0, raf, running = true, autoTimer;
+
+const CAPTIONS = [
+  '<strong>Voice Conversation</strong> — The person speaks freely, in their own words, at their own pace. No tick-boxes. No clinical forms. Just a warm, unhurried conversation about everyday life.',
+  '<strong>AI Listening</strong> — Claude Sonnet listens to every response. Not just the words, but the rhythm — pauses, corrections, qualifications. Twelve questions across six clinical domains, each one adaptive to what came before.',
+  '<strong>Hesitation Detection</strong> — The AI detects minimisation: "I manage fine, really." It recognises the two specific fears that prevent honest disclosure — the fear of being a burden, and the fear of what honest disclosure might lead to.',
+  '<strong>Interpretation Layer</strong> — Every response is scored across six clinical domains: mobility, cognition, mood, nutrition, social connection, and home environment. The spoken tone modifies the clinical score.',
+  '<strong>Three Outputs</strong> — From a single conversation: a Wellness Guide for the person, a structured clinical referral for the frailty team, and — with consent — a population intelligence signal for NHS commissioners.',
+  '<strong>Consent & Privacy</strong> — Nothing is shared without explicit permission at every stage. The person holds the keys. Population intelligence is always anonymised and aggregated. The conversation belongs to the person.',
+];
+
+/* ── Colour palette matching the brand ── */
+const C = {
+  sage:     '#2D5A4E',
+  sageDark: '#1E3D35',
+  sagePale: '#EFF4F2',
+  sageL:    'rgba(45,90,78,0.18)',
+  amber:    '#C4843A',
+  amberPale:'rgba(196,132,58,0.12)',
+  cream:    '#FAF7F2',
+  charcoal: '#1C2B26',
+  textSec:  '#5A6B5A',
+  border:   'rgba(45,90,78,0.13)',
+  white:    '#FFFFFF',
+  wellness: '#2D5A4E',
+  clinical: '#C4843A',
+  popn:     '#1C2B26',
+  rose:     '#8a4a5a',
+};
+
+/* ── DPR-aware resize ── */
+function resize() {
+  DPR = window.devicePixelRatio || 1;
+  const cssW = canvas.parentElement.getBoundingClientRect().width || 800;
+  const cssH = canvas.offsetHeight || 320;
+  canvas.width  = Math.round(cssW * DPR);
+  canvas.height = Math.round(cssH * DPR);
+  canvas.style.width  = cssW + 'px';
+  canvas.style.height = cssH + 'px';
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  W = cssW; H = cssH;
+}
+
+/* ── Helpers ── */
+function roundRect(x,y,w,h,r) {
+  ctx.beginPath();
+  ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.arcTo(x+w,y,x+w,y+r,r);
+  ctx.lineTo(x+w,y+h-r); ctx.arcTo(x+w,y+h,x+w-r,y+h,r);
+  ctx.lineTo(x+r,y+h); ctx.arcTo(x,y+h,x,y+h-r,r);
+  ctx.lineTo(x,y+r); ctx.arcTo(x,y,x+r,y,r);
+  ctx.closePath();
+}
+
+function pill(x,y,w,h,col,lbl,a=1,fs=9) {
+  ctx.save(); ctx.globalAlpha=a;
+  ctx.fillStyle=col+'22'; ctx.strokeStyle=col; ctx.lineWidth=1;
+  roundRect(x-w/2,y-h/2,w,h,h/2); ctx.fill(); ctx.stroke();
+  if(lbl){
+    ctx.fillStyle=col;
+    ctx.font=`600 ${fs}px Nunito,sans-serif`;
+    ctx.textAlign='center'; ctx.fillText(lbl,x,y+fs*.36);
+  }
+  ctx.restore();
+}
+
+function badge(x,y,w,h,col,lbl,sub=null,a=1) {
+  ctx.save(); ctx.globalAlpha=a;
+  ctx.fillStyle=col;
+  ctx.shadowColor=col+'55'; ctx.shadowBlur=14;
+  roundRect(x-w/2,y-h/2,w,h,10); ctx.fill();
+  ctx.shadowBlur=0;
+  ctx.fillStyle=C.white; ctx.textAlign='center';
+  ctx.font=`600 10px Nunito,sans-serif`;
+  ctx.fillText(lbl, x, sub ? y-3 : y+4);
+  if(sub){
+    ctx.font=`400 8px Nunito,sans-serif`;
+    ctx.fillStyle='rgba(255,255,255,0.7)';
+    ctx.fillText(sub,x,y+10);
+  }
+  ctx.restore();
+}
+
+function label(x,y,txt,col,a=0.7,fs=9,align='center') {
+  ctx.save(); ctx.globalAlpha=a;
+  ctx.fillStyle=col; ctx.font=`600 ${fs}px Nunito,sans-serif`;
+  ctx.textAlign=align; ctx.fillText(txt,x,y);
+  ctx.restore();
+}
+
+/* ── Waveform helper ── */
+function waveform(x,y,w,h,col,a,phase,amplitude=1,spokenPhrases=null) {
+  ctx.save(); ctx.globalAlpha=a;
+  ctx.strokeStyle=col; ctx.lineWidth=1.5;
+  ctx.beginPath();
+  const steps=80;
+  for(let i=0;i<=steps;i++){
+    const px=x+i/steps*w;
+    const freq1=Math.sin((i/steps)*Math.PI*12+phase)*amplitude;
+    const freq2=Math.sin((i/steps)*Math.PI*7+phase*1.3)*amplitude*0.5;
+    const freq3=Math.sin((i/steps)*Math.PI*20+phase*0.7)*amplitude*0.25;
+    const envelope=Math.sin((i/steps)*Math.PI);
+    const py=y+(freq1+freq2+freq3)*h*0.38*envelope;
+    i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+  }
+  ctx.stroke();
+  ctx.restore();
+}
+
+/* ── Stage 0: Voice conversation ── */
+function s0() {
+  const cx=W/2, cy=H/2;
+
+  /* Mic icon - pulsing */
+  const pulse=0.5+0.5*Math.sin(t*0.05);
+  ctx.save();
+  for(const[r,a] of [[52,.04+.02*pulse],[36,.07+.03*pulse],[22,.12+.05*pulse]]) {
+    ctx.globalAlpha=a; ctx.strokeStyle=C.sage; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.stroke();
+  }
+  ctx.restore();
+
+  /* Mic body */
+  ctx.save(); ctx.globalAlpha=0.9;
+  ctx.fillStyle=C.sage;
+  ctx.shadowColor=C.sage+'66'; ctx.shadowBlur=20;
+  ctx.beginPath(); ctx.arc(cx,cy,18,0,Math.PI*2); ctx.fill();
+  ctx.shadowBlur=0;
+  ctx.fillStyle=C.white;
+  ctx.font='500 16px sans-serif'; ctx.textAlign='center';
+  ctx.fillText('🎙️',cx,cy+6);
+  ctx.restore();
+
+  /* Waveform flowing right */
+  const waveX=cx+28, waveW=W*0.36;
+  waveform(waveX, cy, waveW, H*0.25, C.sage, 0.7, t*0.08, 1);
+
+  /* Question bubbles drifting up */
+  const QUESTIONS = [
+    'How are you managing at home?',
+    'Do you feel safe getting around?',
+    'How has your appetite been?',
+    'Do you see people regularly?',
+    'How is your memory lately?',
+  ];
+  QUESTIONS.forEach((q,i) => {
+    const seed=i*83.5;
+    const bx=W*0.12+((seed*1.4)%1)*W*0.76;
+    const progress=((t*0.003+i*0.2)%1);
+    const by=H*0.82-progress*H*0.68;
+    const a=Math.sin(progress*Math.PI)*0.55;
+    const w=q.length*4.8+20;
+    pill(bx,by,w,20,C.sage,q,a,7.5);
+  });
+
+  /* Label */
+  label(cx,H*0.88,'Speaking freely, in their own words',C.textSec,0.5,9);
+}
+
+/* ── Stage 1: AI listening ── */
+function s1() {
+  const cx=W/2, cy=H*0.42;
+
+  /* Central AI node */
+  const pulse=0.5+0.5*Math.sin(t*0.04);
+  ctx.save();
+  for(const[r,a] of [[48,.04+.03*pulse],[30,.08+.04*pulse]]) {
+    ctx.globalAlpha=a; ctx.strokeStyle=C.amber; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.stroke();
+  }
+  ctx.restore();
+  badge(cx,cy,110,40,C.sageDark,'CLAUDE SONNET','Listening',0.92);
+
+  /* 6 domain spokes */
+  const DOMAINS = [
+    ['Mobility','🚶',C.sage],
+    ['Cognition','🧠',C.amber],
+    ['Mood','💚',C.sage],
+    ['Nutrition','🍽️',C.amber],
+    ['Social','🤝',C.sage],
+    ['Home','🏠',C.amber],
+  ];
+  DOMAINS.forEach(([lbl,icon,col],i) => {
+    const ang=(i/6)*Math.PI*2-Math.PI/2;
+    const dist=Math.min(W,H)*0.34;
+    const nx=cx+Math.cos(ang)*dist;
+    const ny=cy+Math.sin(ang)*dist;
+
+    /* Spoke line */
+    ctx.save();
+    ctx.globalAlpha=0.18+0.08*pulse;
+    ctx.strokeStyle=col; ctx.lineWidth=1;
+    ctx.setLineDash([4,6]);
+    ctx.lineDashOffset=-(t*0.8)%10;
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(nx,ny); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
+
+    /* Domain node */
+    const nodeSize=32;
+    ctx.save(); ctx.globalAlpha=0.82+0.12*Math.sin(t*0.05+i);
+    ctx.fillStyle=col+'18'; ctx.strokeStyle=col; ctx.lineWidth=1;
+    roundRect(nx-nodeSize/2,ny-nodeSize/2,nodeSize,nodeSize,8);
+    ctx.fill(); ctx.stroke();
+    ctx.fillStyle=col; ctx.font='13px sans-serif';
+    ctx.textAlign='center'; ctx.fillText(icon,nx,ny-1);
+    ctx.font=`600 7px Nunito,sans-serif`;
+    ctx.fillText(lbl,nx,ny+13);
+    ctx.restore();
+  });
+
+  /* Flowing particle on each spoke */
+  DOMAINS.forEach(([,, col],i) => {
+    const ang=(i/6)*Math.PI*2-Math.PI/2;
+    const dist=Math.min(W,H)*0.34;
+    const frac=((t*0.006+i/6)%1);
+    const px=cx+Math.cos(ang)*dist*frac;
+    const py=cy+Math.sin(ang)*dist*frac;
+    ctx.save(); ctx.globalAlpha=0.8*Math.sin(frac*Math.PI);
+    ctx.fillStyle=col;
+    ctx.beginPath(); ctx.arc(px,py,3.5,0,Math.PI*2); ctx.fill();
+    ctx.restore();
+  });
+
+  label(cx,H*0.91,'Twelve questions · Six clinical domains',C.textSec,0.5,9);
+}
+
+/* ── Stage 2: Hesitation detection ── */
+function s2() {
+  const cx=W/2;
+
+  /* Waveform with hesitation moments */
+  const waveY=H*0.35;
+  ctx.save(); ctx.strokeStyle=C.sage; ctx.lineWidth=1.5; ctx.globalAlpha=0.6;
+  ctx.beginPath();
+  for(let i=0;i<=120;i++){
+    const px=W*0.08+i/120*W*0.84;
+    /* Simulate hesitation at ~35% and ~70% */
+    const hesitate1=Math.max(0,1-Math.abs((i/120)-0.35)*12);
+    const hesitate2=Math.max(0,1-Math.abs((i/120)-0.70)*10);
+    const amp=(1-hesitate1*0.75-hesitate2*0.7);
+    const wave=Math.sin(i*0.42+t*0.06)*amp*H*0.1
+              +Math.sin(i*0.18+t*0.04)*amp*H*0.05;
+    i===0?ctx.moveTo(px,waveY+wave):ctx.lineTo(px,waveY+wave);
+  }
+  ctx.stroke(); ctx.restore();
+
+  /* Hesitation markers */
+  const hesitations = [
+    { x: W*0.08+0.35*W*0.84, label: '"I manage fine, really"', type: 'minimise' },
+    { x: W*0.08+0.70*W*0.84, label: '"I don\'t want to be a burden"', type: 'fear' },
+  ];
+  hesitations.forEach(({x, label: lbl, type}) => {
+    const col = type==='minimise' ? C.amber : C.rose;
+    /* Drop line */
+    ctx.save(); ctx.globalAlpha=0.5;
+    ctx.strokeStyle=col; ctx.lineWidth=1; ctx.setLineDash([3,4]);
+    ctx.beginPath(); ctx.moveTo(x,waveY-H*0.1); ctx.lineTo(x,waveY+H*0.14); ctx.stroke();
+    ctx.setLineDash([]); ctx.restore();
+    /* Marker dot */
+    ctx.save(); ctx.globalAlpha=0.9;
+    ctx.fillStyle=col+'22'; ctx.strokeStyle=col; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.arc(x,waveY,7,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    ctx.restore();
+    /* Label bubble */
+    const bw=lbl.length*5.2+20;
+    pill(x,waveY-H*0.17,bw,20,col,lbl,0.8,7.5);
+  });
+
+  /* Detection signals */
+  const SIGNALS = ['Minimisation detected','Fear of burden','Pace slowing','Qualification added'];
+  SIGNALS.forEach((s,i) => {
+    const x=W*0.12+i*(W*0.76/3.3);
+    const y=H*0.70+Math.sin(t*0.03+i)*6;
+    pill(x,y,s.length*5.2+16,20,i<2?C.amber:C.sage,s,.65,7.5);
+  });
+
+  label(cx,H*0.88,'Listening beneath the words',C.textSec,0.5,9);
+}
+
+/* ── Stage 3: Interpretation layer ── */
+function s3() {
+  const cx=W/2, cy=H*0.44;
+  const pulse=0.5+0.5*Math.sin(t*0.04);
+
+  /* Radar hexagon */
+  const R=Math.min(W,H)*0.24;
+  const DOMAINS=['Mobility','Cognition','Mood','Nutrition','Social','Home'];
+  const SCORES=[0.78,0.55,0.62,0.44,0.71,0.58];
+  const ACTUAL=[0.55,0.38,0.45,0.28,0.55,0.40]; // after minimisation correction
+
+  /* Background hex */
+  ctx.save(); ctx.globalAlpha=0.06;
+  ctx.strokeStyle=C.sage; ctx.lineWidth=1;
+  [1,0.67,0.33].forEach(scale=>{
+    ctx.beginPath();
+    DOMAINS.forEach((_,i)=>{
+      const ang=(i/6)*Math.PI*2-Math.PI/2;
+      const x=cx+Math.cos(ang)*R*scale;
+      const y=cy+Math.sin(ang)*R*scale;
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    });
+    ctx.closePath(); ctx.stroke();
+  });
+  ctx.restore();
+
+  /* Spokes */
+  ctx.save(); ctx.globalAlpha=0.12; ctx.strokeStyle=C.sage; ctx.lineWidth=1;
+  DOMAINS.forEach((_,i)=>{
+    const ang=(i/6)*Math.PI*2-Math.PI/2;
+    ctx.beginPath(); ctx.moveTo(cx,cy);
+    ctx.lineTo(cx+Math.cos(ang)*R, cy+Math.sin(ang)*R); ctx.stroke();
+  });
+  ctx.restore();
+
+  /* Stated score (outer, sage, dashed) */
+  ctx.save(); ctx.globalAlpha=0.35;
+  ctx.strokeStyle=C.sage; ctx.lineWidth=1.5; ctx.setLineDash([4,5]);
+  ctx.beginPath();
+  SCORES.forEach((s,i)=>{
+    const ang=(i/6)*Math.PI*2-Math.PI/2;
+    const x=cx+Math.cos(ang)*R*s, y=cy+Math.sin(ang)*R*s;
+    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  });
+  ctx.closePath(); ctx.stroke(); ctx.setLineDash([]); ctx.restore();
+
+  /* Interpreted score (inner, amber, filled) */
+  const animProg=Math.min(1,t/80);
+  ctx.save();
+  ctx.fillStyle=C.amber+'28'; ctx.strokeStyle=C.amber; ctx.lineWidth=2;
+  ctx.globalAlpha=0.9;
+  ctx.beginPath();
+  ACTUAL.forEach((s,i)=>{
+    const ang=(i/6)*Math.PI*2-Math.PI/2;
+    const score=s*animProg;
+    const x=cx+Math.cos(ang)*R*score, y=cy+Math.sin(ang)*R*score;
+    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  });
+  ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore();
+
+  /* Domain labels */
+  DOMAINS.forEach((d,i)=>{
+    const ang=(i/6)*Math.PI*2-Math.PI/2;
+    const lx=cx+Math.cos(ang)*(R+22), ly=cy+Math.sin(ang)*(R+22);
+    label(lx,ly+4,d,C.sage,0.7,8);
+  });
+
+  /* Legend */
+  const lx=W*0.72, ly=H*0.22;
+  ctx.save(); ctx.globalAlpha=0.7;
+  ctx.strokeStyle=C.sage; ctx.lineWidth=1.5; ctx.setLineDash([4,5]);
+  ctx.beginPath(); ctx.moveTo(lx,ly); ctx.lineTo(lx+22,ly); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle=C.sage; ctx.font='400 8px Nunito,sans-serif'; ctx.textAlign='left';
+  ctx.fillText('Stated',lx+26,ly+3);
+  ctx.globalAlpha=0.85;
+  ctx.fillStyle=C.amber; ctx.strokeStyle=C.amber; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(lx,ly+16); ctx.lineTo(lx+22,ly+16); ctx.stroke();
+  ctx.fillStyle=C.amber; ctx.fillText('Interpreted',lx+26,ly+19);
+  ctx.restore();
+
+  label(cx,H*0.90,'Spoken tone modifies the clinical score',C.textSec,0.5,9);
+}
+
+/* ── Stage 4: Three outputs ── */
+function s4() {
+  const cx=W/2, sourceY=H*0.22;
+
+  /* Source conversation node */
+  const pulse=0.5+0.5*Math.sin(t*0.04);
+  ctx.save();
+  ctx.globalAlpha=0.08+0.04*pulse; ctx.fillStyle=C.sage;
+  ctx.beginPath(); ctx.arc(cx,sourceY,42,0,Math.PI*2); ctx.fill();
+  ctx.restore();
+  badge(cx,sourceY,130,40,C.sageDark,'ONE CONVERSATION',null,0.92);
+
+  /* Three output destinations */
+  const OUTPUTS = [
+    { x:W*0.18, y:H*0.72, col:C.wellness, label:'WELLNESS GUIDE', sub:'For the person', icon:'📄' },
+    { x:W*0.50, y:H*0.72, col:C.clinical, label:'CLINICAL REFERRAL', sub:'Frailty team', icon:'📋' },
+    { x:W*0.82, y:H*0.72, col:C.popn,    label:'POPULATION DATA', sub:'With consent only', icon:'📊' },
+  ];
+
+  OUTPUTS.forEach(({x,y,col,label:lbl,sub,icon},i) => {
+    /* Flow line with animated particle */
+    const cp1x=cx+(x-cx)*0.3, cp1y=sourceY+(y-sourceY)*0.5;
+    ctx.save();
+    ctx.globalAlpha=0.2; ctx.strokeStyle=col; ctx.lineWidth=1.5;
+    ctx.setLineDash([5,7]); ctx.lineDashOffset=-(t*1.2)%12;
+    ctx.beginPath();
+    ctx.moveTo(cx,sourceY+20);
+    ctx.quadraticCurveTo(cp1x,cp1y,x,y-25);
+    ctx.stroke(); ctx.setLineDash([]); ctx.restore();
+
+    /* Particle on path */
+    const frac=((t*0.007+i/3)%1);
+    const pt_x=Math.pow(1-frac,2)*cx+2*(1-frac)*frac*cp1x+frac*frac*x;
+    const pt_y=Math.pow(1-frac,2)*(sourceY+20)+2*(1-frac)*frac*cp1y+frac*frac*(y-25);
+    ctx.save(); ctx.globalAlpha=Math.sin(frac*Math.PI)*0.9;
+    ctx.fillStyle=col;
+    ctx.beginPath(); ctx.arc(pt_x,pt_y,4,0,Math.PI*2); ctx.fill();
+    ctx.restore();
+
+    /* Output badge */
+    const prog=Math.min(1,Math.max(0,(t-i*20)/50));
+    badge(x,y,118,42,col,lbl,sub,prog*0.92);
+
+    /* Icon above badge */
+    ctx.save(); ctx.globalAlpha=prog*0.9;
+    ctx.font='16px sans-serif'; ctx.textAlign='center';
+    ctx.fillText(icon,x,y-32);
+    ctx.restore();
+  });
+
+  label(cx,H*0.93,'Three distinct outputs. One dignified conversation.',C.textSec,0.5,9);
+}
+
+/* ── Stage 5: Consent & privacy ── */
+function s5() {
+  const cx=W/2, cy=H*0.46;
+
+  /* Three concentric permission rings */
+  const RINGS = [
+    { r:H*0.32, col:C.wellness, label:'Wellness Guide', sub:'Always created', dash:false },
+    { r:H*0.22, col:C.clinical, label:'Clinical Referral', sub:'With permission', dash:false },
+    { r:H*0.12, col:C.popn,    label:'Population Signal', sub:'Explicit consent only', dash:true },
+  ];
+
+  RINGS.forEach(({r,col,label:lbl,sub,dash},i) => {
+    const pulse=0.5+0.5*Math.sin(t*0.04+i);
+    ctx.save();
+    ctx.globalAlpha=0.06+0.03*pulse; ctx.fillStyle=col;
+    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill();
+    ctx.globalAlpha=0.35;
+    ctx.strokeStyle=col; ctx.lineWidth=1.5;
+    if(dash){ ctx.setLineDash([5,7]); }
+    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.stroke();
+    ctx.setLineDash([]); ctx.restore();
+
+    /* Ring label at top */
+    const lx=cx, ly=cy-r-10;
+    pill(lx,ly,lbl.length*5.4+16,20,col,lbl,0.75,8);
+    label(lx,ly+18,sub,col,0.5,7.5);
+  });
+
+  /* Person icon at centre */
+  ctx.save(); ctx.globalAlpha=0.9;
+  ctx.fillStyle=C.sage+'22'; ctx.strokeStyle=C.sage; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.arc(cx,cy,18,0,Math.PI*2); ctx.fill(); ctx.stroke();
+  ctx.font='14px sans-serif'; ctx.textAlign='center';
+  ctx.fillText('👤',cx,cy+5);
+  ctx.restore();
+
+  /* Lock icons at gate points */
+  const GATES=[{a:-Math.PI/2,r:H*.12},{a:-Math.PI/2,r:H*.22}];
+  GATES.forEach(({a,r}) => {
+    const gx=cx+Math.cos(a)*r, gy=cy+Math.sin(a)*r;
+    ctx.save(); ctx.globalAlpha=0.6;
+    ctx.font='11px sans-serif'; ctx.textAlign='center';
+    ctx.fillText('🔐',gx,gy+4);
+    ctx.restore();
+  });
+
+  label(cx, H*0.90, 'The person holds the keys. Nothing shared without permission.', C.textSec,0.5,9);
+}
+
+/* ── Main draw loop ── */
+function draw() {
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle=C.white; ctx.fillRect(0,0,W,H);
+
+  switch(stage) {
+    case 0: s0(); break;
+    case 1: s1(); break;
+    case 2: s2(); break;
+    case 3: s3(); break;
+    case 4: s4(); break;
+    case 5: s5(); break;
+  }
+  t++;
+  if(running) raf=requestAnimationFrame(draw);
+}
+
+/* ── Stage control ── */
+function setStage(s) {
+  stage=s; t=0;
+  document.getElementById('cap-text').innerHTML=CAPTIONS[s];
+  document.querySelectorAll('.snav').forEach((el,i)=>{
+    el.classList.toggle('active',i===s);
+  });
+  if(!running){ running=true; raf=requestAnimationFrame(draw); }
+  clearInterval(autoTimer);
+  autoTimer=setInterval(()=>setStage((stage+1)%6), 9500);
+}
+
+document.querySelectorAll('.snav').forEach(el=>
+  el.addEventListener('click',()=>setStage(+el.dataset.s))
+);
+document.getElementById('btn-next').addEventListener('click',()=>
+  setStage((stage+1)%6)
+);
+document.getElementById('btn-play').addEventListener('click',function(){
+  running=!running;
+  this.textContent=running?'Pause':'Play';
+  if(running){ raf=requestAnimationFrame(draw); resetAuto(); }
+  else { cancelAnimationFrame(raf); clearInterval(autoTimer); }
+});
+
+function resetAuto(){
+  clearInterval(autoTimer);
+  autoTimer=setInterval(()=>setStage((stage+1)%6),9500);
+}
+
+window.addEventListener('resize',()=>{
+  cancelAnimationFrame(raf); resize();
+  if(running) raf=requestAnimationFrame(draw);
+});
+
+requestAnimationFrame(()=>{
+  resize(); draw();
+  autoTimer=setInterval(()=>setStage((stage+1)%6),9500);
+});
+
+})();
+</script>
+</body>
+</html>
