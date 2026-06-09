@@ -7,7 +7,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">  
     <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RESILIENCE — Community intelligence, built for the NHS</title>
+  <title>Community intelligence, built for the NHS</title>
   <meta name="description" content="RESILIENCE is a community-based frailty screening and intelligence system built for the NHS. It identifies older adults at risk before crisis, gives them something of genuine personal value, and equips clinical teams with the intelligence they need.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -153,7 +153,7 @@
       position: fixed;
       top: 0; left: 0; right: 0;
       z-index: 1000;
-      background: rgba(250,247,242,0.94);
+      background: rgba(255,255,255,0.97);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       border-bottom: 1px solid var(--border);
@@ -191,6 +191,52 @@
       transition: color 0.2s;
     }
     .nav-links a:hover { color: var(--sage); }
+
+    /* ── Ecosystem dropdown ── */
+    .nav-dropdown { position: relative; }
+    .nav-dropdown > a {
+      display: flex; align-items: center; gap: 0.3rem;
+    }
+    .nav-dropdown > a::after {
+      content: '';
+      display: inline-block;
+      width: 0; height: 0;
+      border-left: 3.5px solid transparent;
+      border-right: 3.5px solid transparent;
+      border-top: 4px solid var(--text-sec);
+      transition: transform 0.2s;
+      margin-top: 1px;
+    }
+    .nav-dropdown:hover > a::after { transform: rotate(180deg); border-top-color: var(--sage); }
+    .nav-dropdown-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 12px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--white);
+      border: 1px solid rgba(237,140,54,0.18);
+      border-radius: 10px;
+      box-shadow: 0 8px 28px rgba(28,43,38,0.10);
+      min-width: 170px;
+      padding: 0.45rem 0;
+      list-style: none;
+      z-index: 200;
+    }
+    .nav-dropdown:hover .nav-dropdown-menu { display: block; }
+    .nav-dropdown-menu li a {
+      display: block;
+      padding: 0.5rem 1.1rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text-sec);
+      white-space: nowrap;
+      transition: background 0.15s, color 0.15s;
+    }
+    .nav-dropdown-menu li a:hover {
+      background: var(--brand-pale);
+      color: var(--brand-dark);
+    }
     .nav-cta { padding: 0.45rem 1.1rem !important; font-size: 0.78rem !important; }
 
     .hamburger {
@@ -515,9 +561,9 @@
     .tool-card:nth-child(5) { grid-column: 2; }
 
     /* ===== PRINCIPLES ===== */
-    #principles { background: var(--sage-dark); }
-    .principles-header .section-label { color: rgba(196,132,58,0.75); }
-    .principles-header .section-headline { color: var(--white); }
+    #principles { background: #FEF3E8; }
+    .principles-header .section-label { color: var(--brand-mid); }
+    .principles-header .section-headline { color: var(--brand-dark); }
     .principle-list {
       display: flex;
       flex-direction: column;
@@ -525,16 +571,16 @@
       max-width: 740px;
     }
     .principle {
-      border-left: 2px solid rgba(196,132,58,0.35);
+      border-left: 2px solid rgba(196,112,42,0.3);
       padding-left: 2.25rem;
     }
     .principle p {
       font-size: 1.1rem;
       font-weight: 300;
-      color: rgba(255,255,255,0.8);
+      color: var(--text-sec);
       line-height: 1.82;
     }
-    .principle strong { font-weight: 700; color: var(--white); }
+    .principle strong { font-weight: 700; color: var(--brand-dark); }
 
     /* ===== EVIDENCE ===== */
     #evidence { background: var(--cream); }
@@ -670,7 +716,8 @@
     }
     .fy-link:hover { gap: 0.7rem; }
     .fy-quote {
-      background: var(--sage-dark);
+      background: #FEF3E8;
+      border: 1px solid rgba(196,112,42,0.18);
       border-radius: var(--r);
       padding: 3.5rem;
       display: grid;
@@ -683,12 +730,12 @@
       font-size: clamp(1.4rem, 2.5vw, 2rem);
       font-weight: 300;
       font-style: italic;
-      color: var(--white);
+      color: var(--brand-dark);
       line-height: 1.45;
     }
     .fy-quote-text em {
       font-style: normal;
-      color: rgba(196,132,58,0.9);
+      color: var(--brand-mid);
     }
     .fy-steps {
       display: flex;
@@ -703,7 +750,7 @@
     .fy-step-num {
       width: 28px;
       height: 28px;
-      background: rgba(196,132,58,0.25);
+      background: rgba(196,112,42,0.15);
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -711,17 +758,17 @@
       font-family: var(--ff-body);
       font-size: 0.72rem;
       font-weight: 700;
-      color: rgba(196,132,58,0.9);
+      color: var(--brand-mid);
       flex-shrink: 0;
       margin-top: 2px;
     }
     .fy-step-text {
       font-size: 0.88rem;
-      color: rgba(255,255,255,0.75);
+      color: var(--text-sec);
       line-height: 1.7;
     }
     .fy-step-text strong {
-      color: var(--white);
+      color: var(--brand-dark);
       font-weight: 600;
       display: block;
       margin-bottom: 0.15rem;
@@ -810,7 +857,8 @@
 
     /* ===== FOOTER ===== */
     footer {
-      background: var(--sage-dark);
+      background: var(--white);
+      border-top: 1px solid rgba(237,140,54,0.15);
       padding: 4rem 0 2.25rem;
     }
     .footer-top {
@@ -818,7 +866,7 @@
       grid-template-columns: 220px 1fr;
       gap: 4rem;
       padding-bottom: 3rem;
-      border-bottom: 1px solid rgba(255,255,255,0.09);
+      border-bottom: 1px solid rgba(28,43,38,0.08);
       margin-bottom: 2rem;
     }
     .f-brand-logo {
@@ -827,20 +875,20 @@
       font-size: 1.2rem;
       font-weight: 600;
       letter-spacing: 0.1em;
-      color: var(--white);
+      color: var(--brand-dark);
       display: block;
       margin-bottom: 0.9rem;
     }
     .f-tagline {
       font-size: 0.82rem;
-      color: rgba(255,255,255,0.45);
+      color: var(--text-sec);
       line-height: 1.75;
       max-width: 220px;
     }
     .f-powered {
       display: block;
       font-size: 0.72rem;
-      color: rgba(255,255,255,0.3);
+      color: rgba(28,43,38,0.35);
       margin-top: 1.4rem;
     }
     .f-nav {
@@ -854,17 +902,17 @@
       font-weight: 700;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.33);
+      color: var(--brand-mid);
       margin-bottom: 1rem;
     }
     .f-nav-col a {
       display: block;
       font-size: 0.82rem;
-      color: rgba(255,255,255,0.6);
+      color: var(--text-sec);
       margin-bottom: 0.55rem;
       transition: color 0.2s;
     }
-    .f-nav-col a:hover { color: var(--white); }
+    .f-nav-col a:hover { color: var(--brand-dark); }
     .footer-bottom {
       display: flex;
       justify-content: space-between;
@@ -872,14 +920,14 @@
       flex-wrap: wrap;
       gap: 1rem;
     }
-    .f-copy { font-size: 0.75rem; color: rgba(255,255,255,0.3); }
+    .f-copy { font-size: 0.75rem; color: rgba(28,43,38,0.38); }
     .f-links { display: flex; gap: 1.5rem; }
     .f-links a {
       font-size: 0.75rem;
-      color: rgba(255,255,255,0.3);
+      color: rgba(28,43,38,0.38);
       transition: color 0.2s;
     }
-    .f-links a:hover { color: rgba(255,255,255,0.65); }
+    .f-links a:hover { color: var(--brand-dark); }
 
     /* ===== RESPONSIVE ===== */
     @media (max-width: 960px) {
@@ -1036,9 +1084,13 @@
       <li><a href="#how">How It Works</a></li>
       <li><a href="#tools">The Tools</a></li>
       <li><a href="#evidence">Evidence</a></li>
-      <li><a href="#for-whom">For Whom</a></li>
-      <li><a href="#for-you">For You</a></li>
-      <li><a href="#contact">Contact</a></li>
+      <li class="nav-dropdown">
+        <a href="#ecosystem">Ecosystem</a>
+        <ul class="nav-dropdown-menu">
+          <li><a href="https://www.assistiv.cloud" target="_blank" rel="noopener">assistiv.cloud</a></li>
+          <li><a href="https://www.assistiv.co" target="_blank" rel="noopener">assistiv.co</a></li>
+        </ul>
+      </li>
     </ul>
     <a href="#contact" class="btn btn-primary nav-cta">Get in touch</a>
     <button class="hamburger" id="hbg" aria-label="Open navigation menu">
@@ -1054,9 +1106,9 @@
   <a href="#how"      onclick="closeMob()">How It Works</a>
   <a href="#tools"    onclick="closeMob()">The Tools</a>
   <a href="#evidence" onclick="closeMob()">Evidence</a>
-  <a href="#for-whom" onclick="closeMob()">For Whom</a>
-  <a href="#for-you"  onclick="closeMob()">For You</a>
-  <a href="#contact"  onclick="closeMob()">Contact</a>
+  <a href="#ecosystem" onclick="closeMob()">Ecosystem</a>
+  <a href="https://www.assistiv.cloud" target="_blank" rel="noopener" onclick="closeMob()" style="font-size:1.3rem;opacity:0.6;">↳ assistiv.cloud</a>
+  <a href="https://www.assistiv.co"    target="_blank" rel="noopener" onclick="closeMob()" style="font-size:1.3rem;opacity:0.6;">↳ assistiv.co</a>
   <a href="#contact" class="btn btn-primary" onclick="closeMob()">Get in touch</a>
 </div>
 
@@ -1439,13 +1491,13 @@
       <div>
         <div style="display:flex;align-items:center;gap:0.65rem;margin-bottom:0.75rem">
           <div style="position:relative;width:26px;height:26px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-            <div style="border-radius:50%;position:absolute;width:7px;height:7px;background:#ED8C36;z-index:2"></div>
-            <div style="border-radius:50%;position:absolute;width:15px;height:15px;border:1.5px solid #ED8C36;opacity:0.38;background:none"></div>
-            <div style="border-radius:50%;position:absolute;width:24px;height:24px;border:1.5px solid #ED8C36;opacity:0.16;background:none"></div>
+            <div style="border-radius:50%;position:absolute;width:7px;height:7px;background:#9e5412;z-index:2"></div>
+            <div style="border-radius:50%;position:absolute;width:15px;height:15px;border:1.5px solid #9e5412;opacity:0.38;background:none"></div>
+            <div style="border-radius:50%;position:absolute;width:24px;height:24px;border:1.5px solid #9e5412;opacity:0.16;background:none"></div>
           </div>
           <div style="display:flex;flex-direction:column;gap:1px">
-            <span style="font-family:'Cabinet Grotesk',sans-serif;font-size:1rem;font-weight:700;letter-spacing:-0.03em;line-height:1.1;color:#fff">Assistiv</span>
-            <span style="font-family:'DM Mono',monospace;font-size:0.48rem;letter-spacing:0.18em;text-transform:uppercase;line-height:1;color:#ED8C36;opacity:0.85">Tools</span>
+            <span style="font-family:'Cabinet Grotesk',sans-serif;font-size:1rem;font-weight:700;letter-spacing:-0.03em;line-height:1.1;color:#9e5412">Assistiv</span>
+            <span style="font-family:'DM Mono',monospace;font-size:0.48rem;letter-spacing:0.18em;text-transform:uppercase;line-height:1;color:#c4702a;opacity:0.85">Tools</span>
           </div>
         </div>
         <p class="f-tagline">Community intelligence, built for the NHS. Delivering resilience where it is needed.</p>
@@ -1477,7 +1529,7 @@
     </div>
     <div class="footer-bottom">
       <p class="f-copy">© 2026 Assistiv Systems Limited. All rights reserved.</p>
-      <a href="https://www.marketingformymates.com" class="f-links" rel="dofollow" target="_blank" style="font-size:0.75rem;color:rgba(255,255,255,0.3);transition:color 0.2s;text-decoration:none;" onmouseover="this.style.color='rgba(255,255,255,0.65)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">Built by marketingformymates.com</a>
+      <a href="https://www.marketingformymates.com" class="f-links" rel="dofollow" target="_blank" style="font-size:0.75rem;color:rgba(28,43,38,0.38);transition:color 0.2s;text-decoration:none;" onmouseover="this.style.color='#9e5412'" onmouseout="this.style.color='rgba(28,43,38,0.38)'">Built by marketingformymates.com</a>
       <div class="f-links">
         <a href="#">Privacy Notice</a>
         <a href="#">Accessibility</a>
