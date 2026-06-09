@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RESILIENCE — Clinical Referral · RSLNCE-2026-0042</title>
+<title>Clinical Referral · RSLNCE-2026-0042</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
@@ -29,12 +29,20 @@ a:hover { text-decoration: underline; }
 
 /* ── HEADER ── */
 .page-header {
-  background: var(--white); border-bottom: 2px solid var(--sage-pale);
+  background: var(--white); border-bottom: 2px solid #FEF3E8;
   padding: 16px 32px; display: flex; align-items: center; justify-content: space-between;
   position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow);
 }
 .header-brand { display: flex; align-items: center; gap: 20px; }
-.logo { font-family: 'Cormorant Garamond', serif; font-size: 13px; font-weight: 500; letter-spacing: 0.35em; text-transform: uppercase; color: var(--sage); }
+.logo { display: flex; align-items: center; gap: 10px; }
+.logo-mark { position: relative; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.logo-dot { border-radius: 50%; position: absolute; }
+.logo-core { width: 7px; height: 7px; background: #9e5412; z-index: 2; }
+.logo-r1 { width: 15px; height: 15px; border: 1.5px solid #9e5412; opacity: 0.4; background: none; }
+.logo-r2 { width: 24px; height: 24px; border: 1.5px solid #9e5412; opacity: 0.18; background: none; }
+.logo-wordmark { display: flex; flex-direction: column; gap: 1px; }
+.logo-name { font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; color: #9e5412; }
+.logo-sub { font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; line-height: 1; color: #c4702a; opacity: 0.8; }
 .header-divider { width: 1px; height: 30px; background: var(--border); }
 .header-meta { display: flex; flex-direction: column; gap: 2px; }
 .header-ref { font-size: 13px; font-weight: 700; color: var(--charcoal); }
@@ -196,7 +204,17 @@ a:hover { text-decoration: underline; }
 <!-- ── PAGE HEADER ── -->
 <header class="page-header">
   <div class="header-brand">
-    <div class="logo">RESILIENCE</div>
+    <div class="logo">
+      <div class="logo-mark">
+        <div class="logo-dot logo-core"></div>
+        <div class="logo-dot logo-r1"></div>
+        <div class="logo-dot logo-r2"></div>
+      </div>
+      <div class="logo-wordmark">
+        <span class="logo-name">Assistiv</span>
+        <span class="logo-sub">Tools</span>
+      </div>
+    </div>
     <div class="header-divider"></div>
     <div class="header-meta">
       <div class="header-ref">Clinical Referral · RSLNCE-2026-0042</div>
