@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RESILIENCE — Dual Report Referral · RSLNCE-2026-0042</title>
+<title>Dual Report Referral · RSLNCE-2026-0042</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
@@ -26,19 +26,27 @@
 body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);font-size:13px;}
 
 /* HEADER */
-.page-header{background:var(--sage-dark);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.page-header{background:#ED8C36;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
 .dh-brand{display:flex;align-items:center;gap:16px;}
-.dh-logo{font-family:'Cormorant Garamond',serif;font-size:12px;font-weight:500;letter-spacing:.35em;text-transform:uppercase;color:rgba(255,255,255,.9);}
-.dh-title{font-size:13px;font-weight:600;color:rgba(255,255,255,.75);}
-.dh-sub{font-size:11px;color:rgba(255,255,255,.45);margin-top:1px;}
+.dh-logo{display:flex;align-items:center;gap:10px;}
+.dh-logo-mark{position:relative;width:26px;height:26px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.dh-logo-dot{border-radius:50%;position:absolute;}
+.dh-logo-core{width:7px;height:7px;background:#fff;z-index:2;}
+.dh-logo-r1{width:15px;height:15px;border:1.5px solid #fff;opacity:0.45;background:none;}
+.dh-logo-r2{width:24px;height:24px;border:1.5px solid #fff;opacity:0.2;background:none;}
+.dh-logo-wordmark{display:flex;flex-direction:column;gap:1px;}
+.dh-logo-name{font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;letter-spacing:-0.02em;line-height:1.1;color:#fff;}
+.dh-logo-sub{font-size:8px;letter-spacing:0.18em;text-transform:uppercase;line-height:1;color:#fff;opacity:0.7;}
+.dh-title{font-size:13px;font-weight:600;color:white;}
+.dh-sub{font-size:11px;color:rgba(255,255,255,.7);margin-top:1px;}
 .dh-actions{display:flex;align-items:center;gap:10px;}
 .risk-badge{font-size:12px;font-weight:700;letter-spacing:.08em;padding:6px 16px;border-radius:20px;text-transform:uppercase;}
 .risk-badge.amber{background:var(--a-bg);color:var(--a-text);border:1px solid var(--a-border);}
 .dh-btn{font-family:'Nunito',sans-serif;font-size:12px;font-weight:600;padding:7px 16px;border-radius:16px;cursor:pointer;border:none;transition:all .2s;}
-.dh-btn.primary{background:var(--amber);color:white;}
-.dh-btn.primary:hover{background:var(--amber-dark);}
-.dh-btn.ghost{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);}
-.dh-btn.ghost:hover{background:rgba(255,255,255,.18);}
+.dh-btn.primary{background:white;color:#9e5412;}
+.dh-btn.primary:hover{background:#FEF3E8;color:#7a3e0a;}
+.dh-btn.ghost{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:white;}
+.dh-btn.ghost:hover{background:rgba(255,255,255,.25);}
 
 /* LAYOUT */
 .page-body{max-width:1100px;margin:0 auto;padding:22px 20px 60px;}
@@ -133,7 +141,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);f
 .cbar-score.amber{color:var(--amber-dark);}
 
 @media(max-width:900px){.row.cols-2,.row.cols-3{grid-template-columns:1fr;}.dr-grid{grid-template-columns:1fr;}}
-@media print{.page-header{position:static;}.dh-actions,.actions-bar{display:none;}.domain-row-body{display:block!important;}}
+@media print{.page-header{position:static;background:#ED8C36;}.dh-actions,.actions-bar{display:none;}.domain-row-body{display:block!important;}}
 </style>
 </head>
 <body>
@@ -141,7 +149,17 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);f
 <!-- HEADER -->
 <header class="page-header">
   <div class="dh-brand">
-    <div class="dh-logo">RESILIENCE</div>
+    <div class="dh-logo">
+      <div class="dh-logo-mark">
+        <div class="dh-logo-dot dh-logo-core"></div>
+        <div class="dh-logo-dot dh-logo-r1"></div>
+        <div class="dh-logo-dot dh-logo-r2"></div>
+      </div>
+      <div class="dh-logo-wordmark">
+        <span class="dh-logo-name">Assistiv</span>
+        <span class="dh-logo-sub">Tools</span>
+      </div>
+    </div>
     <div>
       <div class="dh-title">Dual Report Referral — Person + Carer</div>
       <div class="dh-sub">Folkestone and Hythe Neighbourhood Health Service · RSLNCE-2026-0042 · 16 May 2026</div>
