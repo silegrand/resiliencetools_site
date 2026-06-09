@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RESILIENCE Intelligence Dashboard · Folkestone & Hythe PCN</title>
+<title>Intelligence Dashboard · Folkestone & Hythe PCN</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -23,18 +23,26 @@
 body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);font-size:13px;}
 
 /* HEADER */
-.dash-header{background:var(--sage-dark);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.dash-header{background:#ED8C36;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
 .dh-brand{display:flex;align-items:center;gap:16px;}
-.dh-logo{font-family:'Cormorant Garamond',serif;font-size:12px;font-weight:500;letter-spacing:.35em;text-transform:uppercase;color:rgba(255,255,255,.9);}
-.dh-title{font-size:13px;font-weight:600;color:rgba(255,255,255,.75);}
-.dh-sub{font-size:11px;color:rgba(255,255,255,.45);margin-top:1px;}
+.dh-logo{display:flex;align-items:center;gap:10px;}
+.dh-logo-mark{position:relative;width:26px;height:26px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.dh-logo-dot{border-radius:50%;position:absolute;}
+.dh-logo-core{width:7px;height:7px;background:#fff;z-index:2;}
+.dh-logo-r1{width:15px;height:15px;border:1.5px solid #FEF3E8;opacity:0.45;background:none;}
+.dh-logo-r2{width:24px;height:24px;border:1.5px solid #FEF3E8;opacity:0.2;background:none;}
+.dh-logo-wordmark{display:flex;flex-direction:column;gap:1px;}
+.dh-logo-name{font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;letter-spacing:-0.02em;line-height:1.1;color:#FEF3E8;}
+.dh-logo-sub{font-size:8px;letter-spacing:0.18em;text-transform:uppercase;line-height:1;color:#FEF3E8;opacity:0.7;}
+.dh-title{font-size:13px;font-weight:600;color:white;}
+.dh-sub{font-size:11px;color:rgba(255,255,255,.7);margin-top:1px;}
 .dh-actions{display:flex;align-items:center;gap:10px;}
-.dh-badge{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.85);font-size:11px;font-weight:600;padding:5px 12px;border-radius:12px;}
+.dh-badge{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);color:white;font-size:11px;font-weight:600;padding:5px 12px;border-radius:12px;}
 .dh-btn{font-family:'Nunito',sans-serif;font-size:12px;font-weight:600;padding:7px 16px;border-radius:16px;cursor:pointer;border:none;transition:all .2s;}
-.dh-btn.primary{background:var(--amber);color:white;}
-.dh-btn.primary:hover{background:var(--amber-dark);}
-.dh-btn.ghost{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);}
-.dh-btn.ghost:hover{background:rgba(255,255,255,.18);}
+.dh-btn.primary{background:white;color:#9e5412;}
+.dh-btn.primary:hover{background:#FEF3E8;color:#7a3e0a;}
+.dh-btn.ghost{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:white;}
+.dh-btn.ghost:hover{background:rgba(255,255,255,.25);}
 
 /* LAYOUT */
 .dash-body{max-width:1200px;margin:0 auto;padding:22px 20px 60px;}
@@ -102,25 +110,25 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);f
 .mini-donut{width:80px;height:80px;}
 
 /* AI SYNTHESIS */
-.ai-panel{background:var(--sage-dark);border-radius:14px;padding:22px 24px;color:white;}
-.ai-label{font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:14px;}
+.ai-panel{background:#FEF3E8;border:1px solid rgba(158,84,18,0.15);border-radius:14px;padding:22px 24px;color:var(--charcoal);}
+.ai-label{font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#9e5412;margin-bottom:14px;}
 .ai-trigger{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
-.ai-trigger-btn{font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;padding:10px 22px;background:var(--amber);color:white;border:none;border-radius:20px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px;}
-.ai-trigger-btn:hover{background:var(--amber-dark);}
+.ai-trigger-btn{font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;padding:10px 22px;background:#9e5412;color:white;border:none;border-radius:20px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px;}
+.ai-trigger-btn:hover{background:#7a3e0a;}
 .ai-trigger-btn:disabled{opacity:.5;pointer-events:none;}
-.ai-trigger-desc{font-size:12px;color:rgba(255,255,255,.6);line-height:1.5;max-width:400px;}
-.ai-loading{display:none;align-items:center;gap:12px;color:rgba(255,255,255,.7);font-size:13px;}
+.ai-trigger-desc{font-size:12px;color:#7a5230;line-height:1.5;max-width:400px;}
+.ai-loading{display:none;align-items:center;gap:12px;color:#9e5412;font-size:13px;}
 .ai-loading.active{display:flex;}
-.ai-orb{width:12px;height:12px;border-radius:50%;background:var(--amber);animation:pulse 1.5s infinite;}
+.ai-orb{width:12px;height:12px;border-radius:50%;background:#9e5412;animation:pulse 1.5s infinite;}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.85);}}
-.ai-output{display:none;margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,.12);}
+.ai-output{display:none;margin-top:16px;padding-top:16px;border-top:1px solid rgba(158,84,18,0.15);}
 .ai-output.visible{display:block;}
 .ai-section{margin-bottom:16px;}
-.ai-section h4{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;color:rgba(255,255,255,.9);margin-bottom:8px;}
-.ai-section p,.ai-section li{font-size:13px;color:rgba(255,255,255,.72);line-height:1.65;}
+.ai-section h4{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;color:#9e5412;margin-bottom:8px;}
+.ai-section p,.ai-section li{font-size:13px;color:var(--text-secondary);line-height:1.65;}
 .ai-section ul{padding-left:16px;}
 .ai-section li{margin-bottom:4px;}
-.ai-meta{font-size:10px;color:rgba(255,255,255,.35);margin-top:16px;}
+.ai-meta{font-size:10px;color:rgba(158,84,18,0.45);margin-top:16px;}
 
 /* ALERT PILLS */
 .alert-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
@@ -141,7 +149,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);f
   .row.cols-2,.row.cols-2-1,.row.cols-1-2{grid-template-columns:1fr;}
 }
 @media print{
-  .dash-header{position:static;background:var(--charcoal);}
+  .dash-header{position:static;background:#ED8C36;}
   .dh-actions,.ai-trigger{display:none;}
   .ai-output{display:block!important;}
 }
@@ -152,7 +160,17 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);f
 <!-- HEADER -->
 <header class="dash-header">
   <div class="dh-brand">
-    <div class="dh-logo">RESILIENCE</div>
+    <div class="dh-logo">
+      <div class="dh-logo-mark">
+        <div class="dh-logo-dot dh-logo-core"></div>
+        <div class="dh-logo-dot dh-logo-r1"></div>
+        <div class="dh-logo-dot dh-logo-r2"></div>
+      </div>
+      <div class="dh-logo-wordmark">
+        <span class="dh-logo-name">Assistiv</span>
+        <span class="dh-logo-sub">Tools</span>
+      </div>
+    </div>
     <div>
       <div class="dh-title">Intelligence Dashboard</div>
       <div class="dh-sub">Folkestone and Hythe PCN · 100 screens · May 2026</div>
