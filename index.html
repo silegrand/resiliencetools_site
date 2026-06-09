@@ -237,7 +237,21 @@
       background: var(--brand-pale);
       color: var(--brand-dark);
     }
-    .nav-cta { padding: 0.45rem 1.1rem !important; font-size: 0.78rem !important; }
+    .nav-cta {
+      font-family: var(--ff-body);
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--white) !important;
+      background: var(--sage);
+      text-decoration: none;
+      padding: 0.55rem 1.3rem;
+      border-radius: 6px;
+      border: none;
+      transition: background 0.2s;
+      white-space: nowrap;
+      display: inline-block;
+    }
+    .nav-cta:hover { background: var(--sage-dark); }
 
     .hamburger {
       display: none;
@@ -1135,7 +1149,7 @@
         </ul>
       </li>
     </ul>
-    <a href="#contact" class="btn btn-primary nav-cta">Get in touch</a>
+    <a href="#contact" class="nav-cta">Get in touch</a>
     <button class="hamburger" id="hbg" aria-label="Open navigation menu">
       <span></span><span></span><span></span>
     </button>
