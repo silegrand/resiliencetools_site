@@ -1586,6 +1586,82 @@
 </section>
 
 
+<!-- PLATFORM ECOSYSTEM -->
+<section id="ecosystem-section" style="background:var(--cream);padding:5rem 2rem;border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div style="max-width:1100px;margin:0 auto;">
+    <span class="section-label fade-up">Our platform</span>
+    <h2 class="section-headline fade-up" style="max-width:640px;margin-bottom:1rem;">Three connected tools. One system of care.</h2>
+    <p class="fade-up" style="font-size:1rem;font-weight:300;color:var(--text-sec);line-height:1.65;max-width:640px;margin-bottom:3.5rem;">Assistiv operates across three integrated platforms. Each addresses a distinct stage of the journey from invisibility to appropriate support — finding people, understanding their needs, and delivering the right response.</p>
+
+    <style>
+      .eco-pathway { display:grid; grid-template-columns:1fr auto 1fr auto 1fr; gap:0; align-items:stretch; }
+      .eco-box { border:1px solid var(--border); padding:2rem 1.75rem; background:#fff; display:flex; flex-direction:column; text-decoration:none; transition:border-color 0.2s, box-shadow 0.2s; }
+      .eco-box:hover { border-color:var(--sage); box-shadow:0 4px 24px rgba(237,140,54,0.1); }
+      .eco-box-num { font-size:0.65rem; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--sage); margin-bottom:0.6rem; }
+      .eco-box-name { font-family:var(--ff-display); font-size:1.25rem; color:var(--charcoal); margin-bottom:0.4rem; }
+      .eco-box-url { font-size:0.75rem; color:var(--text-sec); margin-bottom:1rem; display:block; }
+      .eco-box-desc { font-size:0.875rem; font-weight:300; color:var(--text-sec); line-height:1.55; flex:1; }
+      .eco-box-role { display:inline-block; margin-top:1.5rem; font-size:0.65rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; padding:0.3rem 0.75rem; border:1px solid var(--border); border-radius:2px; background:var(--cream); color:var(--text-sec); align-self:flex-start; }
+      .eco-box-here { border-color:var(--sage) !important; }
+      .eco-box-here .eco-box-num { color:var(--sage-dark); }
+      .eco-box-here .eco-box-name { color:var(--sage-dark); }
+      .eco-box-here .eco-box-role { border-color:var(--sage); color:var(--sage-dark); background:var(--brand-pale); font-weight:700; }
+      .eco-conn { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.4rem; padding:0 1.5rem; align-self:center; }
+      .eco-conn-line { width:48px; height:1px; background:var(--border); position:relative; }
+      .eco-conn-line::after { content:''; position:absolute; right:-1px; top:-3px; width:7px; height:7px; border-right:1px solid var(--text-sec); border-bottom:1px solid var(--text-sec); transform:rotate(-45deg); }
+      .eco-conn-lbl { font-size:0.6rem; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-sec); }
+      .eco-outcomes-row { margin-top:3rem; display:grid; grid-template-columns:1fr 1fr; gap:1rem; padding-top:2.5rem; border-top:1px solid var(--border); }
+      .eco-outcome-box { padding:1.5rem; border:1px solid var(--border); background:#fff; }
+      .eco-outcome-lbl { font-size:0.65rem; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-sec); margin-bottom:0.5rem; }
+      .eco-outcome-ttl { font-size:0.95rem; font-weight:500; color:var(--charcoal); margin-bottom:0.4rem; }
+      .eco-outcome-body { font-size:0.825rem; font-weight:300; color:var(--text-sec); line-height:1.55; }
+      .eco-outcome-hi { border-color:var(--sage); }
+      .eco-outcome-hi .eco-outcome-lbl { color:var(--sage); }
+      .eco-outcome-hi .eco-outcome-ttl { color:var(--sage-dark); }
+      @media (max-width:820px) { .eco-pathway { grid-template-columns:1fr; } .eco-conn { flex-direction:row; justify-content:center; padding:1rem 0; } .eco-conn-line { width:32px; } .eco-outcomes-row { grid-template-columns:1fr; } }
+    </style>
+
+    <div class="eco-pathway fade-up">
+      <a class="eco-box" href="https://www.assistiv.cloud" target="_blank" rel="noopener">
+        <p class="eco-box-num">01</p>
+        <p class="eco-box-name">Identify</p>
+        <span class="eco-box-url">assistiv.cloud</span>
+        <p class="eco-box-desc">Population-level frailty intelligence. Finds older adults in the Missing Middle before they reach crisis — using open NHS data, geographic signals, and longitudinal risk modelling.</p>
+        <span class="eco-box-role">Intelligence layer</span>
+      </a>
+      <div class="eco-conn"><div class="eco-conn-line"></div><p class="eco-conn-lbl">Refer</p></div>
+      <a class="eco-box eco-box-here" href="#">
+        <p class="eco-box-num">02</p>
+        <p class="eco-box-name">Screen</p>
+        <span class="eco-box-url">assistiv.tools</span>
+        <p class="eco-box-desc">Community screening for identified populations. Determines the level and urgency of need through structured, validated assessment — sorting those who need acute pathways from those suited to early intervention.</p>
+        <span class="eco-box-role">You are here</span>
+      </a>
+      <div class="eco-conn"><div class="eco-conn-line"></div><p class="eco-conn-lbl">Route</p></div>
+      <a class="eco-box" href="https://www.assistiv.co" target="_blank" rel="noopener">
+        <p class="eco-box-num">03</p>
+        <p class="eco-box-name">Intervene</p>
+        <span class="eco-box-url">assistiv.co</span>
+        <p class="eco-box-desc">Early intervention for those below the acute threshold. Passive home monitoring, warm conversation, and care coordination — delivered on the person's terms before independence is lost.</p>
+        <span class="eco-box-role">Early intervention</span>
+      </a>
+    </div>
+
+    <div class="eco-outcomes-row fade-up">
+      <div class="eco-outcome-box">
+        <p class="eco-outcome-lbl">Acute pathway</p>
+        <p class="eco-outcome-ttl">Health and Social Care</p>
+        <p class="eco-outcome-body">People approaching or exceeding the acute threshold are referred directly into NHS or local authority care pathways — with the longitudinal data needed for rapid, accurate assessment.</p>
+      </div>
+      <div class="eco-outcome-box eco-outcome-hi">
+        <p class="eco-outcome-lbl">Early intervention pathway</p>
+        <p class="eco-outcome-ttl">Assistiv Services</p>
+        <p class="eco-outcome-body">People below the acute threshold — managing, but at risk — are supported by Assistiv's platform. Proactive, non-intrusive, and designed to extend independence and defer the need for formal care.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- CONTACT -->
 <section id="contact" class="section-pad">
   <div class="container">
