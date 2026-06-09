@@ -295,7 +295,7 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 8rem 2rem 5rem;
+      padding: 9.5rem 2rem 5rem;
       position: relative;
       z-index: 1;
       max-width: 1120px;
@@ -1141,6 +1141,56 @@
     </button>
   </div>
 </nav>
+
+<!-- ECOSYSTEM BANNER -->
+<style>
+  .eco-banner {
+    position: fixed;
+    top: 72px;
+    left: 0; right: 0;
+    z-index: 999;
+    background: var(--brand-pale);
+    border-bottom: 1px solid rgba(237,140,54,0.22);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.45rem 1.5rem;
+    font-family: var(--ff-body);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--brand-dark);
+    white-space: nowrap;
+    flex-wrap: wrap;
+  }
+  .eco-banner-label { opacity: 0.7; }
+  .eco-banner-role {
+    color: var(--brand-dark);
+    font-weight: 700;
+  }
+  .eco-banner-sep { opacity: 0.35; margin: 0 0.25rem; }
+  .eco-banner a {
+    color: var(--brand-mid);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.15s;
+  }
+  .eco-banner a:hover { color: var(--brand-dark); text-decoration: underline; }
+  @media (max-width: 600px) {
+    .eco-banner { font-size: 0.6rem; top: 60px; }
+  }
+</style>
+<div class="eco-banner">
+  <span class="eco-banner-label">Assistiv Ecosystem</span>
+  <span class="eco-banner-sep">·</span>
+  <span class="eco-banner-role">Community Screening</span>
+  <span class="eco-banner-sep">·</span>
+  <a href="https://www.assistiv.cloud" target="_blank" rel="noopener">assistiv.cloud</a>
+  <span class="eco-banner-sep">·</span>
+  <a href="https://www.assistiv.co" target="_blank" rel="noopener">assistiv.co</a>
+</div>
 
 <!-- MOBILE NAV -->
 <div class="mobile-nav" id="mob-nav">
