@@ -1060,6 +1060,49 @@
     }
     .mini-res-link:hover { text-decoration: underline; }
 
+    /* ── OUTPUT CARDS (matching conversation animation page) ── */
+    .outputs-legend {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .output-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem 1.25rem 1rem;
+      transition: box-shadow 0.2s;
+      display: flex; flex-direction: column;
+    }
+    .output-card:hover { box-shadow: 0 4px 20px rgba(28,43,38,0.08); }
+    .output-icon { font-size: 1.4rem; margin-bottom: 0.6rem; }
+    .output-title {
+      font-family: var(--ff-display); font-size: 1.05rem;
+      font-weight: 500; color: var(--charcoal); margin-bottom: 0.35rem;
+    }
+    .output-desc {
+      font-size: 0.8rem; color: var(--text-sec); line-height: 1.55;
+      flex: 1;
+    }
+    .output-tag {
+      display: inline-block; margin-top: 0.65rem;
+      font-size: 0.6rem; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; padding: 0.2rem 0.6rem;
+      border-radius: 50px; border: 1px solid var(--border);
+      color: var(--text-sec); background: var(--cream);
+      text-decoration: none; align-self: flex-start;
+    }
+    .output-card.wellness .output-tag { border-color: var(--sage); color: var(--sage); }
+    .output-card.clinical .output-tag { border-color: var(--amber); color: var(--amber); }
+    .output-card.population .output-tag { border-color: var(--charcoal); color: var(--charcoal); }
+    @media (max-width: 860px) {
+      .outputs-legend { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .outputs-legend { grid-template-columns: 1fr; }
+    }
+
   </style>
   <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@500;700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
@@ -1222,6 +1265,34 @@
   <div class="process-icon">●●●</div>
   <div class="process-label">Triple Tap</div>
 </div>    </div>
+
+    <!-- Output cards -->
+    <div class="outputs-legend fade-up">
+      <div class="output-card wellness">
+        <div class="output-icon">📄</div>
+        <div class="output-title">Wellness Guide</div>
+        <div class="output-desc">A personalised document returned to the person — affirming, practical, written in plain English. Something of genuine value from the conversation.</div>
+        <span class="output-tag">For the person</span>
+      </div>
+      <div class="output-card clinical">
+        <div class="output-icon">📋</div>
+        <div class="output-title">Clinical Referral</div>
+        <div class="output-desc">A structured frailty referral centred on a six-spoke Radar diagram. Domain scores, minimisation notes, and a CGA preparation brief.</div>
+        <span class="output-tag">For the frailty team</span>
+      </div>
+      <div class="output-card assistiv">
+        <div class="output-icon">🏠</div>
+        <div class="output-title">Assistiv Services</div>
+        <div class="output-desc">For those below the acute threshold: preventative care, home support, and care coordination delivered through the Assistiv platform — on the person's terms.</div>
+        <span class="output-tag" style="border-color:#1E3D35;color:#1E3D35">assistiv.co</span>
+      </div>
+      <div class="output-card population">
+        <div class="output-icon">📊</div>
+        <div class="output-title">Intelligence Data</div>
+        <div class="output-desc">With explicit consent only: an anonymised signal returned to the Assistiv.Health platform, feeding population frailty intelligence for NHS commissioners.</div>
+        <a class="output-tag" href="https://www.assistiv.cloud" target="_blank" rel="noopener">With consent · assistiv.cloud</a>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1598,6 +1669,8 @@
     cream:    '#FAF7F2', charcoal:'#1C2B26',
     textSec:  '#5A6B5A', border:'rgba(45,90,78,0.13)',
     white:    '#FFFFFF', rose:'#8a4a5a',
+    wellness: '#2D5A4E', clinical: '#C4843A',
+    assistiv: '#1E3D35', popn: '#1C2B26',
   };
 
   /* ── DPR-aware resize ── */
@@ -1795,33 +1868,37 @@
     lbl(cx,H*0.91,'Spoken tone modifies the clinical score',C.textSec,0.5);
   }
 
-  /* ── Stage 4: Three outputs ── */
+  /* ── Stage 4: Four outputs ── */
   function s4() {
     const cx=W/2, srcY=H*0.18;
     const pulse=0.5+0.5*Math.sin(t*0.04);
     ctx.save(); ctx.globalAlpha=0.07+0.04*pulse; ctx.fillStyle=C.sage;
-    ctx.beginPath(); ctx.arc(cx,srcY,34,0,Math.PI*2); ctx.fill(); ctx.restore();
-    badge(cx,srcY,116,34,C.sageDark,'ONE CONVERSATION',null,0.9);
+    ctx.beginPath(); ctx.arc(cx,srcY,38,0,Math.PI*2); ctx.fill(); ctx.restore();
+    badge(cx,srcY,130,38,C.sageDark,'ONE CONVERSATION',null,0.92);
     const OUTS=[
-      {x:W*0.18,y:H*0.73,col:C.sage,lbl:'WELLNESS GUIDE',sub:'For the person'},
-      {x:W*0.50,y:H*0.73,col:C.amber,lbl:'CLINICAL REFERRAL',sub:'Frailty team'},
-      {x:W*0.82,y:H*0.73,col:C.charcoal,lbl:'POPULATION DATA',sub:'With consent'},
+      {x:W*0.12,y:H*0.72,col:C.wellness,lbl:'WELLNESS GUIDE',  sub:'For the person', icon:'📄'},
+      {x:W*0.37,y:H*0.72,col:C.clinical,lbl:'CLINICAL REFERRAL',sub:'Frailty team',  icon:'📋'},
+      {x:W*0.63,y:H*0.72,col:C.assistiv,lbl:'ASSISTIV SERVICES',sub:'assistiv.co',   icon:'🏠'},
+      {x:W*0.88,y:H*0.72,col:C.popn,    lbl:'INTELLIGENCE DATA',sub:'With consent',  icon:'📊'},
     ];
-    OUTS.forEach(({x,y,col,lbl:lb,sub},i)=>{
-      const cp={x:cx+(x-cx)*0.3,y:srcY+(y-srcY)*0.5};
-      ctx.save(); ctx.globalAlpha=0.18; ctx.strokeStyle=col; ctx.lineWidth=1.5;
+    OUTS.forEach(({x,y,col,lbl:lb,sub,icon},i)=>{
+      const cp={x:cx+(x-cx)*0.35,y:srcY+(y-srcY)*0.45};
+      ctx.save(); ctx.globalAlpha=0.2; ctx.strokeStyle=col; ctx.lineWidth=1.5;
       ctx.setLineDash([4,6]); ctx.lineDashOffset=-(t*1.2)%10;
-      ctx.beginPath(); ctx.moveTo(cx,srcY+18); ctx.quadraticCurveTo(cp.x,cp.y,x,y-22); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx,srcY+20); ctx.quadraticCurveTo(cp.x,cp.y,x,y-24); ctx.stroke();
       ctx.setLineDash([]); ctx.restore();
-      // particle
-      const frac=((t*0.007+i/3)%1);
+      const frac=((t*0.007+i/4)%1);
       const px=Math.pow(1-frac,2)*cx+2*(1-frac)*frac*cp.x+frac*frac*x;
-      const py=Math.pow(1-frac,2)*(srcY+18)+2*(1-frac)*frac*cp.y+frac*frac*(y-22);
+      const py=Math.pow(1-frac,2)*(srcY+20)+2*(1-frac)*frac*cp.y+frac*frac*(y-24);
       ctx.save(); ctx.globalAlpha=Math.sin(frac*Math.PI)*0.9; ctx.fillStyle=col;
       ctx.beginPath(); ctx.arc(px,py,3.5,0,Math.PI*2); ctx.fill(); ctx.restore();
-      badge(x,y,108,36,col,lb,sub,Math.min(0.92,(t-i*18)/40));
+      const prog=Math.min(1,Math.max(0,(t-i*18)/50));
+      ctx.save(); ctx.globalAlpha=prog*0.9;
+      ctx.font='14px sans-serif'; ctx.textAlign='center';
+      ctx.fillText(icon,x,y-30); ctx.restore();
+      badge(x,y,108,38,col,lb,sub,prog*0.92);
     });
-    lbl(cx,H*0.93,'Three outputs. One conversation.',C.textSec,0.5);
+    lbl(cx,H*0.92,'Four outputs. One dignified conversation.',C.textSec,0.5);
   }
 
   /* ── Stage 5: Consent & privacy — four cards ── */
@@ -1833,10 +1910,10 @@
     ctx.fillText('Nothing shared without your permission',cx,H*0.09);
     ctx.restore();
     const CARDS=[
-      {icon:'📄',title:'Wellness Guide',  gate:'Always',           col:C.sage,     lock:false, desc:'Returned to you after every conversation.'},
-      {icon:'📋',title:'Clinical Referral',gate:'Your permission', col:C.amber,    lock:true,  desc:'Only sent to the frailty team if you agree.'},
-      {icon:'🏠',title:'Assistiv Services',gate:'Your choice',     col:C.forestL,  lock:true,  desc:'Support offered to you. You decide.'},
-      {icon:'📊',title:'Intelligence Data',gate:'Explicit consent',col:C.charcoal, lock:true,  desc:'Anonymised only. Explicit opt-in.'},
+      {icon:'📄',title:'Wellness Guide',  gate:'Always',           col:C.wellness, lock:false, desc:'Returned to you after every conversation.'},
+      {icon:'📋',title:'Clinical Referral',gate:'Your permission', col:C.clinical, lock:true,  desc:'Only sent to the frailty team if you agree.'},
+      {icon:'🏠',title:'Assistiv Services',gate:'Your choice',     col:C.assistiv, lock:true,  desc:'Support offered to you. You decide.'},
+      {icon:'📊',title:'Intelligence Data',gate:'Explicit consent',col:C.popn,     lock:true,  desc:'Anonymised only. Explicit opt-in.'},
     ];
     const margin=W*0.03;
     const cardW=(W-margin*2-(CARDS.length-1)*margin)/CARDS.length;
