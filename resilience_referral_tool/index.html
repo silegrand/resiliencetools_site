@@ -316,7 +316,7 @@ a:hover { text-decoration: underline; }
     <div class="minim-icon">⚠</div>
     <div>
       <div class="minim-title">Clinical Note — Minimisation Detected</div>
-      <div class="minim-body">The RESILIENCE tool detected signals consistent with health minimisation during this conversation. The respondent may be understating the extent of their difficulties, potentially due to concern about worrying family members or fear of residential care placement. Clinical scores may therefore underrepresent actual frailty risk. A <strong>sensitive, unhurried approach to initial contact</strong> is recommended, with particular care taken to create a safe space before asking about specific difficulties. The respondent's autonomy and right to remain at home should be explicitly affirmed early in any clinical conversation.</div>
+      <div class="minim-body">The ASSISTIV tool detected signals consistent with health minimisation during this conversation. The respondent may be understating the extent of their difficulties, potentially due to concern about worrying family members or fear of residential care placement. Clinical scores may therefore underrepresent actual frailty risk. A <strong>sensitive, unhurried approach to initial contact</strong> is recommended, with particular care taken to create a safe space before asking about specific difficulties. The respondent's autonomy and right to remain at home should be explicitly affirmed early in any clinical conversation.</div>
     </div>
   </div>
 
@@ -639,7 +639,7 @@ a:hover { text-decoration: underline; }
     <span class="actions-label">Clinician actions</span>
     <button class="btn btn-primary" onclick="acknowledgeReferral()">Acknowledge Receipt</button>
     <button class="btn btn-outline" onclick="alert('Flagged for next MDT meeting.')">Flag for MDT</button>
-    <button class="btn btn-outline" onclick="alert('A new RESILIENCE screen link will be sent in 3 months.')">Request Repeat Screen</button>
+    <button class="btn btn-outline" onclick="alert('A new ASSISTIV screen link will be sent in 3 months.')">Request Repeat Screen</button>
     <button class="btn btn-outline" onclick="window.print()">Print / Export PDF</button>
     <button class="btn btn-primary" style="display:flex;align-items:center;gap:7px;background:var(--sage);" onclick="generateCgaPDF()">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
@@ -650,7 +650,7 @@ a:hover { text-decoration: underline; }
 
   <!-- FOOTER -->
   <div class="page-footer">
-    <span>RESILIENCE · Clinical Referral · RSLNCE-2026-0042 · Generated 16 May 2026</span>
+    <span>ASSISTIV · Clinical Referral · RSLNCE-2026-0042 · Generated 16 May 2026</span>
     <span>Folkestone and Hythe Neighbourhood Health Service · <a href="#">Data governance</a> · <a href="#">Delete respondent data</a></span>
   </div>
 
@@ -911,7 +911,7 @@ function generateCgaPDF() {
     doc.setFont('helvetica','bold');
     doc.setFontSize(9);
     doc.setTextColor(...WHITE);
-    doc.text('RESILIENCE',mg,10);
+    doc.text('ASSISTIV',mg,10);
     doc.setFont('helvetica','normal');
     doc.setFontSize(7.5);
     doc.setTextColor(180,210,200);
@@ -927,7 +927,7 @@ function generateCgaPDF() {
     doc.setFont('helvetica','normal');
     doc.setFontSize(6.5);
     doc.setTextColor(130,170,160);
-    doc.text('Assistiv Systems Limited, Faversham, Kent  ·  resiliencetools.xyz',mg,pH-3.5);
+    doc.text('Assistiv Systems Limited, Faversham, Kent  ·  assistiv.tools',mg,pH-3.5);
     doc.text('This document pre-populates the CGA. It does not constitute a clinical assessment. All clinical decisions remain with the qualified practitioner.',pW-mg-118,pH-3.5);
   }
 
@@ -998,7 +998,7 @@ function generateCgaPDF() {
   doc.setFont('helvetica','bold'); doc.setFontSize(7.5); doc.setTextColor(123,74,32);
   doc.text('MINIMISATION CLINICAL NOTE — For the assessing clinician',mg+5,y+6);
   doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(90,48,32);
-  const mText='The RESILIENCE screening tool detected minimisation signals during this conversation. The person is likely understating the extent of their difficulties — most probably due to fear of being a burden on their daughter or concern about what honest disclosure might lead to. The CGA should explicitly reassure the person that the goal of every service involved is for them to stay at home, on their own terms, with their dignity intact. A sensitive, unhurried approach is strongly recommended at every stage of initial contact.';
+  const mText='The ASSISTIV screening tool detected minimisation signals during this conversation. The person is likely understating the extent of their difficulties — most probably due to fear of being a burden on their daughter or concern about what honest disclosure might lead to. The CGA should explicitly reassure the person that the goal of every service involved is for them to stay at home, on their own terms, with their dignity intact. A sensitive, unhurried approach is strongly recommended at every stage of initial contact.';
   doc.text(doc.splitTextToSize(mText,pW-mg*2-10),mg+5,y+12);
   y+=26;
 
@@ -1069,7 +1069,7 @@ function generateCgaPDF() {
   doc.setFont('helvetica','bold'); doc.setFontSize(7.5); doc.setTextColor(...AMBER);
   doc.text('GP / CLINICIAN CONVERSATION STARTER',mg+5,y+6);
   doc.setFont('helvetica','italic'); doc.setFontSize(7.5); doc.setTextColor(...CHARCOAL);
-  const gpText='"I can see from your RESILIENCE conversation that there are a few things you\'ve been finding harder lately — feeling connected to people, your mood, and getting around. I want to make sure we talk through those today, so we can think together about what support would help you stay well and at home, on your own terms."';
+  const gpText='"I can see from your ASSISTIV conversation that there are a few things you\'ve been finding harder lately — feeling connected to people, your mood, and getting around. I want to make sure we talk through those today, so we can think together about what support would help you stay well and at home, on your own terms."';
   doc.text(doc.splitTextToSize(gpText,pW-mg*2-10),mg+5,y+12);
   y+=26;
 
@@ -1081,7 +1081,7 @@ function generateCgaPDF() {
 
   addFooter();
 
-  doc.save('RESILIENCE_CGA_PreScreen_SingleReport_RSLNCE-2026-0042.pdf');
+  doc.save('ASSISTIV_CGA_PreScreen_SingleReport_RSLNCE-2026-0042.pdf');
 }
 </script>
 
