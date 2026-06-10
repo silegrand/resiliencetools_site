@@ -247,7 +247,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);f
     <div style="font-size:20px;flex-shrink:0;">⚠</div>
     <div>
       <div class="minim-title">Minimisation Pattern — Both Tools Detected</div>
-      <div class="minim-body">The RESILIENCE screening tool detected minimisation signals during the person's conversation. The divergence pattern in this dual report — person consistently rating higher than the carer's observation — is the classic corroborating indicator. The person is almost certainly understating the extent of their difficulties, most likely due to fear of being a burden or concern about care home placement. The CGA should explicitly reassure the person that the goal of every service involved is for them to stay at home, on their own terms, with their dignity intact.</div>
+      <div class="minim-body">The ASSISTIV screening tool detected minimisation signals during the person's conversation. The divergence pattern in this dual report — person consistently rating higher than the carer's observation — is the classic corroborating indicator. The person is almost certainly understating the extent of their difficulties, most likely due to fear of being a burden or concern about care home placement. The CGA should explicitly reassure the person that the goal of every service involved is for them to stay at home, on their own terms, with their dignity intact.</div>
     </div>
   </div>
 
@@ -268,7 +268,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);f
     </button>
   </div>
 
-  <p style="font-size:11px;color:var(--text-light);margin-top:20px;line-height:1.7;">RESILIENCE Dual Report · RSLNCE-2026-0042 · Folkestone and Hythe NHS · <a href="#" style="color:var(--sage);">Data governance</a> · <a href="#" style="color:var(--sage);">Delete data</a></p>
+  <p style="font-size:11px;color:var(--text-light);margin-top:20px;line-height:1.7;">ASSISTIV Dual Report · RSLNCE-2026-0042 · Folkestone and Hythe NHS · <a href="#" style="color:var(--sage);">Data governance</a> · <a href="#" style="color:var(--sage);">Delete data</a></p>
 </div>
 
 <!-- ── JAVASCRIPT ── -->
@@ -612,7 +612,7 @@ function generateCgaPDF() {
     doc.setFont('helvetica','bold');
     doc.setFontSize(9);
     doc.setTextColor(...WHITE);
-    doc.text('RESILIENCE', mg, 10);
+    doc.text('ASSISTIV', mg, 10);
     doc.setFont('helvetica','normal');
     doc.setFontSize(7.5);
     doc.setTextColor(180,210,200);
@@ -628,7 +628,7 @@ function generateCgaPDF() {
     doc.setFont('helvetica','normal');
     doc.setFontSize(6.5);
     doc.setTextColor(130,170,160);
-    doc.text('Assistiv Systems Limited, Faversham, Kent  ·  resiliencetools.xyz', mg, pH-3.5);
+    doc.text('Assistiv Systems Limited, Faversham, Kent  ·  assistiv.tools', mg, pH-3.5);
     doc.setTextColor(160,190,185);
     doc.text('This document pre-populates the CGA. It does not constitute a clinical assessment. All clinical decisions remain with the qualified practitioner.', pW-mg-118, pH-3.5);
   }
@@ -711,7 +711,7 @@ function generateCgaPDF() {
   doc.setFont('helvetica','normal');
   doc.setFontSize(7);
   doc.setTextColor(90,48,32);
-  const mLines=doc.splitTextToSize('The RESILIENCE screening tool and carer report both detected signals consistent with health minimisation. The person is almost certainly understating the extent of their difficulties, most likely due to fear of being a burden or concern about care home placement. The CGA should explicitly reassure the person that the goal of every service involved is for them to stay at home, on their own terms, with their dignity intact. A sensitive, unhurried approach is strongly recommended.',pW-mg*2-10);
+  const mLines=doc.splitTextToSize('The ASSISTIV screening tool and carer report both detected signals consistent with health minimisation. The person is almost certainly understating the extent of their difficulties, most likely due to fear of being a burden or concern about care home placement. The CGA should explicitly reassure the person that the goal of every service involved is for them to stay at home, on their own terms, with their dignity intact. A sensitive, unhurried approach is strongly recommended.',pW-mg*2-10);
   doc.text(mLines,mg+5,y+11);
   y+=24;
 
@@ -811,7 +811,7 @@ function generateCgaPDF() {
   doc.setFont('helvetica','italic');
   doc.setFontSize(7.5);
   doc.setTextColor(...CHARCOAL);
-  const gpText='"I can see from your RESILIENCE conversation that there are a few things you\'ve been finding harder lately — getting around, staying connected, and managing at home. I want to make sure we talk through those today, so we can think together about what support would help you stay well and at home, on your own terms."';
+  const gpText='"I can see from your ASSISTIV conversation that there are a few things you\'ve been finding harder lately — getting around, staying connected, and managing at home. I want to make sure we talk through those today, so we can think together about what support would help you stay well and at home, on your own terms."';
   const gpLines=doc.splitTextToSize(gpText,pW-mg*2-10);
   doc.text(gpLines,mg+5,y+12);
   y+=26;
@@ -827,7 +827,7 @@ function generateCgaPDF() {
 
   addPageFooter();
 
-  doc.save('RESILIENCE_CGA_PreScreen_RSLNCE-2026-0042.pdf');
+  doc.save('ASSISTIV_CGA_PreScreen_RSLNCE-2026-0042.pdf');
 }
 </script>
 </body>
