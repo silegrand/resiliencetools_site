@@ -599,7 +599,7 @@ async function interpretCarer(transcript,q){
     headers:{'Content-Type':'application/json','x-api-key':window.CARER_API_KEY,'anthropic-version':'2023-06-01'},
     body:JSON.stringify({
       model:'claude-sonnet-4-20250514',max_tokens:600,
-      system:`You are interpreting a carer's observational response about an older adult they care for, as part of the RESILIENCE frailty screening system. Domain: ${q.domain}. Return ONLY valid JSON: {"reflection":"warm empathic 1-sentence response acknowledging what they shared","domain_score":number 1-10 where 1=robust no concern 10=significant concern,"concern_level":"low|medium|high","key_observation":"most clinically significant thing they said verbatim"}`,
+      system:`You are interpreting a carer's observational response about an older adult they care for, as part of the ASSISTIV frailty screening system. Domain: ${q.domain}. Return ONLY valid JSON: {"reflection":"warm empathic 1-sentence response acknowledging what they shared","domain_score":number 1-10 where 1=robust no concern 10=significant concern,"concern_level":"low|medium|high","key_observation":"most clinically significant thing they said verbatim"}`,
       messages:[{role:'user',content:`Question: "${q.text}" Carer said: "${transcript}"`}]
     })
   });
