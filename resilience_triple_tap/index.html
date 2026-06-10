@@ -263,7 +263,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);f
 
       <!-- SCREENING CALIBRATION -->
       <div class="card">
-        <div class="card-label">RESILIENCE Screening Calibration vs CGA</div>
+        <div class="card-label">ASSISTIV Screening Calibration vs CGA</div>
         <p style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">How accurately did community screening predict the CGA clinical findings?</p>
         <div class="calib-bar">
           <div class="cb-hit" style="width:67%"></div>
@@ -319,7 +319,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);f
   <div class="longi-placeholder" style="margin-bottom:20px;">
     <div class="longi-icon">📈</div>
     <div class="longi-title">Longitudinal Triple Tap Tracking</div>
-    <div class="longi-body">Repeat all three assessments at 3 and 6 months to measure intervention effectiveness. Does social prescribing shift the person's self-report? Does the carer observe improvement? Does the next CGA confirm it? This trajectory view is the most powerful clinical intelligence RESILIENCE generates over time.</div>
+    <div class="longi-body">Repeat all three assessments at 3 and 6 months to measure intervention effectiveness. Does social prescribing shift the person's self-report? Does the carer observe improvement? Does the next CGA confirm it? This trajectory view is the most powerful clinical intelligence ASSISTIV generates over time.</div>
     <div style="margin-top:16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
       <div style="background:rgba(26,43,74,.08);border:1px dashed #C5D0E0;border-radius:8px;padding:10px 18px;font-size:12px;color:var(--navy);font-weight:600;">Baseline — May 2026 ✓</div>
       <div style="background:rgba(26,43,74,.04);border:1px dashed #C5D0E0;border-radius:8px;padding:10px 18px;font-size:12px;color:var(--text-light);">3 months — Aug 2026 ○</div>
@@ -336,7 +336,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);f
     <button class="btn-action outline" onclick="window.print()">Print / PDF</button>
   </div>
 
-  <p style="font-size:11px;color:var(--text-light);margin-top:20px;line-height:1.7;">RESILIENCE Triple Tap Intelligence · RSLNCE-2026-0042 · Folkestone and Hythe NHS · Assistiv Systems Limited · <a href="#" style="color:var(--sage);">resiliencetools.xyz</a></p>
+  <p style="font-size:11px;color:var(--text-light);margin-top:20px;line-height:1.7;">ASSISTIV Triple Tap Intelligence · RSLNCE-2026-0042 · Folkestone and Hythe NHS · Assistiv Systems Limited · <a href="#" style="color:var(--sage);">assistiv.tools</a></p>
 </div>
 
 <!-- JAVASCRIPT -->
@@ -602,7 +602,7 @@ async function runAI(){
 }
 
 function buildSystemPrompt(){
-  return `You are a senior geriatric medicine clinical intelligence analyst. You have been given three independent assessments of the same older adult: their own self-report via the RESILIENCE community screening tool, an observational report from their carer, and the findings of a formal Comprehensive Geriatric Assessment (CGA) conducted by a clinician.
+  return `You are a senior geriatric medicine clinical intelligence analyst. You have been given three independent assessments of the same older adult: their own self-report via the ASSISTIV community screening tool, an observational report from their carer, and the findings of a formal Comprehensive Geriatric Assessment (CGA) conducted by a clinician.
 
 The CGA is the primary clinical assessment and carries the most clinical weight. However, the person's self-report and carer observation provide community context that enriches clinical understanding.
 
@@ -641,7 +641,7 @@ Please synthesise all three perspectives.`;
 function getDemoSynthesis(){
   return `## Triple Tap Analysis
 
-The Triple Tap on Social Connection is the single most important finding in this case. All three independent sources — the person's self-report (3/10), the carer's observation (2/10), and the CGA formal social needs assessment (2/10, UCLA 7/9) — converge on the same conclusion: critical social isolation, compounded by unaddressed spousal bereavement at twelve months. This degree of convergence across three independent assessors represents the highest clinical confidence signal available in the RESILIENCE system. It admits no ambiguity and demands urgent action.
+The Triple Tap on Social Connection is the single most important finding in this case. All three independent sources — the person's self-report (3/10), the carer's observation (2/10), and the CGA formal social needs assessment (2/10, UCLA 7/9) — converge on the same conclusion: critical social isolation, compounded by unaddressed spousal bereavement at twelve months. This degree of convergence across three independent assessors represents the highest clinical confidence signal available in the ASSISTIV system. It admits no ambiguity and demands urgent action.
 
 ## What Community Screening Got Right
 
