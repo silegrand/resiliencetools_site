@@ -316,7 +316,7 @@ nav {
     <div class="output-card population">
       <div class="output-icon">📊</div>
       <div class="output-title">Intelligence Data</div>
-      <div class="output-desc">With explicit consent only: an anonymised signal returned to the Assistiv.Health platform, feeding population frailty intelligence for NHS commissioners.</div>
+      <div class="output-desc">With explicit consent only: an anonymised signal returned to the Assistiv.Cloud platform, feeding population frailty intelligence for NHS commissioners.</div>
       <a class="output-tag" href="https://www.assistiv.cloud" target="_blank" rel="noopener">With consent · assistiv.cloud</a>
     </div>
   </div>
@@ -335,7 +335,7 @@ const CAPTIONS = [
   '<strong>AI Listening</strong> — Claude Sonnet listens to every response. Not just the words, but the rhythm — pauses, corrections, qualifications. Twelve questions across six clinical domains, each one adaptive to what came before.',
   '<strong>Hesitation Detection</strong> — The AI detects minimisation: "I manage fine, really." It recognises the two specific fears that prevent honest disclosure — the fear of being a burden, and the fear of what honest disclosure might lead to.',
   '<strong>Interpretation Layer</strong> — Every response is scored across six clinical domains: mobility, cognition, mood, nutrition, social connection, and home environment. The spoken tone modifies the clinical score.',
-  '<strong>Four Outputs</strong> — From a single conversation: a Wellness Guide for the person, a structured clinical referral for the frailty team, access to Assistiv preventative services, and — with consent — a population intelligence signal back to the Assistiv.Health platform for NHS commissioners.',
+  '<strong>Four Outputs</strong> — From a single conversation: a Wellness Guide for the person, a structured clinical referral for the frailty team, access to Assistiv preventative services, and — with consent — a population intelligence signal back to the Assistiv.Cloud platform for NHS commissioners.',
   '<strong>Consent & Privacy</strong> — Nothing is shared without explicit permission at every stage. The person holds the keys. Population intelligence is always anonymised and aggregated. The conversation belongs to the person.',
 ];
 
@@ -709,7 +709,7 @@ function s4() {
     { x:W*0.12, y:H*0.70, col:C.wellness, label:'WELLNESS GUIDE',   sub:'For the person',    icon:'📄' },
     { x:W*0.37, y:H*0.70, col:C.clinical, label:'CLINICAL REFERRAL',sub:'Frailty team',       icon:'📋' },
     { x:W*0.63, y:H*0.70, col:C.assistiv, label:'ASSISTIV SERVICES',sub:'assistiv.co',        icon:'🏠' },
-    { x:W*0.88, y:H*0.70, col:C.popn,    label:'INTELLIGENCE DATA', sub:'assistiv.health',    icon:'📊' },
+    { x:W*0.88, y:H*0.70, col:C.popn,    label:'INTELLIGENCE DATA', sub:'assistiv.cloud',    icon:'📊' },
   ];
 
   OUTPUTS.forEach(({x,y,col,label:lbl,sub,icon},i) => {
@@ -793,7 +793,7 @@ function s5() {
       title: 'Intelligence Data',
       gate: 'Explicit consent',
       gateCol: C.popn,
-      desc: 'Anonymised signal to assistiv.health. Never linked to you. Explicit opt-in only.',
+      desc: 'Anonymised signal to assistiv.cloud. Never linked to you. Explicit opt-in only.',
       col: C.popn,
       lock: true,
     },
