@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RESILIENCE — Prototype 2</title>
+<title>ASSISTIV — Prototype 2</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -289,9 +289,9 @@ body::before {
 <div class="screen active" id="setup-screen">
   <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;">
     <div class="setup-wrap">
-      <div class="setup-logo">RESILIENCE — Demo Configuration</div>
+      <div class="setup-logo">ASSISTIV — Demo Configuration</div>
       <h1 class="setup-title">Enable <em>AI-powered</em><br>voice interpretation</h1>
-      <p class="setup-body">RESILIENCE uses Claude Sonnet to genuinely understand what is said — detecting minimisation, generating real MI reflections, and flagging clinical signals in natural speech. Enter your Anthropic API key below to experience this live.</p>
+      <p class="setup-body">ASSISTIV Tools uses Claude Sonnet to genuinely understand what is said — detecting minimisation, generating real MI reflections, and flagging clinical signals in natural speech. Enter your Anthropic API key below to experience this live.</p>
       <div class="setup-card">
         <div class="setup-card-title">What AI enables in this demo</div>
         <div class="setup-capabilities">
@@ -323,7 +323,7 @@ body::before {
 ══════════════════════════════ -->
 <div class="screen" id="welcome-screen">
   <div class="welcome-wrap">
-    <div class="welcome-logo">RESILIENCE</div>
+    <div class="welcome-logo">ASSISTIV</div>
 
     <div class="welcome-step visible" id="ws-0">
       <h1 class="welcome-headline">A conversation<br>about <em>how you<br>are getting on</em></h1>
@@ -333,7 +333,7 @@ body::before {
     <div class="welcome-step" id="ws-1">
       <div class="w-card">
         <div class="w-card-title">What this is</div>
-        <div class="w-card-body">RESILIENCE listens to you talk about your everyday life — how you get around, how you are feeling, who you have around you. There are no forms to fill in. Just speak, in your own words, and the tool will do the rest. It takes around ten to fifteen minutes.</div>
+        <div class="w-card-body">ASSISTIV listens to you talk about your everyday life — how you get around, how you are feeling, who you have around you. There are no forms to fill in. Just speak, in your own words, and the tool will do the rest. It takes around ten to fifteen minutes.</div>
       </div>
     </div>
 
@@ -1016,7 +1016,7 @@ async function callSonnet(transcript, q) {
 }
 
 function buildSystemPrompt(q) {
-  return `You are the clinical intelligence layer of RESILIENCE — a compassionate, community-based frailty screening tool for older adults in Folkestone and Hythe, Kent, UK. You operate on Motivational Interviewing principles.
+  return `You are the clinical intelligence layer of ASSSISTIV — a compassionate, community-based frailty screening tool for older adults in Folkestone and Hythe, Kent, UK. You operate on Motivational Interviewing principles.
 
 DOMAIN BEING ASSESSED: ${q.domain}
 CLINICAL CONTEXT: ${q.prisma}
@@ -1175,7 +1175,7 @@ BURDEN CONCERN: ${interp.burden_concern_detected}`;
 
 async function callSonnetReport(summary) {
   if (!API_KEY) throw new Error('No API key');
-  const systemPrompt = `You are generating a warm, personalised Wellness Guide for an older adult who has just completed the RESILIENCE frailty screening conversation in Folkestone and Hythe, Kent, UK.
+  const systemPrompt = `You are generating a warm, personalised Wellness Guide for an older adult who has just completed the ASSSISTIV frailty screening conversation in Folkestone and Hythe, Kent, UK.
 
 The guide is structured around the FINGER framework (Finnish Geriatric Intervention Study to Prevent Cognitive Impairment and Disability), which demonstrated that multidomain lifestyle interventions significantly reduce cognitive decline and frailty.
 
@@ -1236,7 +1236,7 @@ function buildFallbackReport() {
       { name:"Staying Connected", icon:"💬", text:"The people we can turn to make such a difference to our health and wellbeing. Even one regular arrangement — a call, a walk, a cup of tea — can mean a great deal." },
       { name:"Managing Your Health", icon:"💊", text:"Your local pharmacist is a brilliant, free source of advice about your medicines and health. A free medicines review is available to anyone taking several medicines regularly." }
     ],
-    gp_starter: "I completed a RESILIENCE wellbeing conversation recently and wanted to take the opportunity to talk through how I have been getting on.",
+    gp_starter: "I completed a ASSISTIV wellbeing conversation recently and wanted to take the opportunity to talk through how I have been getting on.",
     weekly_checks: [
       "How has my energy been this week?",
       "Have I managed to get outside or move around today?",
@@ -1346,7 +1346,7 @@ function renderReport(data) {
       </button>
     </div>
     <p style="font-size:12px;color:var(--text-light);margin-top:24px;line-height:1.7;">
-      RESILIENCE — Folkestone and Hythe Neighbourhood Health Service &nbsp;·&nbsp;
+      ASSISTIV — Folkestone and Hythe Neighbourhood Health Service &nbsp;·&nbsp;
       <a href="#" style="color:var(--sage);text-decoration:none;">Privacy notice</a> &nbsp;·&nbsp;
       <a href="#" style="color:var(--sage);text-decoration:none;">Delete my data</a> &nbsp;·&nbsp;
       Prototype 2
