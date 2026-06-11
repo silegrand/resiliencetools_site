@@ -7,8 +7,8 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">  
     <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Community intelligence, built for the NHS</title>
-  <meta name="description" content="Assistiv Tools are a community-based frailty screening and intelligence system built for the NHS. It identifies older adults at risk before crisis, gives them something of genuine personal value, and equips clinical teams with the intelligence they need.">
+  <title>Assistiv Tools — Community Frailty Screening for the NHS</title>
+  <meta name="description" content="Assistiv Tools are a community-based frailty screening and intelligence system built for the NHS. These tools help to identify older adults at risk before a crisis, give them something of genuine value from the process, and equip clinical teams with the intelligence they need to respond effectively.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -543,7 +543,7 @@
     }
     .tool-card:hover .tool-arrow { gap: 0.65rem; }
 
-    /* Simulation badge */
+    /* Status badges — unified estate system: Live ● / Prototype ◐ / Simulation ○ */
     .sim-badge {
       display: inline-flex;
       align-items: center;
@@ -561,7 +561,25 @@
       margin-bottom: 1rem;
       align-self: flex-start;
     }
-    .sim-badge::before { content: '◎'; font-size: 0.62rem; }
+    .sim-badge::before { content: '○'; font-size: 0.62rem; }
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: rgba(45,107,71,0.1);
+      border: 1px solid rgba(45,107,71,0.3);
+      color: #2d6b47;
+      font-family: var(--ff-body);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.28rem 0.7rem;
+      border-radius: 50px;
+      margin-bottom: 1rem;
+      align-self: flex-start;
+    }
+    .live-badge::before { content: '●'; font-size: 0.62rem; }
     .sim-note {
       font-size: 0.78rem;
       color: #8B5A1A;
@@ -1228,7 +1246,7 @@
     <div class="hero-text">
       <p class="hero-pre">Assistiv Early Screening for Independent Living in the Community</p>
       <h1 class="hero-h1">Community intelligence, built for the NHS.<br>Delivering resilience where it is needed.</h1>
-      <p class="hero-sub">Assistiv tools are a community-based frailty screening and intelligence system built for the NHS. It identifies older adults at risk before crisis, gives them something of genuine personal value from the process, and equips clinical teams with the intelligence they need to respond effectively.</p>
+      <p class="hero-sub">Assistiv tools are a community-based frailty screening and intelligence system built for the NHS. These tools help to identify older adults at risk before a crisis, give them something of genuine value from the process, and equip clinical teams with the intelligence they need to respond effectively.</p>
       <div class="hero-btns">
         <a href="#how"     class="btn btn-primary">See how it works</a>
         <a href="#contact" class="btn btn-ghost">Get in touch</a>
@@ -1317,51 +1335,51 @@
     </div>
     <div class="process fade-up">
       <div class="proc-step">
-        <div class="proc-icon">🎙️</div>
+        <div class="proc-icon" aria-hidden="true">🎙️</div>
         <h4>Conversation</h4>
       </div>
       <div class="proc-step">
-        <div class="proc-icon">🧠</div>
+        <div class="proc-icon" aria-hidden="true">🧠</div>
         <h4>Interpretation</h4>
       </div>
       <div class="proc-step">
-        <div class="proc-icon">📄</div>
+        <div class="proc-icon" aria-hidden="true">📄</div>
         <h4>Wellness Guide</h4>
       </div>
       <div class="proc-step">
-        <div class="proc-icon">📋</div>
+        <div class="proc-icon" aria-hidden="true">📋</div>
         <h4>Clinical Referral</h4>
       </div>
       <div class="proc-step">
-        <div class="proc-icon">📊</div>
+        <div class="proc-icon" aria-hidden="true">📊</div>
         <h4>Population Intelligence</h4>
       </div><div class="process-step">
-  <div class="process-icon">●●●</div>
+  <div class="process-icon" aria-hidden="true">●●●</div>
   <div class="process-label">Triple Tap</div>
 </div>    </div>
 
     <!-- Output cards -->
     <div class="outputs-legend fade-up">
       <div class="output-card wellness">
-        <div class="output-icon">📄</div>
+        <div class="output-icon" aria-hidden="true">📄</div>
         <div class="output-title">Wellness Guide</div>
         <div class="output-desc">A personalised document returned to the person — affirming, practical, written in plain English. Something of genuine value from the conversation.</div>
         <span class="output-tag">For the person</span>
       </div>
       <div class="output-card clinical">
-        <div class="output-icon">📋</div>
+        <div class="output-icon" aria-hidden="true">📋</div>
         <div class="output-title">Clinical Referral</div>
         <div class="output-desc">A structured frailty referral centred on a six-spoke Radar diagram. Domain scores, minimisation notes, and a CGA preparation brief.</div>
         <span class="output-tag">For the frailty team</span>
       </div>
       <div class="output-card assistiv">
-        <div class="output-icon">🏠</div>
+        <div class="output-icon" aria-hidden="true">🏠</div>
         <div class="output-title">Assistiv Services</div>
         <div class="output-desc">For those below the acute threshold: preventative care, home support, and care coordination delivered through the Assistiv platform — on the person's terms.</div>
         <span class="output-tag" style="border-color:#6B3FA0;color:#6B3FA0">assistiv.services</span>
       </div>
       <div class="output-card population">
-        <div class="output-icon">📊</div>
+        <div class="output-icon" aria-hidden="true">📊</div>
         <div class="output-title">Intelligence Data</div>
         <div class="output-desc">With explicit consent only: an anonymised signal returned to the Assistiv.Cloud platform, feeding population frailty intelligence for NHS commissioners.</div>
         <a class="output-tag" href="https://www.assistiv.cloud" target="_blank" rel="noopener" style="border-color:#365EBF;color:#365EBF">assistiv.cloud</a>
@@ -1380,21 +1398,23 @@
     <div class="tools-grid">
 
       <a href="/resilience_screening_tool/" class="tool-card fade-up d1">
-        <div class="tool-icon">🎙️</div>
+        <div class="tool-icon" aria-hidden="true">🎙️</div>
+        <span class="live-badge">Live</span>
         <h3>The Screening Tool</h3>
-        <p>A voice-first community frailty screen that interprets free spoken responses using Claude Sonnet. Twelve conversational questions across six clinical domains. Adaptive language for four completing-party types. Safety architecture built throughout.</p>
+        <p>A voice-first community frailty screen that interprets free spoken responses using Claude. Twelve conversational questions across six life domains. Adaptive language for four completing-party types. Safety architecture built throughout.</p>
         <span class="tool-arrow">Open tool →</span>
       </a>
 
       <a href="/resilience_carer/" class="tool-card fade-up d2">
-        <div class="tool-icon">🤝</div>
+        <div class="tool-icon" aria-hidden="true">🤝</div>
+        <span class="live-badge">Live</span>
         <h3>The Carer Report</h3>
         <p>An independent observational questionnaire for a nominated carer, linked by consent only. The carer's scores never reach the person; the person's scores never reach the carer. The comparison happens at the clinical layer, where it generates the most value.</p>
         <span class="tool-arrow">Open tool →</span>
       </a>
 
       <a href="/resilience_referral_tool/" class="tool-card fade-up d3">
-        <div class="tool-icon">📋</div>
+        <div class="tool-icon" aria-hidden="true">📋</div>
         <span class="sim-badge">Simulation</span>
         <h3>The Clinical Referral</h3>
         <p>A structured referral document for the frailty team, centred on a Frailty Profile Radar, a six-spoke diagram that communicates the person's risk profile at a glance. Domain detail, minimisation notes, referral priorities, and a CGA preparation brief.</p>
@@ -1403,7 +1423,7 @@
       </a>
 
       <a href="/resilience_person_carer_referral/" class="tool-card fade-up d4">
-        <div class="tool-icon">⚖️</div>
+        <div class="tool-icon" aria-hidden="true">⚖️</div>
         <span class="sim-badge">Simulation</span>
         <h3>The Dual Report</h3>
         <p>When both a person's screen and a carer's report are available, two profiles overlay on the radar. Agreement confirms clinical confidence. Divergence is a clinical signal, almost always indicating that the person is understating genuine difficulty.</p>
@@ -1412,7 +1432,7 @@
       </a>
 
       <a href="/resilience_dashboard/" class="tool-card fade-up d5">
-        <div class="tool-icon">📊</div>
+        <div class="tool-icon" aria-hidden="true">📊</div>
         <span class="sim-badge">Simulation</span>
         <h3>The Intelligence Dashboard</h3>
         <p>A population-level frailty intelligence interface for NHS commissioning teams. Geographic ward-level risk mapping, domain analysis, referral demand forecasting, and an AI-synthesised commissioning brief from the full anonymised dataset.</p>
@@ -1420,15 +1440,14 @@
         <span class="tool-arrow">View simulation →</span>
       </a>
       
-<div class="tool-card">
-  <div class="tool-icon">●●●</div>
-  <span class="sim-badge">Simulation</span>
-  <h3 class="tool-title">Triple Tap Intelligence</h3>
-  <p class="tool-description">The synthesis layer. Person self-report, carer observation, and CGA clinical findings overlaid on a single radar, three independent perspectives on the same person. In this simulation, where all three confirm significant need, the Triple Tap is the highest confidence signal in the system.</p>
-  <a href="/resilience_triple_tap/" 
-  <span class="tool-arrow">View simulation →</span>
-  </a>
-</div>    </div>
+      <a href="/resilience_triple_tap/" class="tool-card fade-up d6">
+        <div class="tool-icon" aria-hidden="true">●●●</div>
+        <span class="sim-badge">Simulation</span>
+        <h3>Triple Tap Intelligence</h3>
+        <p>The synthesis layer. Person self-report, carer observation, and CGA clinical findings overlaid on a single radar, three independent perspectives on the same person. In this simulation, where all three confirm significant need, the Triple Tap is the highest confidence signal in the system.</p>
+        <span class="tool-arrow">View simulation →</span>
+      </a>
+    </div>
     
   </div>
 </section>
@@ -1490,7 +1509,7 @@
       </div>
       <div class="ev-card fade-up d3">
         <h4>Oral Frailty &amp; Sleep</h4>
-        <p>Peer-reviewed evidence covering oral frailty indicators and sleep disruption as supplementary clinical domains within the screening architecture.</p>
+        <p>Peer-reviewed evidence covering oral frailty indicators and sleep disruption as supplementary life domains within the screening architecture.</p>
       </div>
       <div class="ev-card fade-up d1">
         <h4>Explainable Machine Learning &amp; Frailty Prediction</h4>
@@ -1512,17 +1531,17 @@
     </div>
     <div class="audience-grid">
       <div class="aud-card fade-up d1">
-        <div class="aud-icon">🏠</div>
+        <div class="aud-icon" aria-hidden="true">🏠</div>
         <h3>Older Adults &amp; Families</h3>
         <p>Assistiv is for you if you want to stay living well at home and would like to understand what support might help, on your own terms, at your own pace.</p>
       </div>
       <div class="aud-card fade-up d2">
-        <div class="aud-icon">🏥</div>
+        <div class="aud-icon" aria-hidden="true">🏥</div>
         <h3>NHS Clinical Teams</h3>
         <p>Assistiv is for frailty nurses, geriatricians, Neighbourhood Health Service coordinators, and GP practices who need to identify at-risk patients in the community before crisis, not after.</p>
       </div>
       <div class="aud-card fade-up d3">
-        <div class="aud-icon">📈</div>
+        <div class="aud-icon" aria-hidden="true">📈</div>
         <h3>Commissioners &amp; System Leaders</h3>
         <p>Assistiv is for ICB commissioners and NHS system leaders who need population-level frailty intelligence to inform commissioning decisions, identify service gaps, and target preventive investment.</p>
       </div>
@@ -1543,21 +1562,21 @@
     <div class="for-you-grid">
 
       <div class="fy-card personal fade-up d1">
-        <div class="fy-icon">🏡</div>
+        <div class="fy-icon" aria-hidden="true">🏡</div>
         <h3>If you are wondering how you are doing</h3>
         <p>Maybe things feel a little harder than they used to. Maybe you are managing fine but would like to understand what support is available before you need it. Assistiv asks you about your life in your own words, at your own pace, and gives you something genuinely useful in return. No waiting room. No referral needed. Just a conversation.</p>
         <a href="/resilience_screening_tool/" class="fy-link">Try the conversation →</a>
       </div>
 
       <div class="fy-card family fade-up d2">
-        <div class="fy-icon">❤️</div>
+        <div class="fy-icon" aria-hidden="true">❤️</div>
         <h3>If someone you love is on your mind</h3>
         <p>Adult children often notice things before anyone else does. A parent who seems a little more tired, a little less steady, a little more reluctant to talk about how they are getting on. If you have noticed something and are not sure what to do next, Assistiv can help you understand the picture more clearly, and give your family member something valuable in the process.</p>
         <a href="/resilience_screening_tool/" class="fy-link">Learn how it works →</a>
       </div>
 
       <div class="fy-card community fade-up d3">
-        <div class="fy-icon">🤲</div>
+        <div class="fy-icon" aria-hidden="true">🤲</div>
         <h3>If you work with older adults in your community</h3>
         <p>Social prescribing link workers, community pharmacists, voluntary sector workers, and faith community leaders are often the first to sense that someone is struggling. Assistiv gives you something to offer in that moment: a dignified, voice-first conversation that produces a Wellness Guide the person can keep, and, if they choose, opens a pathway to clinical support.</p>
         <a href="#contact" class="fy-link">Talk to us about your work →</a>
@@ -1722,7 +1741,7 @@
           </div>
         </div>
         <p class="f-tagline">Community intelligence, built for the NHS. Delivering resilience where it is needed.</p>
-        <span class="f-powered">Powered by Claude Sonnet, Anthropic</span>
+        <span class="f-powered">Powered by Anthropic technologies</span>
       </div>
       <nav class="f-nav" aria-label="Footer navigation">
         <div class="f-nav-col">
@@ -1750,11 +1769,12 @@
       </nav>
     </div>
     <div class="footer-bottom">
-      <p class="f-copy">© 2026 Assistiv Systems Limited. All rights reserved.</p>
-      <a href="https://www.marketingformymates.com" class="f-links" rel="dofollow" target="_blank" style="font-size:0.75rem;color:rgba(28,43,38,0.38);transition:color 0.2s;text-decoration:none;" onmouseover="this.style.color='#9e5412'" onmouseout="this.style.color='rgba(28,43,38,0.38)'">Built by marketingformymates.com</a>
+      <p class="f-copy">© 2026 Assistiv Systems Limited. Registered in England and Wales. Company number 17082597. Open Data: NHS Fingertips, NHSBSA EPD, ONS Census 2021, MHCLG IMD 2025. For research and commissioning intelligence purposes only.</p>
       <div class="f-links">
-        <a href="#">Privacy Notice</a>
-        <a href="#">Accessibility</a>
+        <a href="https://www.assistiv.co/governance.html" target="_blank" rel="noopener">Governance</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="accessibility.html">Accessibility</a>
       </div>
     </div>
   </div>
@@ -1930,7 +1950,7 @@
       ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.stroke();
     }
     ctx.restore();
-    badge(cx,cy,100,34,C.sageDark,'CLAUDE SONNET','Listening',0.92);
+    badge(cx,cy,100,34,C.sageDark,'CLAUDE','Listening',0.92);
     const DOMAINS=[['Mobility',C.sage],['Cognition',C.amber],['Mood',C.sage],
                    ['Nutrition',C.amber],['Social',C.sage],['Home',C.amber]];
     DOMAINS.forEach(([d,col],i)=>{
@@ -1949,7 +1969,7 @@
       ctx.beginPath(); ctx.arc(cx+Math.cos(ang)*dist*frac, cy+Math.sin(ang)*dist*frac, 3,0,Math.PI*2); ctx.fill();
       ctx.restore();
     });
-    lbl(cx,H*0.92,'Twelve questions · Six clinical domains',C.textSec,0.5);
+    lbl(cx,H*0.92,'Twelve questions · Six life domains',C.textSec,0.5);
   }
 
   /* ── Stage 2: Hesitation detection ── */
